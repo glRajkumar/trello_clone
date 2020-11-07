@@ -1,0 +1,30 @@
+@host = http://localhost:5000
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE2NmE2YzFlYjg2ZTE4ZDQ5ZWFmNjEiLCJpYXQiOjE2MDQ3NDE3NTMsImV4cCI6MTYwNDgwNjU1M30.y1cnjD2TpaKThbyf1Uq-sf6-vL3odR3JLnG2qqpoF28
+
+### get me 
+GET {{host}}/user/me
+Authorization: {{token}}
+
+### register
+POST {{host}}/user/register
+Content-Type: application/json
+
+{
+    "userName": "oomllluo",
+    "email" : "oonhb@gmail.com",
+    "password" : "aaaaaaa"
+}
+
+### login
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+    "email" : "oonhb@gmail.com",
+    "password" : "aaaaaaa"
+}
+
+### logout
+POST {{host}}/user/logout
+Content-Type: application/json
+Authorization: {{token}}
