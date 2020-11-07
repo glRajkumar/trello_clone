@@ -9,7 +9,7 @@ async function auth(req, res, next) {
         const userId = payload.userId
 
         const user = await User.findOne({ _id: userId, token: { $in: token } })
-            .select("-password -token -followers -following -requested -requests -savedPosts -__v")
+            .select("-password -token -__v")
         if (!user) return res.status(400).send("User was not found")
 
         req.user = user
