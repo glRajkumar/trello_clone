@@ -1,0 +1,27 @@
+#app{
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+a{
+    color: #007bff;
+}
+
+a:hover{
+    color: #291137;
+}
+
+button{
+    color: #fff;
+    background-color: #007bff;
+}
+
+button:hover{
+    color: #007bff;
+    background-color: #fff;
+    outline: 1px #007bff solid;
+}
+
+.form-box h4{
+    margin-top: .5rem;
+}

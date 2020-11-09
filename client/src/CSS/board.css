@@ -1,0 +1,28 @@
+.board{
+    padding: 1rem;
+}
+
+.board-head{
+    display: flex;
+    padding: .7rem .4rem;
+}
+
+.board-lists{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.lists{
+    margin-right: 1rem;
+    padding: .5rem;
+    background-color: rgba(0, 0, 0, .1);
+}
+
+.list-add{
+    cursor: pointer;
+    text-align: center;
+}
+
+.list-cont{
+    cursor: pointer;
+}

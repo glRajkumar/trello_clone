@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Board = mongoose.model("Board", {
+const boardSchema = new mongoose.Schema({
     boardName: {
         type: String,
         required: true
@@ -30,6 +30,9 @@ const Board = mongoose.model("Board", {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }]
-})
+
+}, { timestamps: true })
+
+const Board = mongoose.model("Board", boardSchema)
 
 module.exports = Board

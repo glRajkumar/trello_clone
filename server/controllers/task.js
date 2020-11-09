@@ -21,54 +21,44 @@ router.get("/:boardId", auth, async (req, res) => {
     }
 })
 
-router.post("/", auth, async (req, res) => {
-    const { title, boardid } = req.body
+router.get("/task/:taskId", auth, async (req, res) => {
+    const { taskId } = req.params
 
     try {
-        const task = new Task({ title, board: boardid })
+        const tasks = await Task.findById(taskId)
+            .select("-__v -createdAt")
+            .lean()
+
+        res.json({ tasks })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "Cannot get tasks" })
+    }
+})
+
+router.post("/", auth, async (req, res) => {
+    const { boardid, ...details } = req.body
+
+    try {
+        const task = new Task({ board: boardid, ...details })
         await task.save()
         await Board.findByIdAndUpdate(boardid, { $push: { tasks: task._id } })
-        res.json({ id: task._id, msg: "Task saved successfully" })
+        res.json({ task, id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
         res.status(400).json({ error, msg: "Task creation failed" })
     }
 })
 
-router.put("/body", auth, async (req, res) => {
-    const { body, taskId } = req.body
+router.put("/", auth, async (req, res) => {
+    const { taskId, ...details } = req.body
 
     try {
-        await Task.findByIdAndUpdate(taskId, { body })
-        res.json({ msg: "Task body saved successfully" })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "Cannot add body to the tasks" })
-    }
-})
-
-
-router.put("/full", auth, async (req, res) => {
-    const { taskId, title, body } = req.body
-
-    try {
-        await Task.findByIdAndUpdate(taskId, { title, body })
+        await Task.findByIdAndUpdate(taskId, { ...details })
         res.json({ msg: "Task updated successfully" })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "Task updation failed" })
-    }
-})
-
-router.put("/status", auth, async (req, res) => {
-    const { taskId, status } = req.body
-
-    try {
-        await Task.findByIdAndUpdate(taskId, { status })
-        res.json({ msg: "Task updated successfully" })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "Task staus updation failed" })
+        res.status(400).json({ error, msg: "Cannot update the tasks" })
     }
 })
 

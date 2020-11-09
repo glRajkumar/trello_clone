@@ -5,15 +5,12 @@ const Board = require('../models/Board')
 const router = express.Router()
 
 router.get("/boards", auth, async (req, res) => {
-    const skip = parseInt(req.query.skip)
     const userId = req.user._id
 
     try {
         const boards = await Board.find({ postedBy: userId })
-            .select('-tasks -postedBy -__v -members')
+            .select('boardName catagery')
             .sort('-createdAt')
-            .skip(skip)
-            .limit(10)
             .lean()
 
         res.json({ boards })
@@ -28,8 +25,8 @@ router.get("/:boardId", auth, async (req, res) => {
 
     try {
         const boards = await Board.find({ _id: boardId })
-            .select("tasks")
-            .populate("tasks", "status title body")
+            .select("-members -postedBy -createdAt -__v")
+            .populate("tasks", "status title")
             .sort('-createdAt')
             .lean()
 

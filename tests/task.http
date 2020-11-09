@@ -1,8 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE4ZTUyZTg5Njg2ODA5OTA0Yzg1ZWIiLCJpYXQiOjE2MDQ5MDQyNTEsImV4cCI6MTYwNDk2OTA1MX0.gOTByRLCdjT46-5FxVXBMgTYHSa3-Klh1iR2ghzAe5I
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE5MWQ5NzVlYWQ1MjQxZTRkZTVhM2IiLCJpYXQiOjE2MDQ5MTg2ODMsImV4cCI6MTYwNDk4MzQ4M30.Iyf5BlkNRoH70TD8s4S7CxnVYwwyhcL9dY94RgAFdPE
 
-### get task 
-GET {{host}}/task/5fa8eebf99714442b4ecb5ea
+### get tasks of board 
+GET {{host}}/task/5fa91dfd5ead5241e4de5a42
+Authorization: {{token}}
+
+### get task by id 
+GET {{host}}/task/task/5fa946f0d7108839e491acfe
 Authorization: {{token}}
 
 ### create a task
@@ -12,39 +16,23 @@ Authorization: {{token}}
 
 {
     "title": "oomknluo",
-    "boardid" : "5fa8eebf99714442b4ecb5ea"
+    "status": "Doing",
+    "boardid" : "5fa91dfd5ead5241e4de5a42"
 }
 
-### update task body
-PUT {{host}}/task/body
+### update task 
+PUT {{host}}/task
 Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId": "5fa8eee799714442b4ecb5eb",
-    "body" : "oohhh bbbb nnnn"
+    "taskId": "5fa946f0d7108839e491acfe",
+    "body" : "bbbb nnnn",
+    "status": "To-do",
+    "title": "jhub"
 }
 
-### update a task
-PUT {{host}}/task/full
-Content-Type: application/json
-Authorization: {{token}}
-
-{
-    "taskId": "5fa8eee799714442b4ecb5eb",
-    "title": "okkk  nhbh bbg mjn kkk",
-    "body" : "oohh hhmn jhu uuh hh mnnnnn"
-}
-
-### update task status
-PUT {{host}}/task/status
-Content-Type: application/json
-Authorization: {{token}}
-
-{
-    "taskId": "5fa8eee799714442b4ecb5eb",
-    "status": "Doing"
-}
+### for above use status, body, title to update
 
 ### delete the tasks
 DELETE {{host}}/task/5fa8e58d89686809904c85ec/5fa8ea6982cbf735a80325c8

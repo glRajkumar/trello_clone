@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE4ZTUyZTg5Njg2ODA5OTA0Yzg1ZWIiLCJpYXQiOjE2MDQ5MDQyNTEsImV4cCI6MTYwNDk2OTA1MX0.gOTByRLCdjT46-5FxVXBMgTYHSa3-Klh1iR2ghzAe5I
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE5MWQ5NzVlYWQ1MjQxZTRkZTVhM2IiLCJpYXQiOjE2MDQ5MTg2ODMsImV4cCI6MTYwNDk4MzQ4M30.Iyf5BlkNRoH70TD8s4S7CxnVYwwyhcL9dY94RgAFdPE
 
 ### get boards 
-GET {{host}}/board/boards/?skip=0
+GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fa8eebf99714442b4ecb5ea
+GET {{host}}/board/5fa91dfd5ead5241e4de5a42
 Authorization: {{token}}
 
 ### get members by id
@@ -19,8 +19,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "secmmm", 
-    "catagery" : "Others"   
+    "boardName" : "kijjjjju", 
+    "catagery" : "Education"   
 }
 
 ### update public appearence
