@@ -1,19 +1,17 @@
 const express = require('express')
 const auth = require('../middlewares/auth')
 const Task = require('../models/Task')
+const Board = require("../models/Board")
 
 const router = express.Router()
 
-router.get("/", auth, async (req, res) => {
-    const skip = parseInt(req.query.skip)
-    const userId = req.user._id
+router.get("/:boardId", auth, async (req, res) => {
+    const { boardId } = req.params
 
     try {
-        const tasks = await Task.find({ postedBy: userId })
-            .select("-postedBy -createdAt -__v")
+        const tasks = await Task.find({ board: boardId })
+            .select("status title body")
             .sort('-createdAt')
-            .skip(skip)
-            .limit(5)
             .lean()
 
         res.json({ tasks })
@@ -24,37 +22,62 @@ router.get("/", auth, async (req, res) => {
 })
 
 router.post("/", auth, async (req, res) => {
-    const { title, body, catagery } = req.body
-    const userId = req.user._id
+    const { title, boardid } = req.body
 
     try {
-        const task = new Task({ title, body, catagery, postedBy: userId })
+        const task = new Task({ title, board: boardid })
         await task.save()
-
-        res.json({ msg: "Task saved successfully" })
+        await Board.findByIdAndUpdate(boardid, { $push: { tasks: task._id } })
+        res.json({ id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "Cannot get tasks" })
+        res.status(400).json({ error, msg: "Task creation failed" })
     }
 })
 
-router.put("/", auth, async (req, res) => {
-    const { id, title, body, catagery } = req.body
+router.put("/body", auth, async (req, res) => {
+    const { body, taskId } = req.body
 
     try {
-        await Task.findByIdAndUpdate(id, { title, body, catagery }, { new: true })
+        await Task.findByIdAndUpdate(taskId, { body })
+        res.json({ msg: "Task body saved successfully" })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "Cannot add body to the tasks" })
+    }
+})
+
+
+router.put("/full", auth, async (req, res) => {
+    const { taskId, title, body } = req.body
+
+    try {
+        await Task.findByIdAndUpdate(taskId, { title, body })
         res.json({ msg: "Task updated successfully" })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "Cannot get tasks" })
+        res.status(400).json({ error, msg: "Task updation failed" })
     }
 })
 
-router.delete("/:id", auth, async (req, res) => {
-    const { id } = req.params
+router.put("/status", auth, async (req, res) => {
+    const { taskId, status } = req.body
 
     try {
-        await Task.findByIdAndRemove(id)
+        await Task.findByIdAndUpdate(taskId, { status })
+        res.json({ msg: "Task updated successfully" })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "Task staus updation failed" })
+    }
+})
+
+router.delete("/:boardId/:taskId", auth, async (req, res) => {
+    const { boardId, taskId } = req.params
+
+    try {
+        await Task.findByIdAndRemove(taskId)
+        await Board.findByIdAndUpdate(boardId, { $pull: { tasks: taskId } })
         res.json({ msg: "Task deleted successfully" })
 
     } catch (error) {

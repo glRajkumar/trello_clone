@@ -1,8 +1,8 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE2NmE2YzFlYjg2ZTE4ZDQ5ZWFmNjEiLCJpYXQiOjE2MDQ3NDQ3NTcsImV4cCI6MTYwNDgwOTU1N30.r59eIjMPT5dfS-Z7gY4V5fe4fJAHEMvky7KxnS-fS1s
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE4ZTUyZTg5Njg2ODA5OTA0Yzg1ZWIiLCJpYXQiOjE2MDQ5MDQyNTEsImV4cCI6MTYwNDk2OTA1MX0.gOTByRLCdjT46-5FxVXBMgTYHSa3-Klh1iR2ghzAe5I
 
 ### get task 
-GET {{host}}/task/?skip=0
+GET {{host}}/task/5fa8eebf99714442b4ecb5ea
 Authorization: {{token}}
 
 ### create a task
@@ -11,23 +11,41 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "oomllluo",
-    "body" : "oonhb@gmail.com",
-    "catagery": "Education"
+    "title": "oomknluo",
+    "boardid" : "5fa8eebf99714442b4ecb5ea"
 }
 
-### update a task
-PUT {{host}}/task
+### update task body
+PUT {{host}}/task/body
 Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "id": "5fa67b4011e955351c6a2f5c",
-    "title": "okkkkkk",
-    "body" : "oohhhhhhh",
-    "catagery": "Others"
+    "taskId": "5fa8eee799714442b4ecb5eb",
+    "body" : "oohhh bbbb nnnn"
+}
+
+### update a task
+PUT {{host}}/task/full
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "taskId": "5fa8eee799714442b4ecb5eb",
+    "title": "okkk  nhbh bbg mjn kkk",
+    "body" : "oohh hhmn jhu uuh hh mnnnnn"
+}
+
+### update task status
+PUT {{host}}/task/status
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "taskId": "5fa8eee799714442b4ecb5eb",
+    "status": "Doing"
 }
 
 ### delete the tasks
-DELETE {{host}}/task/5fa67a3854cce2423450148a
+DELETE {{host}}/task/5fa8e58d89686809904c85ec/5fa8ea6982cbf735a80325c8
 Authorization: {{token}}

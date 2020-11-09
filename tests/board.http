@@ -1,0 +1,58 @@
+@host = http://localhost:5000
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE4ZTUyZTg5Njg2ODA5OTA0Yzg1ZWIiLCJpYXQiOjE2MDQ5MDQyNTEsImV4cCI6MTYwNDk2OTA1MX0.gOTByRLCdjT46-5FxVXBMgTYHSa3-Klh1iR2ghzAe5I
+
+### get boards 
+GET {{host}}/board/boards/?skip=0
+Authorization: {{token}}
+
+### get board by id
+GET {{host}}/board/5fa8eebf99714442b4ecb5ea
+Authorization: {{token}}
+
+### get members by id
+GET {{host}}/board/members/5fa8e58d89686809904c85ec
+Authorization: {{token}}
+
+### create new board
+POST {{host}}/board
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardName" : "secmmm", 
+    "catagery" : "Others"   
+}
+
+### update public appearence
+PUT {{host}}/board/public
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fa8e58d89686809904c85ec", 
+    "isPublic" : "false"   
+}
+
+### add member to the board
+PUT {{host}}/board/addmember
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fa8e58d89686809904c85ec", 
+    "memId" : "5fa8aae3194ad52894e6b252"   
+}
+
+### remove member from the board
+PUT {{host}}/board/removememb
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fa8e58d89686809904c85ec", 
+    "memId" : "5fa8aae3194ad52894e6b252"   
+}
+
+### delete the board
+DELETE {{host}}/board/5fa8e58d89686809904c85ec
+Authorization: {{token}}
