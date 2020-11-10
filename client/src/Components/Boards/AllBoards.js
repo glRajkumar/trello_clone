@@ -19,12 +19,11 @@ function AllBoards({ headers }) {
                             boards.map((board) => {
                                 return (
                                     <div
-                                        onClick={() => history.push(`/board/${board._id}`)}
                                         className="wrapper"
                                         key={board._id}
                                     >
-                                        <p><strong>{board.boardName}</strong></p>
-                                        <p>{board.catagery}</p>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}><strong>{board.boardName}</strong></p>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}>{board.catagery}</p>
                                         <button className="board-del" onClick={() => Delete(board._id)}>
                                             Delete
                                         </button>

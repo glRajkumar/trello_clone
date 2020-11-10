@@ -1,27 +1,17 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Catageries from "./Catageries"
-import { useDispatch } from 'react-redux'
-import { BOARD_ADD } from '../../Store/actionTypes'
 import axios from 'axios'
 
 function CreateBoard({ headers }) {
     const history = useHistory()
-    const dispatch = useDispatch()
     const [boardName, setBoardName] = useState('')
     const [catagery, setCatagery] = useState(Catageries[0])
 
     const Submit = () => {
         if (boardName !== "") {
-            console.log({ boardName, catagery })
             axios.post("/board", { boardName, catagery }, { headers })
-                .then((res) => {
-                    const payload = {
-                        _id: res.data.id,
-                        boardName,
-                        catagery
-                    }
-                    dispatch({ type: BOARD_ADD, payload })
+                .then(() => {
                     history.push('/')
                 })
                 .catch((err) => {

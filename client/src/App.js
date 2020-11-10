@@ -3,11 +3,8 @@ import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NotFound, Protected, UnAuthor, FirstCheck } from './Components/Common';
 import { NavBar, Login, Signup } from './Components/User';
+import { AllBoards, Board, CreateBoard, Detailed } from "./Components/Boards"
 import './CSS/app.css'
-import AllBoards from './Components/Boards/AllBoards';
-import CreateBoard from './Components/Boards/CreateBoard';
-import Board from './Components/Boards/Board';
-import Detailed from './Components/Boards/Detailed';
 
 function App() {
   const { auth } = useSelector(state => state.auth)

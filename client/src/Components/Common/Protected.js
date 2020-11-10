@@ -5,9 +5,6 @@ import { Route, Redirect } from 'react-router-dom'
 const Protected = ({ component: Component, ...rest }) => {
     const auth = useSelector(state => state.auth)
 
-    console.log("at protected")
-    console.log(auth)
-
     const headers = {
         Authorization: "Bearer " + auth.token
     }

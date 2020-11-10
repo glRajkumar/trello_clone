@@ -1,0 +1,32 @@
+.svg_ic{
+    cursor: pointer;
+    fill: transparent;
+    width: 16px;
+    height: 16px;
+    stroke: #000;
+    stroke-width: 5;
+}
+
+.filled,
+.svg_ic:hover{
+    fill: #000;
+}
+
+.svg_ic:hover *>:not(circle){
+    stroke: white;
+    fill: #000;
+}
+
+.svg_ic_op{
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 5;
+}
+
+.svg_ic_op:hover{
+    fill: #000;
+    stroke: #fff;
+}

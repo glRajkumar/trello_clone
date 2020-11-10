@@ -13,8 +13,6 @@ function Detailed({ headers }) {
     useEffect(() => {
         Axios.get(`/task/task/${taskId}`, { headers })
             .then((res) => {
-                console.log(res.data)
-                console.log(res.data.tasks)
                 setDetails(res.data.tasks)
                 setOriginal(res.data.tasks)
                 setLoad(false)
@@ -39,8 +37,7 @@ function Detailed({ headers }) {
         }
 
         Axios.put('/task', { ...payload }, { headers })
-            .then((res) => {
-                console.log(res.data)
+            .then(() => {
                 history.goBack()
             })
             .catch((err) => {
