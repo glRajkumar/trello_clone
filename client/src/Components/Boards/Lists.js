@@ -4,28 +4,37 @@ import axios from 'axios'
 
 function Lists({ lists, headers, boardid, status }) {
     const history = useHistory()
+    const [tasks, setTasks] = useState(lists)
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
+    console.log("tasks")
+    console.log(tasks)
     const Submit = () => {
         if (title !== "") {
-            if (status) {
-                axios.post("/task", { title, boardid, status }, { headers })
-                    .then((res) => {
-                        console.log(res.data)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            } else {
-                axios.post("/task", { title, boardid }, { headers })
-                    .then((res) => {
-                        console.log(res.data)
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+            const payload = {
+                boardid,
+                title
             }
+            if (status) {
+                payload.status = status
+            }
+            axios.post("/task", { ...payload }, { headers })
+                .then((res) => {
+                    console.log(res.data)
+                    setTasks(prev => {
+                        return [
+                            ...prev,
+                            {
+                                _id: res.data.id,
+                                ...payload
+                            }
+                        ]
+                    })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         }
         setTitle("")
         setShow(prev => !prev)
@@ -34,8 +43,8 @@ function Lists({ lists, headers, boardid, status }) {
     return (
         <div className="lists">
             {
-                lists.length > 0 &&
-                lists.map((list) => {
+                tasks.length > 0 &&
+                tasks.map((list) => {
                     return (
                         <p
                             className="list-cont"

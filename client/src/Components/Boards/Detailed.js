@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Loading } from '../Common'
 import Axios from 'axios'
 
 function Detailed({ headers }) {
+    const history = useHistory()
     const { taskId } = useParams()
     const [loading, setLoad] = useState(true)
     const [details, setDetails] = useState({})
@@ -40,6 +41,7 @@ function Detailed({ headers }) {
         Axios.put('/task', { ...payload }, { headers })
             .then((res) => {
                 console.log(res.data)
+                history.goBack()
             })
             .catch((err) => {
                 console.log(err)

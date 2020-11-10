@@ -6,7 +6,7 @@ GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fa9d67440be14333c1fda01
+GET {{host}}/board/5fa9e501a5c7cb27509427ef
 Authorization: {{token}}
 
 ### get members by id

@@ -43,7 +43,7 @@ router.post("/", auth, async (req, res) => {
         const task = new Task({ board: boardid, ...details })
         await task.save()
         await Board.findByIdAndUpdate(boardid, { $push: { tasks: task._id } })
-        res.json({ task, id: task._id, msg: "Task saved successfully" })
+        res.json({ id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
         res.status(400).json({ error, msg: "Task creation failed" })
