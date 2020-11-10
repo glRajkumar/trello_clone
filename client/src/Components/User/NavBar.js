@@ -26,6 +26,8 @@ function NavBar({ auth }) {
                             <li> <Link to="/login">Log in</Link> </li>
                         </>
                         : <>
+                            <li> <Link to="/shared">Shared Boards</Link> </li>
+                            <li> <Link to="/public">Public Boards</Link> </li>
                             <li> <Link to="/create-board">Creat Board</Link> </li>
                             <li> <button onClick={logout}>Log out</button> </li>
                         </>

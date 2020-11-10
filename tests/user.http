@@ -1,5 +1,7 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE5ZDY1ZTQwYmUxNDMzM2MxZmRhMDAiLCJpYXQiOjE2MDQ5NjU5OTAsImV4cCI6MTYwNTAzMDc5MH0.VLxXwLpzJ-3kdPkCbDHoRHUqWLA690jd49s0sfQV9GI
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNmE3OTEwOTgzMzQ4Zjg1ZjljMzIiLCJpYXQiOjE2MDUwMDM5MTEsImV4cCI6MTYwNTA2ODcxMX0.40iO8YLGsAS_5AFmI4qQy6rFu0tIiC1nFpilVbUm4Es
+
+### @token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNjliZjgyMzMxYTI5NDg1Mjc3NWEiLCJpYXQiOjE2MDUwMDM3MTUsImV4cCI6MTYwNTA2ODUxNX0.ugy7hF8aCZ4EuNP6pQSMD_lBz-Dhepum3fFo-9Zy12w
 
 ### get me 
 GET {{host}}/user/me
@@ -10,9 +12,9 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-    "userName": "aaaall",
-    "email" : "aaakkk@gmail.com",
-    "password" : "aaaaaaa"
+    "userName": "rrrr",
+    "email" : "rrr@gmail.com",
+    "password" : "aA1!aa"
 }
 
 ### login
@@ -20,8 +22,17 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "email" : "aaakkk@gmail.com",
-    "password" : "aaaaaaa"
+    "email" : "rrr@gmail.com",
+    "password" : "aA1!aa"
+}
+
+### search user
+POST {{host}}/user/search
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "query": "aaaa"
 }
 
 ### logout

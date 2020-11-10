@@ -60,6 +60,17 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/search', auth, async (req, res) => {
+    const userPattern = new RegExp(req.body.query)
+
+    try {
+        const user = await User.find({ userName: { $regex: userPattern } }).select("_id userName")
+        res.json({ user })
+    } catch (error) {
+        res.status(400).json({ error, msg: 'cannot search' })
+    }
+})
+
 router.post("/logout", auth, async (req, res) => {
     const { user, token } = req
 

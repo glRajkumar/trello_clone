@@ -1,16 +1,24 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmE5ZDY1ZTQwYmUxNDMzM2MxZmRhMDAiLCJpYXQiOjE2MDQ5NjU5OTAsImV4cCI6MTYwNTAzMDc5MH0.VLxXwLpzJ-3kdPkCbDHoRHUqWLA690jd49s0sfQV9GI
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNmE3OTEwOTgzMzQ4Zjg1ZjljMzIiLCJpYXQiOjE2MDUwMDM5MTEsImV4cCI6MTYwNTA2ODcxMX0.40iO8YLGsAS_5AFmI4qQy6rFu0tIiC1nFpilVbUm4Es
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
+### get public boards 
+GET {{host}}/board/public/?skip=0
+Authorization: {{token}}
+
 ### get board by id
-GET {{host}}/board/5fa9e501a5c7cb27509427ef
+GET {{host}}/board/5faa69f382331a294852775d
+Authorization: {{token}}
+
+### get shared
+GET {{host}}/board/sharedboards/?skip=0
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5fa8e58d89686809904c85ec
+GET {{host}}/board/members/5faa88e2d75f3b03d48efc60
 Authorization: {{token}}
 
 ### create new board
@@ -19,8 +27,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "kijjjjju", 
-    "catagery" : "Education"   
+    "boardName" : "bb vv fju", 
+    "catagery" : "Sports"   
 }
 
 ### update public appearence
@@ -29,7 +37,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fa8e58d89686809904c85ec", 
+    "boardId" : "5faa63094d732a1260ece0bf", 
     "isPublic" : "false"   
 }
 
@@ -39,8 +47,9 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fa8e58d89686809904c85ec", 
-    "memId" : "5fa8aae3194ad52894e6b252"   
+    "boardId" : "5faa88e2d75f3b03d48efc60", 
+    "memId" : "5faa6a7910983348f85f9c32",
+    "permision": "Admin"
 }
 
 ### remove member from the board
@@ -49,8 +58,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fa8e58d89686809904c85ec", 
-    "memId" : "5fa8aae3194ad52894e6b252"   
+    "boardId" : "5faa69f382331a294852775d", 
+    "memId" : "5faa6bd710983348f85f9c38"   
 }
 
 ### delete the board

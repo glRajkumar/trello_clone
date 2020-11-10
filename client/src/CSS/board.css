@@ -7,8 +7,11 @@
     padding: .7rem .4rem;
 }
 
-.board-head p{
+.board-head > div{
+    border: 1px solid rgba(0, 0, 0, .1);
     margin-right: 1rem;
+    padding: .5rem 1rem;
+    cursor: pointer;
 }
 
 .board-lists{
@@ -29,4 +32,34 @@
 
 .list-cont{
     cursor: pointer;
+    background-color: white;
+    padding: .2rem .5rem;
+    margin-bottom: .3rem;
+}
+
+.list-lasts button:last-child{
+    margin-left: .5rem;
+}
+
+.list-lasts button{
+    padding: .3rem .5rem;
+    font-size: .9rem;
+}
+
+.board-users{
+    position: relative;
+}
+
+.board-useroption{
+    top: 102%;
+    z-index: 3;
+    padding: 1rem;
+    width: 200px;
+    position: absolute;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
+.board-useroption > div{
+    margin: .5rem 0;
 }

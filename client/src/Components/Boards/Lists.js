@@ -8,8 +8,6 @@ function Lists({ lists, headers, boardid, status }) {
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
-    console.log("tasks")
-    console.log(tasks)
     const Submit = () => {
         if (title !== "") {
             const payload = {
@@ -69,7 +67,7 @@ function Lists({ lists, headers, boardid, status }) {
 
             {
                 showForm &&
-                <>
+                <div className="list-lasts">
                     <input
                         className="input-box"
                         type="text"
@@ -79,7 +77,7 @@ function Lists({ lists, headers, boardid, status }) {
                     />
                     <button onClick={Submit}>Save</button>
                     <button onClick={() => setShow(prev => !prev)}>Cancel</button>
-                </>
+                </div>
             }
         </div>
     )

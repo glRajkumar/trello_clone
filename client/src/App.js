@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NotFound, Protected, UnAuthor, FirstCheck } from './Components/Common';
 import { NavBar, Login, Signup } from './Components/User';
-import { AllBoards, Board, CreateBoard, Detailed } from "./Components/Boards"
+import { AllBoards, Board, CreateBoard, Detailed, PublicBoards, Shared } from "./Components/Boards"
 import './CSS/app.css'
 
 function App() {
@@ -24,6 +24,8 @@ function App() {
           !auth && <Route exact path="/" component={FirstCheck} />
         }
 
+        <Protected exact path="/public" component={PublicBoards} />
+        <Protected exact path="/shared" component={Shared} />
         <Protected exact path="/board/:boardid" component={Board} />
         <Protected exact path="/create-board" component={CreateBoard} />
         <Protected exact path="/taskdetails/:taskId" component={Detailed} />
