@@ -31,7 +31,7 @@ function CreateBoard({ headers }) {
     }
 
     return (
-        <div>
+        <div className="form-box">
             <input
                 className="input-box"
                 type="text"

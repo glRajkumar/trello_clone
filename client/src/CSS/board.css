@@ -7,6 +7,10 @@
     padding: .7rem .4rem;
 }
 
+.board-head p{
+    margin-right: 1rem;
+}
+
 .board-lists{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

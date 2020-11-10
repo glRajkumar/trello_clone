@@ -6,7 +6,7 @@ import "../../CSS/allboards.css"
 
 function AllBoards({ headers }) {
     const history = useHistory()
-    const { boards, loading, error } = useBoards(headers)
+    const { boards, loading, error, Delete } = useBoards(headers)
 
     return !loading
         ?
@@ -25,6 +25,9 @@ function AllBoards({ headers }) {
                                     >
                                         <p><strong>{board.boardName}</strong></p>
                                         <p>{board.catagery}</p>
+                                        <button className="board-del" onClick={() => Delete(board._id)}>
+                                            Delete
+                                        </button>
                                     </div>
                                 )
                             })

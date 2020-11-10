@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BOARD_GET } from "../../Store/actionTypes"
+import { BOARD_GET, BOARD_DELETE } from "../../Store/actionTypes"
 import axios from 'axios'
 
 function useBoards(headers) {
@@ -24,7 +24,18 @@ function useBoards(headers) {
             })
     }, [])
 
-    return { boards, loading, error }
+    const Delete = (id) => {
+        axios.delete(`/board/${id}`, { headers })
+            .then((res) => {
+                console.log(res.data)
+                dispatch({ type: BOARD_DELETE, payload: id })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    return { boards, loading, error, Delete }
 }
 
 export default useBoards

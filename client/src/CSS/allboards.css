@@ -11,3 +11,10 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.board-del{
+    background-color: rgba(255, 0, 0, .5);
+    font-size: .8rem;
+    float: right;
+    padding: .2rem .4rem;
+}

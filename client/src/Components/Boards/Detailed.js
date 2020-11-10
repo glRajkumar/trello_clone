@@ -10,7 +10,7 @@ function Detailed({ headers }) {
     const [original, setOriginal] = useState({})
 
     useEffect(() => {
-        Axios.get(`/task/${taskId}`, { headers })
+        Axios.get(`/task/task/${taskId}`, { headers })
             .then((res) => {
                 console.log(res.data)
                 console.log(res.data.tasks)
@@ -37,7 +37,6 @@ function Detailed({ headers }) {
             payload.status = details.status
         }
 
-        console.log(payload)
         Axios.put('/task', { ...payload }, { headers })
             .then((res) => {
                 console.log(res.data)
@@ -48,7 +47,7 @@ function Detailed({ headers }) {
     }
 
     return !loading ? (
-        <div>
+        <div className="form-box">
             <input
                 className="input-box"
                 type="text"
@@ -66,7 +65,7 @@ function Detailed({ headers }) {
                 className="input-box"
                 type="text"
                 placeholder="describe the details of your task..."
-                value={details.title}
+                value={details.body}
                 onChange={e => setDetails(prev => {
                     return {
                         ...prev,

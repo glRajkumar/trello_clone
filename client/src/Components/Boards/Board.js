@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Loading } from '../Common'
-import Axios from 'axios'
+import axios from 'axios'
 import "../../CSS/board.css"
 import Lists from './Lists'
 
@@ -11,7 +11,7 @@ function Board({ headers }) {
     const [boardDetails, setBoardDetails] = useState(null)
 
     useEffect(() => {
-        Axios.get(`/board/${boardid}`, { headers })
+        axios.get(`/board/${boardid}`, { headers })
             .then((res) => {
                 setBoardDetails(res.data.boards[0])
                 setLoad(false)

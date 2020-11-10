@@ -15,8 +15,6 @@ const boardReducer = (state = initialState, { type, payload }) => {
             }
 
         case BOARD_GET:
-            console.log("payload at get")
-            console.log(payload)
             return {
                 ...state,
                 loading: false,
@@ -27,8 +25,6 @@ const boardReducer = (state = initialState, { type, payload }) => {
             }
 
         case BOARD_ADD:
-            console.log("payload at add")
-            console.log(payload)
             return {
                 ...state,
                 boards: [
@@ -38,8 +34,6 @@ const boardReducer = (state = initialState, { type, payload }) => {
             }
 
         case BOARD_EDIT:
-            console.log("payload at edit")
-            console.log(payload)
             const newData = state.boards.map(board => {
                 if (board._id === payload.id) {
                     return {
@@ -56,8 +50,6 @@ const boardReducer = (state = initialState, { type, payload }) => {
             }
 
         case BOARD_DELETE:
-            console.log("payload at delete")
-            console.log(payload)
             return {
                 ...state,
                 boards: state.boards.filter(t => t._id !== payload)
