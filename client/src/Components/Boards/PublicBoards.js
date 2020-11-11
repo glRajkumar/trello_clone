@@ -1,9 +1,10 @@
 import React from 'react'
 import { Loading } from '../Common'
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import usePublic from '../Customs/usePublic'
 
 function PublicBoards({ headers }) {
+    const history = useHistory()
     const { init, boards, hasMore, loading, error, getBoards } = usePublic("/public", headers)
 
     return !init
@@ -20,10 +21,10 @@ function PublicBoards({ headers }) {
                                         className="wrapper"
                                         key={board._id}
                                     >
-                                        <p>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}>
                                             <strong>{board.boardName}</strong>
                                         </p>
-                                        <p>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}>
                                             {board.catagery}
                                         </p>
                                         <p>

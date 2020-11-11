@@ -69,7 +69,7 @@ export function UserIcon(props) {
 
 export function DeleteIcon() {
     return (
-        <svg viewBox="0 0 384 384">
+        <svg viewBox="0 0 384 384" className="delete-ic">
             <path d="M64,341C64,364,83,384,106,384h170C300,384,320,364,320,341v-256H64V341z" />
             <polygon points="266,21 245,0 138,0 117,21 42,21 42,64 341,64 341,21" />
         </svg>

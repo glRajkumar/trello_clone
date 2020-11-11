@@ -1,9 +1,10 @@
 import React from 'react'
 import { Loading } from '../Common'
-import { Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import usePublic from '../Customs/usePublic'
 
-function Shared({ headers }) {
+function AllSharedBoards({ headers }) {
+    const history = useHistory()
     const { init, boards, hasMore, loading, error, getBoards } = usePublic("/sharedboards", headers)
 
     return !init
@@ -20,10 +21,10 @@ function Shared({ headers }) {
                                         className="wrapper"
                                         key={board._id}
                                     >
-                                        <p>
+                                        <p onClick={() => history.push(`/sharedboard/${board._id}`)}>
                                             <strong>{board.boardName}</strong>
                                         </p>
-                                        <p>
+                                        <p onClick={() => history.push(`/sharedboard/${board._id}`)}>
                                             {board.catagery}
                                         </p>
                                         <p>
@@ -39,8 +40,7 @@ function Shared({ headers }) {
                 {
                     !loading && boards.length === 0 &&
                     <div>
-                        Start the first publi Trello....
-                        <Link to="/create-board">board</Link>
+                        No one shared a board with you
                     </div>
                 }
 
@@ -64,4 +64,4 @@ function Shared({ headers }) {
         : (<Loading />)
 }
 
-export default Shared
+export default AllSharedBoards

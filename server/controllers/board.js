@@ -9,13 +9,20 @@ router.get("/sharedboards", auth, async (req, res) => {
     const userId = req.user._id
 
     try {
-        const boards = await Board.find({ "members.user": userId })
-            .select("boardName catagery postedBy")
+        let boards = await Board.find({ "members.user": userId })
+            .select("boardName catagery postedBy members")
             .populate('postedBy', "userName")
             .sort('-createdAt')
             .skip(skip)
             .limit(10)
             .lean()
+
+        boards = boards.map(board => {
+            return {
+                ...board,
+                members: board.members.filter(m => m.user.toString() === userId.toString())
+            }
+        })
 
         res.json({ boards })
     } catch (error) {
@@ -27,7 +34,7 @@ router.get('/public', auth, async (req, res) => {
     const skip = parseInt(req.query.skip)
 
     try {
-        const boards = await Board.find({ isPublic: true })
+        let boards = await Board.find({ isPublic: true, postedBy: { $ne: req.user._id } })
             .select('boardName catagery postedBy')
             .populate('postedBy', "userName")
             .sort('-createdAt')
@@ -63,7 +70,7 @@ router.get("/:boardId", auth, async (req, res) => {
 
     try {
         const boards = await Board.find({ _id: boardId })
-            .select("-members -postedBy -createdAt -__v")
+            .select("-members -createdAt -__v")
             .populate("tasks", "status title")
             .sort('-createdAt')
             .lean()
@@ -72,6 +79,30 @@ router.get("/:boardId", auth, async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ error, msg: "Cannot get boards" })
+    }
+})
+
+router.get("/shared/:boardId", auth, async (req, res) => {
+    const { boardId } = req.params
+
+    try {
+        let boards = await Board.find({ _id: boardId })
+            .select("-createdAt -__v")
+            .populate("tasks", "status title")
+            .sort('-createdAt')
+            .lean()
+
+        boards = boards.map(board => {
+            return {
+                ...board,
+                members: board.members.filter(m => m.user.toString() === req.user._id.toString())
+            }
+        })
+
+        res.json({ boards })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "cannot gt the shared board" })
     }
 })
 

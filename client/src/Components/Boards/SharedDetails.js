@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Loading } from '../Common'
 import Axios from 'axios'
 
-function Detailed({ headers }) {
+function SharedDetails({ headers }) {
     const history = useHistory()
+    const location = useLocation()
     const { taskId } = useParams()
     const [loading, setLoad] = useState(true)
     const [details, setDetails] = useState({})
     const [original, setOriginal] = useState({})
-    const { _id } = useSelector(state => state.auth)
 
     useEffect(() => {
         Axios.get(`/task/task/${taskId}`, { headers })
@@ -91,7 +90,7 @@ function Detailed({ headers }) {
             </select>
 
             {
-                details.board.postedBy === _id &&
+                location.state.permision !== "View" &&
                 <button onClick={Submit}>Save</button>
             }
 
@@ -100,4 +99,4 @@ function Detailed({ headers }) {
         : (<Loading />)
 }
 
-export default Detailed
+export default SharedDetails

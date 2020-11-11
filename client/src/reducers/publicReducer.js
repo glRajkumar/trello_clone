@@ -21,7 +21,7 @@ const publicReducer = (state, { type, payload }) => {
             } else {
                 return {
                     ...state,
-                    skip: state.skip + 5,
+                    skip: state.skip + 10,
                     loading: false,
                     boards: [
                         ...state.boards,

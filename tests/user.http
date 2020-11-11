@@ -1,7 +1,14 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNmE3OTEwOTgzMzQ4Zjg1ZjljMzIiLCJpYXQiOjE2MDUwMDM5MTEsImV4cCI6MTYwNTA2ODcxMX0.40iO8YLGsAS_5AFmI4qQy6rFu0tIiC1nFpilVbUm4Es
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFiNWE0ODdiNTYxODQwNThhYzUxYTAiLCJpYXQiOjE2MDUwNjUyOTgsImV4cCI6MTYwNTEzMDA5OH0.O8AfWXRg6crUJF5wzwBGYLX6y3ODTlBru2pzRoC6e6E
 
-### @token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNjliZjgyMzMxYTI5NDg1Mjc3NWEiLCJpYXQiOjE2MDUwMDM3MTUsImV4cCI6MTYwNTA2ODUxNX0.ugy7hF8aCZ4EuNP6pQSMD_lBz-Dhepum3fFo-9Zy12w
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhOTJlNzQ0YWJhODRlMGNhNGE3NTciLCJpYXQiOjE2MDUwNjQ1MDcsImV4cCI6MTYwNTEyOTMwN30.28dv7kt9TKUlNxi-Dkk3uUJSw2-VHu0nGqB_4EV629U
+### rrr@gmail.com, rrrr, 5faa92e744aba84e0ca4a757
+
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFiNTc5NTU0YTYzYjQ0NDAxMDAwYWMiLCJpYXQiOjE2MDUwNjQ2MTIsImV4cCI6MTYwNTEyOTQxMn0.l_5UhWVh4KVNLqucN2gCVelZ-1MX4wd41gcZx_6sHuc
+### ccc@gmail.com, cccc
+
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFiNWE0ODdiNTYxODQwNThhYzUxYTAiLCJpYXQiOjE2MDUwNjUyOTgsImV4cCI6MTYwNTEzMDA5OH0.O8AfWXRg6crUJF5wzwBGYLX6y3ODTlBru2pzRoC6e6E
+### ddd@gmail.com, dddd, 5fab5a487b56184058ac51a0
 
 ### get me 
 GET {{host}}/user/me
@@ -12,8 +19,8 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-    "userName": "rrrr",
-    "email" : "rrr@gmail.com",
+    "userName": "dddd",
+    "email" : "ddd@gmail.com",
     "password" : "aA1!aa"
 }
 
@@ -22,7 +29,7 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "email" : "rrr@gmail.com",
+    "email" : "ddd@gmail.com",
     "password" : "aA1!aa"
 }
 

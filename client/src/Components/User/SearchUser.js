@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import axios from 'axios'
+import "../../CSS/userlists.css"
 
 function SearchUser({ headers, boardId }) {
     const stayFocusRef = useRef(null)
@@ -45,7 +46,7 @@ function SearchUser({ headers, boardId }) {
     }
 
     return (
-        <div>
+        <div className="searuser">
             {
                 !selectedUser &&
                 <input
@@ -61,7 +62,7 @@ function SearchUser({ headers, boardId }) {
             {
                 selectedUser &&
                 <div>
-                    <p>{selectedUser.name}</p>
+                    <p>selected: <strong>{selectedUser.name}</strong></p>
                     <select
                         className="input-box"
                         value={permision}
@@ -71,7 +72,7 @@ function SearchUser({ headers, boardId }) {
                         <option value="Ask">Ask</option>
                         <option value="Admin">Admin</option>
                     </select>
-                    <button onClick={Submit}>Add</button>
+                    <button id="search-btn" onClick={Submit}>Add</button>
                 </div>
             }
 

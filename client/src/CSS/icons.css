@@ -26,7 +26,14 @@
     stroke-width: 5;
 }
 
+/* 
 .svg_ic_op:hover{
     fill: #000;
     stroke: #fff;
+} */
+
+.delete-ic{
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
 }

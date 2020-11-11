@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
 
-function Lists({ lists, headers, boardid, status, isMine }) {
+function SharedLists({ lists, headers, boardid, status, permision }) {
     const history = useHistory()
     const [tasks, setTasks] = useState(lists)
     const [showForm, setShow] = useState(false)
@@ -15,9 +15,8 @@ function Lists({ lists, headers, boardid, status, isMine }) {
                 boardid,
                 title
             }
-            if (status) {
-                payload.status = status
-            }
+            if (status) payload.status = status
+
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
                     setTasks(prev => {
@@ -56,11 +55,11 @@ function Lists({ lists, headers, boardid, status, isMine }) {
                 tasks.map((list) => {
                     return (
                         <div className="list-cont" key={list._id}>
-                            <p onClick={() => history.push(`/taskdetails/${list._id}`)}>
+                            <p onClick={() => history.push(`/sharedtask/${list._id}`, { permision })}>
                                 {list.title}
                             </p>
                             {
-                                isMine &&
+                                permision !== "View" &&
                                 <p onClick={() => DelTitle(list._id)}>
                                     <DeleteIcon />
                                 </p>
@@ -71,7 +70,7 @@ function Lists({ lists, headers, boardid, status, isMine }) {
             }
 
             {
-                isMine && !showForm &&
+                permision !== "View" && !showForm &&
                 <p
                     className="list-add"
                     onClick={() => setShow(prev => !prev)}
@@ -98,4 +97,4 @@ function Lists({ lists, headers, boardid, status, isMine }) {
     )
 }
 
-export default Lists
+export default SharedLists

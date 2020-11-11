@@ -27,6 +27,7 @@ router.get("/task/:taskId", auth, async (req, res) => {
     try {
         const tasks = await Task.findById(taskId)
             .select("-__v -createdAt")
+            .populate('board', "postedBy -_id")
             .lean()
 
         res.json({ tasks })

@@ -1,24 +1,28 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhNmE3OTEwOTgzMzQ4Zjg1ZjljMzIiLCJpYXQiOjE2MDUwMDM5MTEsImV4cCI6MTYwNTA2ODcxMX0.40iO8YLGsAS_5AFmI4qQy6rFu0tIiC1nFpilVbUm4Es
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhOTJlNzQ0YWJhODRlMGNhNGE3NTciLCJpYXQiOjE2MDUwNjQ1MDcsImV4cCI6MTYwNTEyOTMwN30.28dv7kt9TKUlNxi-Dkk3uUJSw2-VHu0nGqB_4EV629U
 
-### get boards 
-GET {{host}}/board/boards
+### get shared
+GET {{host}}/board/sharedboards/?skip=0
 Authorization: {{token}}
 
 ### get public boards 
 GET {{host}}/board/public/?skip=0
 Authorization: {{token}}
 
-### get board by id
-GET {{host}}/board/5faa69f382331a294852775d
+### get boards 
+GET {{host}}/board/boards
 Authorization: {{token}}
 
-### get shared
-GET {{host}}/board/sharedboards/?skip=0
+### get board by id
+GET {{host}}/board/5fab7c8fcfba304f2ca50eba
+Authorization: {{token}}
+
+### get shared board by id
+GET {{host}}/board/shared/5fab7c8fcfba304f2ca50eba
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5faa88e2d75f3b03d48efc60
+GET {{host}}/board/members/5fab59917b56184058ac519e
 Authorization: {{token}}
 
 ### create new board
@@ -27,8 +31,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "bb vv fju", 
-    "catagery" : "Sports"   
+    "boardName" : "hgtf", 
+    "catagery" : "Education"   
 }
 
 ### update public appearence
@@ -47,9 +51,9 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5faa88e2d75f3b03d48efc60", 
-    "memId" : "5faa6a7910983348f85f9c32",
-    "permision": "Admin"
+    "boardId" : "5fab7c8fcfba304f2ca50eba", 
+    "memId" : "5faa92e744aba84e0ca4a757",
+    "permision" : "Ask"
 }
 
 ### remove member from the board
@@ -58,8 +62,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5faa69f382331a294852775d", 
-    "memId" : "5faa6bd710983348f85f9c38"   
+    "boardId" : "5fab59917b56184058ac519e", 
+    "_id" : "5fab59f57b56184058ac519f"   
 }
 
 ### delete the board

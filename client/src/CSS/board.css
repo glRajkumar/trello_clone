@@ -31,6 +31,9 @@
 }
 
 .list-cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     cursor: pointer;
     background-color: white;
     padding: .2rem .5rem;

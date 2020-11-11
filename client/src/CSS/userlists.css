@@ -1,0 +1,32 @@
+.userlists{
+    margin: .3rem 0;
+}
+
+.user-lst{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .3rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.user-lst div p{
+    font-size: .9rem;
+}
+
+.user-lst button{
+    font-size: .7rem;
+    padding: .3rem .5rem;
+    background-color: rgba(255, 0, 0, .4);
+}
+
+.user-lst button:hover{
+    color: rgba(255, 0, 0, .4);
+    outline: 1px solid rgba(255, 0, 0, .4);
+    background-color: white;
+}
+
+#search-btn{
+    font-size: .9rem;
+    padding: .2rem .6rem;
+}

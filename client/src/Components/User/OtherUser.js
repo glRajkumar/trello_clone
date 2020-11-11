@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import "../../CSS/userlists.css"
 
 function OtherUser({ headers, boardId }) {
     const [loading, setLoad] = useState(true)
@@ -29,15 +30,15 @@ function OtherUser({ headers, boardId }) {
     }
 
     return (
-        <div>
+        <div className="userlists">
             {
                 users.length > 0 &&
                 users.map(user => {
                     return (
-                        <div key={user._id}>
+                        <div className="user-lst" key={user._id}>
                             <div>
-                                <p>{user.user.userName}</p>
-                                <p>{user.permision}</p>
+                                <p>user : <strong>{user.user.userName}</strong></p>
+                                <p>perm : {user.permision}</p>
                             </div>
                             <button onClick={() => Remove(user._id)}>remove</button>
                         </div>

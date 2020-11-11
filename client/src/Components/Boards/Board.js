@@ -6,8 +6,10 @@ import "../../CSS/board.css"
 import Lists from './Lists'
 import OtherUser from '../User/OtherUser'
 import SearchUser from '../User/SearchUser'
+import { useSelector } from 'react-redux'
 
 function Board({ headers }) {
+    const { _id } = useSelector(state => state.auth)
     const { boardid } = useParams()
     const [loading, setLoad] = useState(true)
     const [showMem, setshowMem] = useState(false)
@@ -46,35 +48,40 @@ function Board({ headers }) {
             <div className="board-head">
                 <div> {boardDetails.boardName} </div>
                 <div> {boardDetails.catagery} </div>
-                <div onClick={Private}> {boardDetails.isPublic ? "Make private" : "Make public"} </div>
-                <div className="board-users">
-                    <div onClick={() => setOpen(prev => !prev)}>other users</div>
-                    <div>
-                        {
-                            open &&
-                            <div className="board-useroption">
-                                <div>
-                                    <p onClick={() => setshowMem(prev => !prev)}>members</p>
-                                    {
-                                        showMem &&
+                {
+                    boardDetails.postedBy === _id &&
+                    <>
+                        <div onClick={Private}> {boardDetails.isPublic ? "Make private" : "Make public"} </div>
+                        <div className="board-users">
+                            <div onClick={() => setOpen(prev => !prev)}>other users</div>
+                            <div>
+                                {
+                                    open &&
+                                    <div className="board-useroption">
                                         <div>
-                                            <OtherUser headers={headers} boardId={boardid} />
+                                            <p onClick={() => { setshowMem(prev => !prev); setAddU(false) }}>members</p>
+                                            {
+                                                showMem &&
+                                                <div>
+                                                    <OtherUser headers={headers} boardId={boardid} />
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                </div>
-                                <div>
-                                    <p onClick={() => setAddU(prev => !prev)}>add users</p>
-                                    {
-                                        addU &&
                                         <div>
-                                            <SearchUser headers={headers} boardId={boardid} />
+                                            <p onClick={() => { setAddU(prev => !prev); setshowMem(false) }}>add users</p>
+                                            {
+                                                addU &&
+                                                <div>
+                                                    <SearchUser headers={headers} boardId={boardid} />
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                </div>
+                                    </div>
+                                }
                             </div>
-                        }
-                    </div>
-                </div>
+                        </div>
+                    </>
+                }
             </div>
 
             <div className="board-lists">
@@ -87,6 +94,7 @@ function Board({ headers }) {
                         }
                         headers={headers}
                         boardid={boardid}
+                        isMine={boardDetails.postedBy === _id}
                     />
                 </div>
                 <div>
@@ -99,6 +107,7 @@ function Board({ headers }) {
                         status="Doing"
                         headers={headers}
                         boardid={boardid}
+                        isMine={boardDetails.postedBy === _id}
                     />
                 </div>
                 <div>
@@ -111,6 +120,7 @@ function Board({ headers }) {
                         status="Done"
                         headers={headers}
                         boardid={boardid}
+                        isMine={boardDetails.postedBy === _id}
                     />
                 </div>
             </div>

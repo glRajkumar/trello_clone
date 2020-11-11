@@ -10,8 +10,6 @@ function FirstCheck() {
     const [firstRender, setFirstRender] = useState(true)
     const dispatch = useDispatch()
 
-    console.log("at firstcheck")
-
     const LOGOUT = async () => {
         localStorage.removeItem("task_token")
         localStorage.removeItem("task_token_exp")

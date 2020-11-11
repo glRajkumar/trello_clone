@@ -1,13 +1,45 @@
 .nav{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: space-between;
     align-items: center;
     padding: .5rem 1rem;
 }
 
-.nav ul{
+.nav-container{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.pro-con{
+    position: relative;
+}
+
+#fl{
+    float: right;
+}
+
+.mini{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    z-index : 2;
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0,0, 0.1);
+}
+
+.mini ul li{
+    padding: .4rem 0;
+}
+
+.mini ul li:first-child{
+    margin-top: .5rem;
+}
+
+.mini ul li:last-child {
+    margin-bottom: .5rem;
 }
