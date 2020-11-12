@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { Loading } from '../Common'
+import React, { useState } from 'react'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useDispatch } from "react-redux"
+import { TASK_EDIT } from '../../Store/actionTypes'
 import Axios from 'axios'
 
 function Detailed({ headers }) {
     const history = useHistory()
     const { taskId } = useParams()
-    const [loading, setLoad] = useState(true)
-    const [details, setDetails] = useState({})
-    const [original, setOriginal] = useState({})
-    const { _id } = useSelector(state => state.auth)
-
-    useEffect(() => {
-        Axios.get(`/task/task/${taskId}`, { headers })
-            .then((res) => {
-                setDetails(res.data.tasks)
-                setOriginal(res.data.tasks)
-                setLoad(false)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+    const { state } = useLocation()
+    const dispatch = useDispatch()
+    const [details, setDetails] = useState(state.forwordState)
+    const [original] = useState(state.forwordState)
 
     const Submit = () => {
         const payload = {
@@ -40,6 +28,13 @@ function Detailed({ headers }) {
 
         Axios.put('/task', { ...payload }, { headers })
             .then(() => {
+                const { taskId, ...changes } = payload
+                const actPayload = {
+                    taskid: taskId,
+                    boardid: state.forwordState.boardid,
+                    info: changes
+                }
+                dispatch({ type: TASK_EDIT, payload: actPayload })
                 history.goBack()
             })
             .catch((err) => {
@@ -47,7 +42,7 @@ function Detailed({ headers }) {
             })
     }
 
-    return !loading ? (
+    return (
         <div className="form-box">
             <input
                 className="input-box"
@@ -91,13 +86,12 @@ function Detailed({ headers }) {
             </select>
 
             {
-                details.board.postedBy === _id &&
+                details.isMine &&
                 <button onClick={Submit}>Save</button>
             }
 
         </div>
     )
-        : (<Loading />)
 }
 
 export default Detailed

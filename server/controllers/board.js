@@ -71,7 +71,7 @@ router.get("/:boardId", auth, async (req, res) => {
     try {
         const boards = await Board.find({ _id: boardId })
             .select("-members -createdAt -__v")
-            .populate("tasks", "status title")
+            .populate("tasks", "status title body")
             .sort('-createdAt')
             .lean()
 
@@ -88,7 +88,7 @@ router.get("/shared/:boardId", auth, async (req, res) => {
     try {
         let boards = await Board.find({ _id: boardId })
             .select("-createdAt -__v")
-            .populate("tasks", "status title")
+            .populate("tasks", "status title body")
             .sort('-createdAt')
             .lean()
 

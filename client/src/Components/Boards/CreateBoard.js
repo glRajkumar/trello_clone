@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Catageries from "./Catageries"
+import { BOARD_ADD } from '../../Store/actionTypes'
+import { useDispatch } from 'react-redux'
 import axios from 'axios'
 
 function CreateBoard({ headers }) {
+    const dispatch = useDispatch()
     const history = useHistory()
     const [boardName, setBoardName] = useState('')
     const [catagery, setCatagery] = useState(Catageries[0])
@@ -11,7 +14,13 @@ function CreateBoard({ headers }) {
     const Submit = () => {
         if (boardName !== "") {
             axios.post("/board", { boardName, catagery }, { headers })
-                .then(() => {
+                .then((res) => {
+                    const payload = {
+                        _id: res.data.id,
+                        boardName,
+                        catagery
+                    }
+                    dispatch({ type: BOARD_ADD, payload })
                     history.push('/')
                 })
                 .catch((err) => {

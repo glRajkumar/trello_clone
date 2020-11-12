@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ lists, headers, boardid, status, isMine }) {
+function Lists({ headers, boardid, status = "To-do", isMine }) {
+    const dispath = useDispatch()
     const history = useHistory()
-    const [tasks, setTasks] = useState(lists)
+    const detailed = useSelector(state => state.task)
+    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
@@ -15,20 +19,18 @@ function Lists({ lists, headers, boardid, status, isMine }) {
                 boardid,
                 title
             }
-            if (status) {
-                payload.status = status
-            }
+
+            if (status !== "To-do") payload.status = status
+
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
-                    setTasks(prev => {
-                        return [
-                            ...prev,
-                            {
-                                _id: res.data.id,
-                                ...payload
-                            }
-                        ]
-                    })
+                    let payload = {
+                        _id: res.data.id,
+                        boardid,
+                        title,
+                        status
+                    }
+                    dispath({ type: TASK_ADD, payload })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -39,24 +41,37 @@ function Lists({ lists, headers, boardid, status, isMine }) {
     }
 
     const DelTitle = (id) => {
+        console.log(id)
         axios.delete(`/task/${boardid}/${id}`, { headers })
             .then(() => {
-                let newData = tasks.filter(t => t._id !== id)
-                setTasks(newData)
+                let payload = {
+                    boardid,
+                    taskid: id
+                }
+                dispath({ type: TASK_DELETE, payload })
             })
             .catch((err) => {
                 console.log(err)
             })
     }
 
+    const detailForword = (list) => {
+        const forwordState = {
+            ...list,
+            boardid,
+            isMine
+        }
+        history.push(`/taskdetails/${list._id}`, { forwordState })
+    }
+
     return (
         <div className="lists">
             {
-                tasks.length > 0 &&
+                tasks?.length > 0 &&
                 tasks.map((list) => {
                     return (
                         <div className="list-cont" key={list._id}>
-                            <p onClick={() => history.push(`/taskdetails/${list._id}`)}>
+                            <p onClick={() => detailForword(list)}>
                                 {list.title}
                             </p>
                             {
