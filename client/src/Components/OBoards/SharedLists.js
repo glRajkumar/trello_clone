@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { STASK_ADD, STASK_DELETE } from '../../Store/actionTypes'
 
-function SharedLists({ lists, headers, boardid, status, permision }) {
+function SharedLists({ headers, boardid, status = "To-do", permision }) {
+    const dispatch = useDispatch()
+    const detailed = useSelector(state => state.stask)
     const history = useHistory()
-    const [tasks, setTasks] = useState(lists)
+    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
@@ -15,19 +19,17 @@ function SharedLists({ lists, headers, boardid, status, permision }) {
                 boardid,
                 title
             }
-            if (status) payload.status = status
+            if (status !== "To-do") payload.status = status
 
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
-                    setTasks(prev => {
-                        return [
-                            ...prev,
-                            {
-                                _id: res.data.id,
-                                ...payload
-                            }
-                        ]
-                    })
+                    let payload = {
+                        _id: res.data.id,
+                        boardid,
+                        title,
+                        status
+                    }
+                    dispatch({ type: STASK_ADD, payload })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -40,22 +42,34 @@ function SharedLists({ lists, headers, boardid, status, permision }) {
     const DelTitle = (id) => {
         axios.delete(`/task/${boardid}/${id}`, { headers })
             .then(() => {
-                let newData = tasks.filter(t => t._id !== id)
-                setTasks(newData)
+                let payload = {
+                    boardid,
+                    taskid: id
+                }
+                dispatch({ type: STASK_DELETE, payload })
             })
             .catch((err) => {
                 console.log(err)
             })
     }
 
+    const detailForword = (list) => {
+        const forwordState = {
+            ...list,
+            boardid,
+            permision
+        }
+        history.push(`/sharedtask/${list._id}`, { forwordState })
+    }
+
     return (
         <div className="lists">
             {
-                tasks.length > 0 &&
+                tasks?.length > 0 &&
                 tasks.map((list) => {
                     return (
                         <div className="list-cont" key={list._id}>
-                            <p onClick={() => history.push(`/sharedtask/${list._id}`, { permision })}>
+                            <p onClick={() => detailForword(list)}>
                                 {list.title}
                             </p>
                             {

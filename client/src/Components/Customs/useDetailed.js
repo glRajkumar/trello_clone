@@ -20,10 +20,6 @@ function useDetailed(boardid, headers) {
     const [loading, setLoad] = useState(!isPresent)
     const dispatch = useDispatch()
 
-    console.log("task")
-    console.log(task)
-    console.log(detailed)
-
     useEffect(() => {
         if (!isPresent) {
             axios.get(`/board/${boardid}`, { headers })

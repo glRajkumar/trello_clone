@@ -1,10 +1,8 @@
 import {
     SDET_GET,
-    SDET_EDIT,
     STASK_ADD,
     STASK_EDIT,
     STASK_DELETE,
-    SDET_DELETE
 } from '../actionTypes'
 
 const initState = {
@@ -19,20 +17,6 @@ const staskReducer = (state = initState, { type, payload }) => {
                     ...state.detailed,
                     payload
                 ]
-            }
-
-        case SDET_EDIT:
-            return {
-                detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardId) {
-                        return {
-                            ...board,
-                            ...payload.info
-                        }
-                    } else {
-                        return board
-                    }
-                })
             }
 
         case STASK_ADD:
@@ -87,11 +71,6 @@ const staskReducer = (state = initState, { type, payload }) => {
                         return board
                     }
                 })
-            }
-
-        case SDET_DELETE:
-            return {
-                detailed: state.detailed.filter(board => board._id !== payload)
             }
 
         default: return state

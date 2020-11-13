@@ -5,38 +5,6 @@ const Board = require("../models/Board")
 
 const router = express.Router()
 
-router.get("/:boardId", auth, async (req, res) => {
-    const { boardId } = req.params
-
-    try {
-        const tasks = await Task.find({ board: boardId })
-            .select("status title body")
-            .sort('-createdAt')
-            .lean()
-
-        res.json({ tasks })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "Cannot get tasks" })
-    }
-})
-
-router.get("/task/:taskId", auth, async (req, res) => {
-    const { taskId } = req.params
-
-    try {
-        const tasks = await Task.findById(taskId)
-            .select("-__v -createdAt")
-            .populate('board', "postedBy -_id")
-            .lean()
-
-        res.json({ tasks })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "Cannot get tasks" })
-    }
-})
-
 router.post("/", auth, async (req, res) => {
     const { boardid, ...details } = req.body
 

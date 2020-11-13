@@ -14,7 +14,7 @@ function Board({ headers }) {
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
 
-    return !loading && detailed ? (
+    return !loading ? (
         <div className="board">
             <div className="board-head">
                 <div> {detailed[0].boardName} </div>

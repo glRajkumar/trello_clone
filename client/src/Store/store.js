@@ -10,7 +10,7 @@ const rootReducers = combineReducers({
     board: boardReducer,
     task: taskReducer,
     sboard: sboardReducer,
-    stasks: staskReducer,
+    stask: staskReducer,
 })
 
 const store = createStore(rootReducers)

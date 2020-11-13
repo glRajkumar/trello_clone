@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
 function Lists({ headers, boardid, status = "To-do", isMine }) {
-    const dispath = useDispatch()
+    const dispatch = useDispatch()
     const history = useHistory()
     const detailed = useSelector(state => state.task)
     const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)
@@ -30,7 +30,7 @@ function Lists({ headers, boardid, status = "To-do", isMine }) {
                         title,
                         status
                     }
-                    dispath({ type: TASK_ADD, payload })
+                    dispatch({ type: TASK_ADD, payload })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -41,14 +41,13 @@ function Lists({ headers, boardid, status = "To-do", isMine }) {
     }
 
     const DelTitle = (id) => {
-        console.log(id)
         axios.delete(`/task/${boardid}/${id}`, { headers })
             .then(() => {
                 let payload = {
                     boardid,
                     taskid: id
                 }
-                dispath({ type: TASK_DELETE, payload })
+                dispatch({ type: TASK_DELETE, payload })
             })
             .catch((err) => {
                 console.log(err)

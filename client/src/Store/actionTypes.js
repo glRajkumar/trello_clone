@@ -28,8 +28,6 @@ export const SBOARD_ERROR = "SBOARD_ERROR"
 
 //SHARED Tasks
 export const SDET_GET = "SDET_GET"
-export const SDET_EDIT = "SDET_EDIT"
-export const SDET_DELETE = "SDET_DELETE"
 export const STASK_ADD = "STASK_ADD"
 export const STASK_EDIT = "STASK_EDIT"
 export const STASK_DELETE = "STASK_DELETE"
