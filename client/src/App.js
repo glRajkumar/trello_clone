@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NotFound, Protected, UnAuthor, FirstCheck } from './Components/Common';
 import { NavBar, Login, Signup } from './Components/User';
-import { AllBoards, Board, CreateBoard, Detailed, PublicBoards, AllSharedBoards, SharedBoard, SharedDetails } from "./Components/Boards"
+import { AllBoards, Board, CreateBoard, Detailed } from "./Components/Boards"
+import { PublicBoards, AllSharedBoards, SharedBoard, SharedDetails } from './Components/OBoards'
 import './CSS/app.css'
 
 function App() {

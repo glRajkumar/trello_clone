@@ -1,0 +1,14 @@
+@host = http://localhost:5000
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGMyMjAxMThhNTFiMzBlYTc0ZGQiLCJpYXQiOjE2MDUyNTgyODEsImV4cCI6MTYwNTMyMzA4MX0._B02X0d_5dyo8vL1ozhoIEkjg6lQ3bziTI1fHMBjgpY
+
+### get shared
+GET {{host}}/shared/boards/?skip=0
+Authorization: {{token}}
+
+### get public boards 
+GET {{host}}/shared/public/?skip=0
+Authorization: {{token}}
+
+### get shared board by id
+GET {{host}}/shared/5fae4cc30118a51b30ea74e1
+Authorization: {{token}}

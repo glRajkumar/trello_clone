@@ -13,10 +13,12 @@ app.use(express.json())
 
 const userControllers = require('./controllers/user')
 const boardControllers = require('./controllers/board')
+const sharedControllers = require('./controllers/shared')
 const taskControllers = require('./controllers/task')
 
 app.use("/user", userControllers)
 app.use("/board", boardControllers)
+app.use("/shared", sharedControllers)
 app.use("/task", taskControllers)
 
 // Serve static assets if in production

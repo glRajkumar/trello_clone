@@ -5,11 +5,14 @@ import Axios from 'axios'
 
 function SharedDetails({ headers }) {
     const history = useHistory()
-    const location = useLocation()
+    const { state } = useLocation()
     const { taskId } = useParams()
     const [loading, setLoad] = useState(true)
     const [details, setDetails] = useState({})
     const [original, setOriginal] = useState({})
+
+    console.log("state")
+    console.log(state)
 
     useEffect(() => {
         Axios.get(`/task/task/${taskId}`, { headers })
@@ -90,7 +93,7 @@ function SharedDetails({ headers }) {
             </select>
 
             {
-                location.state.permision !== "View" &&
+                state.permision !== "View" &&
                 <button onClick={Submit}>Save</button>
             }
 

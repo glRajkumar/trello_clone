@@ -21,7 +21,7 @@ All task related js files are separated in Boards folder.
 
 7) User can go to the detailed page onclicking the title
 
-8) Public boards are read only. All boards are public by default.
+8) Public boards are read only. All boards are private by default.
 
 9) User can add and remove other users. The shared boards are can be viewed 
 in SharedBoard section.(for now, other user who have the permision of either "Ask" 

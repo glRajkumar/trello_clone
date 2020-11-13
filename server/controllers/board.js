@@ -4,51 +4,6 @@ const Board = require('../models/Board')
 
 const router = express.Router()
 
-router.get("/sharedboards", auth, async (req, res) => {
-    const skip = parseInt(req.query.skip)
-    const userId = req.user._id
-
-    try {
-        let boards = await Board.find({ "members.user": userId })
-            .select("boardName catagery postedBy members")
-            .populate('postedBy', "userName")
-            .sort('-createdAt')
-            .skip(skip)
-            .limit(10)
-            .lean()
-
-        boards = boards.map(board => {
-            return {
-                ...board,
-                members: board.members.filter(m => m.user.toString() === userId.toString())
-            }
-        })
-
-        res.json({ boards })
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot get shared boards" })
-    }
-})
-
-router.get('/public', auth, async (req, res) => {
-    const skip = parseInt(req.query.skip)
-
-    try {
-        let boards = await Board.find({ isPublic: true, postedBy: { $ne: req.user._id } })
-            .select('boardName catagery postedBy')
-            .populate('postedBy', "userName")
-            .sort('-createdAt')
-            .skip(skip)
-            .limit(10)
-            .lean()
-
-        res.json({ boards })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot get public boards" })
-    }
-})
-
 router.get("/boards", auth, async (req, res) => {
     const userId = req.user._id
 
@@ -79,30 +34,6 @@ router.get("/:boardId", auth, async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ error, msg: "Cannot get boards" })
-    }
-})
-
-router.get("/shared/:boardId", auth, async (req, res) => {
-    const { boardId } = req.params
-
-    try {
-        let boards = await Board.find({ _id: boardId })
-            .select("-createdAt -__v")
-            .populate("tasks", "status title body")
-            .sort('-createdAt')
-            .lean()
-
-        boards = boards.map(board => {
-            return {
-                ...board,
-                members: board.members.filter(m => m.user.toString() === req.user._id.toString())
-            }
-        })
-
-        res.json({ boards })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot gt the shared board" })
     }
 })
 

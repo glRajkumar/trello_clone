@@ -5,8 +5,8 @@ import useBoards from '../Customs/useBoards'
 import "../../CSS/allboards.css"
 
 function AllBoards({ headers }) {
-    const history = useHistory()
     const { boards, loading, error, Delete } = useBoards(headers)
+    const history = useHistory()
 
     return !loading
         ?
@@ -18,12 +18,13 @@ function AllBoards({ headers }) {
                         {
                             boards.map((board) => {
                                 return (
-                                    <div
-                                        className="wrapper"
-                                        key={board._id}
-                                    >
-                                        <p onClick={() => history.push(`/board/${board._id}`)}><strong>{board.boardName}</strong></p>
-                                        <p onClick={() => history.push(`/board/${board._id}`)}>{board.catagery}</p>
+                                    <div className="wrapper" key={board._id}>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}>
+                                            <strong>{board.boardName}</strong>
+                                        </p>
+                                        <p onClick={() => history.push(`/board/${board._id}`)}>
+                                            {board.catagery}
+                                        </p>
                                         <button className="board-del" onClick={() => Delete(board._id)}>
                                             Delete
                                         </button>

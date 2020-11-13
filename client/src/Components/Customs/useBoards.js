@@ -7,7 +7,6 @@ function useBoards(headers) {
     const { boards, loading, error } = useSelector(state => state.board)
     const dispatch = useDispatch()
 
-    console.log({ boards, loading, error })
     useEffect(() => {
         if (boards.length === 0) {
             axios.get('/board/boards', { headers })
@@ -15,7 +14,6 @@ function useBoards(headers) {
                     const payload = {
                         boards: res.data.boards
                     }
-                    console.log(res.data.boards)
                     dispatch({ type: BOARD_GET, payload })
                 })
                 .catch((err) => {

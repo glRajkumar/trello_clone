@@ -11,7 +11,7 @@ function SharedBoard({ headers }) {
     const [boardDetails, setBoardDetails] = useState(null)
 
     useEffect(() => {
-        axios.get(`/board/shared/${boardid}`, { headers })
+        axios.get(`/shared/${boardid}`, { headers })
             .then((res) => {
                 setBoardDetails(res.data.boards[0])
                 setLoad(false)
@@ -38,7 +38,7 @@ function SharedBoard({ headers }) {
                         }
                         headers={headers}
                         boardid={boardid}
-                        permision={boardDetails.members[0].permision}
+                        permision={boardDetails.permision}
                     />
                 </div>
                 <div>
@@ -51,7 +51,7 @@ function SharedBoard({ headers }) {
                         status="Doing"
                         headers={headers}
                         boardid={boardid}
-                        permision={boardDetails.members[0].permision}
+                        permision={boardDetails.permision}
                     />
                 </div>
                 <div>
@@ -64,7 +64,7 @@ function SharedBoard({ headers }) {
                         status="Done"
                         headers={headers}
                         boardid={boardid}
-                        permision={boardDetails.members[0].permision}
+                        permision={boardDetails.permision}
                     />
                 </div>
             </div>

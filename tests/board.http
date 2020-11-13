@@ -1,28 +1,16 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFhOTJlNzQ0YWJhODRlMGNhNGE3NTciLCJpYXQiOjE2MDUwNjQ1MDcsImV4cCI6MTYwNTEyOTMwN30.28dv7kt9TKUlNxi-Dkk3uUJSw2-VHu0nGqB_4EV629U
-
-### get shared
-GET {{host}}/board/sharedboards/?skip=0
-Authorization: {{token}}
-
-### get public boards 
-GET {{host}}/board/public/?skip=0
-Authorization: {{token}}
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGJmMzAxMThhNTFiMzBlYTc0ZGMiLCJpYXQiOjE2MDUyNTgyMzIsImV4cCI6MTYwNTMyMzAzMn0.CIE6Y1XL7yxmkX_g3n8e4WLUO2NS_EoUAHgcn5DP3lc
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fab7c8fcfba304f2ca50eba
-Authorization: {{token}}
-
-### get shared board by id
-GET {{host}}/board/shared/5fab7c8fcfba304f2ca50eba
+GET {{host}}/board/5fae4cc30118a51b30ea74e1
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5fab59917b56184058ac519e
+GET {{host}}/board/members/5fae4cc30118a51b30ea74e1
 Authorization: {{token}}
 
 ### create new board
@@ -31,8 +19,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "hgtf", 
-    "catagery" : "Education"   
+    "boardName" : "nbbbgvvfc", 
+    "catagery" : "Others"   
 }
 
 ### update public appearence
@@ -41,8 +29,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5faa63094d732a1260ece0bf", 
-    "isPublic" : "false"   
+    "boardId" : "5fae4ddc0118a51b30ea74e3", 
+    "isPublic" : "true"   
 }
 
 ### add member to the board
@@ -51,9 +39,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fab7c8fcfba304f2ca50eba", 
-    "memId" : "5faa92e744aba84e0ca4a757",
-    "permision" : "Ask"
+    "boardId" : "5fae4ddc0118a51b30ea74e3", 
+    "memId" : "5fae4c220118a51b30ea74dd"
 }
 
 ### remove member from the board

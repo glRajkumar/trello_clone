@@ -19,3 +19,17 @@ export const DET_DELETE = "DET_DELETE"
 export const TASK_ADD = "TASK_ADD"
 export const TASK_EDIT = "TASK_EDIT"
 export const TASK_DELETE = "TASK_DELETE"
+
+//Shared Boards
+export const SBOARD_LOADING = "SBOARD_LOADING"
+export const SBOARD_GET = "SBOARD_GET"
+export const SBOARD_EXIT = "SBOARD_EXIT"
+export const SBOARD_ERROR = "SBOARD_ERROR"
+
+//SHARED Tasks
+export const SDET_GET = "SDET_GET"
+export const SDET_EDIT = "SDET_EDIT"
+export const SDET_DELETE = "SDET_DELETE"
+export const STASK_ADD = "STASK_ADD"
+export const STASK_EDIT = "STASK_EDIT"
+export const STASK_DELETE = "STASK_DELETE"
