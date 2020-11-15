@@ -17,6 +17,7 @@ function useSDetailed(boardid, headers) {
             }]
     )
     const [loading, setLoad] = useState(!isPresent)
+    const [taskStatus, setStatus] = useState(["To-do", "Doing", "Done"])
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -39,7 +40,8 @@ function useSDetailed(boardid, headers) {
     return {
         permision: detailed[0]?.permision,
         loading,
-        detailed
+        detailed,
+        taskStatus
     }
 }
 

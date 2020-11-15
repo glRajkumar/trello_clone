@@ -31,26 +31,31 @@ function CreateBoard({ headers }) {
 
     return (
         <div className="form-box">
+            <label htmlFor="board-name">Board name :</label>
             <input
                 className="input-box"
                 type="text"
+                name="board-name"
                 placeholder="board-name"
                 value={boardName}
                 onChange={e => setBoardName(e.target.value)}
             />
 
-            <div>
-                Board catagery :
-                <select className="input-box" value={catagery} onChange={e => setCatagery(e.target.value)}>
-                    {
-                        Catageries.map(catagery => {
-                            return (
-                                <option key={catagery} value={catagery}> {catagery} </option>
-                            )
-                        })
-                    }
-                </select>
-            </div>
+            <label htmlFor="board-catagery">Board catagery :</label>
+            <select
+                name="board-catagery"
+                className="input-box"
+                value={catagery}
+                onChange={e => setCatagery(e.target.value)}
+            >
+                {
+                    Catageries.map(catagery => {
+                        return (
+                            <option key={catagery} value={catagery}> {catagery} </option>
+                        )
+                    })
+                }
+            </select>
 
             <button onClick={Submit}>Submit</button>
         </div>

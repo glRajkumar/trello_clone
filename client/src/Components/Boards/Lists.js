@@ -5,7 +5,7 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ headers, boardid, status = "To-do", isMine }) {
+function Lists({ headers, boardid, status, isMine }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const detailed = useSelector(state => state.task)

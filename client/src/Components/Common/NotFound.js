@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default () => {
+function NotFound() {
     return (
         <div className="modalBox">
             <h3>
@@ -11,3 +11,5 @@ export default () => {
         </div>
     )
 }
+
+export default NotFound

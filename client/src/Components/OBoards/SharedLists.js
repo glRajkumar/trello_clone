@@ -5,7 +5,7 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { STASK_ADD, STASK_DELETE } from '../../Store/actionTypes'
 
-function SharedLists({ headers, boardid, status = "To-do", permision }) {
+function SharedLists({ headers, boardid, status, permision }) {
     const dispatch = useDispatch()
     const detailed = useSelector(state => state.stask)
     const history = useHistory()

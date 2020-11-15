@@ -7,7 +7,7 @@ import useSDetailed from '../Customs/useSDetailed'
 
 function SharedBoard({ headers }) {
     const { boardid } = useParams()
-    const { permision, detailed, loading } = useSDetailed(boardid, headers)
+    const { permision, detailed, loading, taskStatus } = useSDetailed(boardid, headers)
 
     return !loading ? (
         <div className="board">
@@ -17,32 +17,21 @@ function SharedBoard({ headers }) {
             </div>
 
             <div className="board-lists">
-                <div>
-                    <strong>To-Do</strong>
-                    <SharedLists
-                        headers={headers}
-                        boardid={boardid}
-                        permision={permision}
-                    />
-                </div>
-                <div>
-                    <strong>Doing</strong>
-                    <SharedLists
-                        status="Doing"
-                        headers={headers}
-                        boardid={boardid}
-                        permision={permision}
-                    />
-                </div>
-                <div>
-                    <strong>Done</strong>
-                    <SharedLists
-                        status="Done"
-                        headers={headers}
-                        boardid={boardid}
-                        permision={permision}
-                    />
-                </div>
+                {
+                    taskStatus.map(status => {
+                        return (
+                            <div key={status}>
+                                <strong> {status} </strong>
+                                <SharedLists
+                                    status={status}
+                                    headers={headers}
+                                    boardid={boardid}
+                                    permision={permision}
+                                />
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )

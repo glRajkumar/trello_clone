@@ -9,7 +9,7 @@ import useDetailed from '../Customs/useDetailed'
 
 function Board({ headers }) {
     const { boardid } = useParams()
-    const { isMine, loading, detailed, Private } = useDetailed(boardid, headers)
+    const { taskStatus, isMine, loading, detailed, Private } = useDetailed(boardid, headers)
     const [showMem, setshowMem] = useState(false)
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
@@ -56,32 +56,21 @@ function Board({ headers }) {
             </div>
 
             <div className="board-lists">
-                <div>
-                    <strong>To-Do</strong>
-                    <Lists
-                        headers={headers}
-                        boardid={boardid}
-                        isMine={isMine}
-                    />
-                </div>
-                <div>
-                    <strong>Doing</strong>
-                    <Lists
-                        status="Doing"
-                        headers={headers}
-                        boardid={boardid}
-                        isMine={isMine}
-                    />
-                </div>
-                <div>
-                    <strong>Done</strong>
-                    <Lists
-                        status="Done"
-                        headers={headers}
-                        boardid={boardid}
-                        isMine={isMine}
-                    />
-                </div>
+                {
+                    taskStatus.map(status => {
+                        return (
+                            <div key={status}>
+                                <strong>{status}</strong>
+                                <Lists
+                                    status={status}
+                                    headers={headers}
+                                    boardid={boardid}
+                                    isMine={isMine}
+                                />
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )

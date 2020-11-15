@@ -17,6 +17,7 @@ function useDetailed(boardid, headers) {
                 tasks: [],
             }]
     )
+    const [taskStatus, setStatus] = useState(["To-do", "Doing", "Done"])
     const [loading, setLoad] = useState(!isPresent)
     const dispatch = useDispatch()
 
@@ -63,6 +64,7 @@ function useDetailed(boardid, headers) {
         isMine: detailed[0]?.postedBy === auth._id,
         loading,
         detailed,
+        taskStatus,
         Private
     }
 }
