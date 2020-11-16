@@ -11,14 +11,18 @@ function AllBoards({ headers }) {
     return !loading
         ?
         (
-            <div>
+            <div className="all-con">
                 {
                     !loading && boards.length > 0 &&
                     <div className="allb-container">
                         {
                             boards.map((board) => {
                                 return (
-                                    <div className="wrapper" key={board._id}>
+                                    <div
+                                        className="wrapper"
+                                        key={board._id}
+                                        style={board.bg.isColour ? { backgroundColor: board.bg.name } : { backgroundImage: `url(${'/static/' + board.bg.name})` }}
+                                    >
                                         <p onClick={() => history.push(`/board/${board._id}`)}>
                                             <strong>{board.boardName}</strong>
                                         </p>

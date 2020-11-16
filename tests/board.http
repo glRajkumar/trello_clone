@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGM2MTAxMThhNTFiMzBlYTc0ZGUiLCJpYXQiOjE2MDU0MzY5MDAsImV4cCI6MTYwNTUwMTcwMH0.oSNytpaOTbTrw7A1wHHn_EsXLdjXiOgCK--HYuBp5Z0
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzNmMzMzMTY1ZTA4MTg0NmQzODkiLCJpYXQiOjE2MDU1MzA2MTYsImV4cCI6MTYwNTU5NTQxNn0.b-8UpuwZCfZiTjShqn2E161Fd17B04C_haEB4kEpcUQ
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fb1063aff9d0b0bc443b325
+GET {{host}}/board/5fb23452a818ff17bcdf2df0
 Authorization: {{token}}
 
 ### get members by id
@@ -19,9 +19,12 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "nbbbgvvfc", 
-    "catagery" : "Education",
-    "bg": "#333"   
+    "boardName" : "nb", 
+    "catagery" : "Blog",
+    "bg": {
+        "isColour" : "false",
+        "name" : "1.jpeg"
+    }   
 }
 
 ### update public appearence
@@ -30,7 +33,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fae4ddc0118a51b30ea74e3", 
+    "boardId" : "5fb2767231c776206c51e7da", 
     "isPublic" : "true"   
 }
 
@@ -40,8 +43,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fae4ddc0118a51b30ea74e3", 
-    "memId" : "5fae4c220118a51b30ea74dd"
+    "boardId" : "5fb2745c33165e081846d38a", 
+    "memId" : "5fb2771331c776206c51e7e0"
 }
 
 ### remove member from the board
@@ -55,5 +58,5 @@ Content-Type: application/json
 }
 
 ### delete the board
-DELETE {{host}}/board/5fa8e58d89686809904c85ec
+DELETE {{host}}/board/5fb2768f31c776206c51e7dd
 Authorization: {{token}}

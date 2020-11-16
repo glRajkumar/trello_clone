@@ -10,14 +10,18 @@ function OBoards({ headers, text, url }) {
     return isLoadedState.isLoaded
         ?
         (
-            <div>
+            <div className="all-con">
                 {
                     isLoadedState.isLoaded && boards.length > 0 &&
                     <div className="allb-container">
                         {
                             boards.map((board) => {
                                 return (
-                                    <div className="wrapper" key={board._id}>
+                                    <div
+                                        className="wrapper"
+                                        key={board._id}
+                                        style={board.bg.isColour ? { backgroundColor: board.bg.name } : { backgroundImage: `url(${'/static/' + board.bg.name})` }}
+                                    >
                                         <p onClick={() => history.push(`/sharedboard/${board._id}`)}>
                                             <strong>{board.boardName}</strong>
                                         </p>

@@ -9,7 +9,7 @@ router.get("/boards", auth, async (req, res) => {
 
     try {
         const boards = await Board.find({ postedBy: userId })
-            .select('boardName catagery')
+            .select('boardName catagery bg')
             .sort('-createdAt')
             .lean()
 
@@ -54,14 +54,14 @@ router.get("/members/:boardId", auth, async (req, res) => {
 })
 
 router.post("/", auth, async (req, res) => {
-    const { boardName, catagery } = req.body
+    const { ...payload } = req.body
     const userId = req.user._id
 
     try {
-        const existBoard = await Board.findOne({ boardName, catagery, postedBy: userId })
+        const existBoard = await Board.findOne({ boardName: payload.boardName, catagery: payload.catagery, postedBy: userId })
         if (existBoard) return res.status(400).json({ msg: "Board already existed with same catagery" })
 
-        const board = new Board({ boardName, catagery, postedBy: userId })
+        const board = new Board({ ...payload, postedBy: userId })
         await board.save()
 
         res.json({ id: board._id, msg: "Board saved successfully" })

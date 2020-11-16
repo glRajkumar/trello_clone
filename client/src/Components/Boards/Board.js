@@ -15,15 +15,15 @@ function Board({ headers }) {
     const [addU, setAddU] = useState(false)
 
     return !loading ? (
-        <div className="board">
+        <div className="board" style={detailed[0].bg?.isColour ? { backgroundColor: detailed[0].bg?.name } : { backgroundImage: `url(${'/static/' + detailed[0].bg?.name})` }}>
             <div className="board-head">
-                <div> {detailed[0].boardName} </div>
-                <div> {detailed[0].catagery} </div>
+                <div className="bh-top"> {detailed[0].boardName} </div>
+                <div className="bh-top"> {detailed[0].catagery} </div>
                 {
                     isMine &&
                     <>
-                        <div onClick={Private}> {detailed[0].isPublic ? "Make private" : "Make public"} </div>
-                        <div className="board-users">
+                        <div className="bh-top" onClick={Private}> {detailed[0].isPublic ? "Make private" : "Make public"} </div>
+                        <div className="board-users bh-top">
                             <div onClick={() => setOpen(prev => !prev)}>other users</div>
                             <div>
                                 {

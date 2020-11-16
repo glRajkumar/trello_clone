@@ -1,3 +1,9 @@
+.all-con{
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: .5rem;
+}
+
 .allb-container{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -11,11 +17,16 @@
     padding: 1rem;
     border: 1px solid rgba(0, 0, 0, .3);
     border-radius: 5px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, .1);
 }
 
 .wrapper p{
     cursor: pointer;
     margin: .3rem 0;
+    color: #fff;
+    text-shadow: 1px 1px 3px #000, -1px -1px 3px #000;
 }
 
 .board-del{

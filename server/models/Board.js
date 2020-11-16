@@ -35,7 +35,18 @@ const boardSchema = new mongoose.Schema({
             type: String,
             default: "View"
         }
-    }]
+    }],
+
+    bg: {
+        isColour: {
+            type: Boolean,
+            default: true
+        },
+        name: {
+            type: String,
+            default: "#fff"
+        }
+    }
 
 }, { timestamps: true })
 

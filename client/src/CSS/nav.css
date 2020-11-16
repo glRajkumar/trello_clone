@@ -6,12 +6,24 @@
     padding: .5rem 1rem;
 }
 
+.nav{
+    background-color: royalblue;
+}
+
 .nav-container{
     padding: 0;
 }
 
 .nav-container li{
     margin: 0 1rem;
+}
+
+.nav-container li a{
+    color: #fff;
+}
+
+.nav-container li a:hover{
+    color: rgba(255, 255,255, .9);
 }
 
 .home a,
@@ -26,6 +38,10 @@
     color: #000;
 }
 
+.home strong:hover{
+    color: #fff;
+}
+
 .pro-con{
     position: relative;
 }
@@ -38,10 +54,11 @@
     border-radius: 5px;
     line-height: 1;
     cursor: pointer;
+    background-color: rgba(255, 255,255, 0.1);
 }
 
 #plus a{
-    color: #000;
+    color: #fff;
 }
 
 #plus:hover{
@@ -57,7 +74,11 @@
     cursor: pointer;
     padding: .4rem .5rem;
     color: #fff;
-    background-color: salmon;
+    background-color: rgb(250, 128, 144);
+}
+
+.username:hover{
+    background-color: rgba(250, 128, 144, .8);
 }
 
 .mini{

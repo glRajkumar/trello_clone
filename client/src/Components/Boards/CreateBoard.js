@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import Catageries from "./Catageries"
+import { Catageries, bgs } from "../utils"
 import { BOARD_ADD } from '../../Store/actionTypes'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
+import "../../CSS/create.css";
 
 function CreateBoard({ headers }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const [boardName, setBoardName] = useState('')
     const [catagery, setCatagery] = useState(Catageries[0])
+    const [bg, setBg] = useState(bgs[0])
 
     const Submit = () => {
         if (boardName !== "") {
-            axios.post("/board", { boardName, catagery }, { headers })
+            let payload = { boardName, catagery }
+            if (bg.name !== "rgb(255,255,255)") payload.bg = bg
+            axios.post("/board", { ...payload }, { headers })
                 .then((res) => {
-                    const payload = {
-                        _id: res.data.id,
-                        boardName,
-                        catagery
-                    }
+                    if (bg.name === "rgb(255,255,255)") payload.bg = bg
+                    payload._id = res.data.id
                     dispatch({ type: BOARD_ADD, payload })
                     history.push('/')
                 })
@@ -56,6 +57,33 @@ function CreateBoard({ headers }) {
                     })
                 }
             </select>
+
+            <div className="selbg">
+                <div>selected background:</div>
+                <div className="selected">
+                    {
+                        bg.isColour
+                            ? <div style={{ backgroundColor: bg.name }}></div>
+                            : <img src={`/static/${bg.name}`} alt={bg.name} />
+                    }
+                </div>
+            </div>
+
+            <div className="bg">
+                {
+                    bgs.map(bg => {
+                        return (
+                            <div key={bg.name} onClick={() => setBg(bg)}>
+                                {
+                                    bg.isColour
+                                        ? <div style={{ backgroundColor: bg.name }}></div>
+                                        : <img src={`/static/${bg.name}`} alt={bg.name} />
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </div>
 
             <button onClick={Submit}>Submit</button>
         </div>

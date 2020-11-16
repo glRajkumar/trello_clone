@@ -22,6 +22,8 @@ app.use("/shared", sharedControllers)
 app.use("/task", taskControllers)
 
 // Serve static assets if in production
+app.use('/static', express.static(path.resolve(__dirname, 'imgs')))
+
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 

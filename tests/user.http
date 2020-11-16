@@ -1,14 +1,14 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGM2MTAxMThhNTFiMzBlYTc0ZGUiLCJpYXQiOjE2MDU0MzY5MDAsImV4cCI6MTYwNTUwMTcwMH0.oSNytpaOTbTrw7A1wHHn_EsXLdjXiOgCK--HYuBp5Z0
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzNmMzMzMTY1ZTA4MTg0NmQzODkiLCJpYXQiOjE2MDU1MzA2MTYsImV4cCI6MTYwNTU5NTQxNn0.b-8UpuwZCfZiTjShqn2E161Fd17B04C_haEB4kEpcUQ
 
-### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGJmMzAxMThhNTFiMzBlYTc0ZGMiLCJpYXQiOjE2MDUyNTgyMzIsImV4cCI6MTYwNTMyMzAzMn0.CIE6Y1XL7yxmkX_g3n8e4WLUO2NS_EoUAHgcn5DP3lc
-### rrr@gmail.com, rrrr, 5fae4bf30118a51b30ea74dc
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU1MzE0MTcsImV4cCI6MTYwNTU5NjIxN30.FPHI1xmfXUmBttsd5P9s0YVmgo1LfEMe2f_91V6AgWk
+### rrr@gmail.com, rrrr, 5fb2771331c776206c51e7e0
 
 ### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGMyMjAxMThhNTFiMzBlYTc0ZGQiLCJpYXQiOjE2MDUyNTgyODEsImV4cCI6MTYwNTMyMzA4MX0._B02X0d_5dyo8vL1ozhoIEkjg6lQ3bziTI1fHMBjgpY
 ### ccc@gmail.com, cccc, 5fae4c220118a51b30ea74dd
 
-### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGM2MTAxMThhNTFiMzBlYTc0ZGUiLCJpYXQiOjE2MDUyNTgzNDUsImV4cCI6MTYwNTMyMzE0NX0.xFnaxB7xSyBQqGIYwQzS7GrUPqe7-aUkuA_bX7iIPJ0
-### ddd@gmail.com, dddd, 5fae4c610118a51b30ea74de
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzNmMzMzMTY1ZTA4MTg0NmQzODkiLCJpYXQiOjE2MDU1MzA2MTYsImV4cCI6MTYwNTU5NTQxNn0.b-8UpuwZCfZiTjShqn2E161Fd17B04C_haEB4kEpcUQ
+### ddd@gmail.com, dddd, 5fb273f333165e081846d389
 
 ### get me 
 GET {{host}}/user/me
@@ -19,8 +19,8 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-    "userName": "dddd",
-    "email" : "ddd@gmail.com",
+    "userName": "rrrr",
+    "email" : "rrr@gmail.com",
     "password" : "aA1!aa"
 }
 
@@ -29,7 +29,7 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "email" : "ddd@gmail.com",
+    "email" : "rrr@gmail.com",
     "password" : "aA1!aa"
 }
 

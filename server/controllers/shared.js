@@ -10,7 +10,7 @@ router.get("/boards", auth, async (req, res) => {
 
     try {
         let boards = await Board.find({ "members.user": userId })
-            .select("boardName catagery postedBy members")
+            .select("boardName catagery postedBy members bg")
             .populate('postedBy', "userName")
             .sort('-createdAt')
             .skip(skip)
@@ -36,7 +36,7 @@ router.get('/public', auth, async (req, res) => {
 
     try {
         let boards = await Board.find({ isPublic: true, postedBy: { $ne: req.user._id } })
-            .select('boardName catagery postedBy')
+            .select('boardName catagery postedBy bg')
             .populate('postedBy', "userName")
             .sort('-createdAt')
             .skip(skip)
