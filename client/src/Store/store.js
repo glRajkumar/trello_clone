@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from "redux-devtools-extension"
 import AuthReducer from './Auth/AuthReducer'
 import boardReducer from './Board/boardReducer'
 import taskReducer from './Board/taskReducer'
@@ -13,6 +14,6 @@ const rootReducers = combineReducers({
     stask: staskReducer,
 })
 
-const store = createStore(rootReducers)
+const store = createStore(rootReducers, composeWithDevTools())
 
 export default store
