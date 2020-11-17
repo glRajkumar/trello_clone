@@ -1,6 +1,7 @@
 import {
     DET_GET,
     DET_EDIT,
+    NEWSTATUS,
     TASK_ADD,
     TASK_EDIT,
     TASK_DELETE,
@@ -28,6 +29,23 @@ const taskReducer = (state = initState, { type, payload }) => {
                         return {
                             ...board,
                             ...payload.info
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
+        case NEWSTATUS:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardId) {
+                        return {
+                            ...board,
+                            taskStatus: [
+                                ...board.taskStatus,
+                                payload.name
+                            ]
                         }
                     } else {
                         return board

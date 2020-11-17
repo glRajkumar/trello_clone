@@ -29,8 +29,10 @@
 }
 
 .board-lists{
+    overflow-x: scroll;
+    min-height: 80vh;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(100, minmax(250px, 1fr));
 }
 
 .lists{
@@ -67,6 +69,11 @@
 .list-lasts button{
     padding: .3rem .5rem;
     font-size: .9rem;
+}
+
+.new-status{
+    padding: .5rem;
+    background-color: rgba(0, 0, 0, .1);
 }
 
 .board-users{
