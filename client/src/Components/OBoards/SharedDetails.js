@@ -80,9 +80,13 @@ function SharedDetails({ headers }) {
                     }
                 })}
             >
-                <option value="To-do">To-do</option>
-                <option value="Doing">Doing</option>
-                <option value="Done">Done</option>
+                {
+                    details.taskStatus.map(status => {
+                        return (
+                            <option key={status} value={status}> {status} </option>
+                        )
+                    })
+                }
             </select>
 
             {

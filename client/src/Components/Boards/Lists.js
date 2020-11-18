@@ -5,7 +5,7 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ headers, boardid, status, isMine }) {
+function Lists({ headers, boardid, status, isMine, taskStatus }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const detailed = useSelector(state => state.task)
@@ -58,7 +58,8 @@ function Lists({ headers, boardid, status, isMine }) {
         const forwordState = {
             ...list,
             boardid,
-            isMine
+            isMine,
+            taskStatus
         }
         history.push(`/taskdetails/${list._id}`, { forwordState })
     }

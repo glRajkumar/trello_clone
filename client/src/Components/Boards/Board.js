@@ -68,6 +68,7 @@ function Board({ headers }) {
                                     headers={headers}
                                     boardid={boardid}
                                     isMine={isMine}
+                                    taskStatus={taskStatus}
                                 />
                             </div>
                         )

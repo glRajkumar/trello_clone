@@ -5,7 +5,7 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { STASK_ADD, STASK_DELETE } from '../../Store/actionTypes'
 
-function SharedLists({ headers, boardid, status, permision }) {
+function SharedLists({ headers, boardid, status, permision, taskStatus }) {
     const dispatch = useDispatch()
     const detailed = useSelector(state => state.stask)
     const history = useHistory()
@@ -57,7 +57,8 @@ function SharedLists({ headers, boardid, status, permision }) {
         const forwordState = {
             ...list,
             boardid,
-            permision
+            permision,
+            taskStatus
         }
         history.push(`/sharedtask/${list._id}`, { forwordState })
     }

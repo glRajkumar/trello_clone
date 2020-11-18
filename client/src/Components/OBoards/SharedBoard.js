@@ -29,6 +29,7 @@ function SharedBoard({ headers }) {
                                     headers={headers}
                                     boardid={boardid}
                                     permision={permision}
+                                    taskStatus={taskStatus}
                                 />
                             </div>
                         )
