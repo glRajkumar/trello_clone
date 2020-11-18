@@ -1,4 +1,5 @@
 import {
+    SBOARD_INIT,
     SBOARD_LOADING,
     SBOARD_GET,
     SBOARD_EXIT,
@@ -27,6 +28,11 @@ const initialState = {
 
 const sboardReducer = (state = initialState, { type, payload }) => {
     switch (type) {
+        case SBOARD_INIT:
+            return {
+                ...initialState
+            }
+
         case SBOARD_LOADING:
             return {
                 ...state,

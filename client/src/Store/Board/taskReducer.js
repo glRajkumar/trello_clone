@@ -1,4 +1,5 @@
 import {
+    DET_INIT,
     DET_GET,
     DET_EDIT,
     NEWSTATUS,
@@ -14,6 +15,11 @@ const initState = {
 
 const taskReducer = (state = initState, { type, payload }) => {
     switch (type) {
+        case DET_INIT:
+            return {
+                ...initState
+            }
+
         case DET_GET:
             return {
                 detailed: [

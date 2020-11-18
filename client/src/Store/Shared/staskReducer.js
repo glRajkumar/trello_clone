@@ -1,8 +1,10 @@
 import {
+    SDET_INIT,
     SDET_GET,
     STASK_ADD,
     STASK_EDIT,
     STASK_DELETE,
+    SNEWSTATUS
 } from '../actionTypes'
 
 const initState = {
@@ -11,12 +13,34 @@ const initState = {
 
 const staskReducer = (state = initState, { type, payload }) => {
     switch (type) {
+        case SDET_INIT:
+            return {
+                ...initState
+            }
+
         case SDET_GET:
             return {
                 detailed: [
                     ...state.detailed,
                     payload
                 ]
+            }
+
+        case SNEWSTATUS:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardId) {
+                        return {
+                            ...board,
+                            taskStatus: [
+                                ...board.taskStatus,
+                                payload.name
+                            ]
+                        }
+                    } else {
+                        return board
+                    }
+                })
             }
 
         case STASK_ADD:

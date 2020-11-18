@@ -1,4 +1,4 @@
-import { BOARD_LOADING, BOARD_GET, BOARD_ADD, BOARD_EDIT, BOARD_DELETE, BOARD_ERROR } from '../actionTypes'
+import { BOARD_INIT, BOARD_LOADING, BOARD_GET, BOARD_ADD, BOARD_EDIT, BOARD_DELETE, BOARD_ERROR } from '../actionTypes'
 
 const initialState = {
     boards: [],
@@ -8,6 +8,11 @@ const initialState = {
 
 const boardReducer = (state = initialState, { type, payload }) => {
     switch (type) {
+        case BOARD_INIT:
+            return {
+                ...initialState
+            }
+
         case BOARD_LOADING:
             return {
                 ...state,

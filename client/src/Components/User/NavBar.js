@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AUTH_LOGOUT } from '../../Store/actionTypes'
+import { AUTH_LOGOUT, BOARD_INIT, SBOARD_INIT, SDET_INIT, DET_INIT } from '../../Store/actionTypes'
 import { Link, useHistory } from 'react-router-dom'
 import { HomeIcon } from '../Common/Icons'
 import "../../CSS/nav.css"
@@ -16,6 +16,10 @@ function NavBar() {
         localStorage.removeItem("task_token")
         localStorage.removeItem("task_token_exp")
         dispatch({ type: AUTH_LOGOUT })
+        dispatch({ type: BOARD_INIT })
+        dispatch({ type: SBOARD_INIT })
+        dispatch({ type: DET_INIT })
+        dispatch({ type: SDET_INIT })
         history.push('/login')
     }
 
