@@ -1,13 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFiNTc5NTU0YTYzYjQ0NDAxMDAwYWMiLCJpYXQiOjE2MDUwNjQ2MTIsImV4cCI6MTYwNTEyOTQxMn0.l_5UhWVh4KVNLqucN2gCVelZ-1MX4wd41gcZx_6sHuc
-
-### get tasks of board 
-GET {{host}}/task/5fab59917b56184058ac519e
-Authorization: {{token}}
-
-### get task by id 
-GET {{host}}/task/task/5fab63fabd7b174b5c2d689a
-Authorization: {{token}}
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU3ODI1NDYsImV4cCI6MTYwNTg0NzM0Nn0.doE-Bcv3_J9G_fgSTMyEsbBCA3WIobDGiXTeR_UFFi8
 
 ### create a task
 POST {{host}}/task
@@ -15,9 +7,10 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "oomknluo",
-    "status": "Doing",
-    "boardid" : "5fab7c8fcfba304f2ca50eba"
+    "title": "nhbgvvf hgtfff cnhgt",
+    "status": "Done",
+    "boardid" : "5fb737a75ec63b2ed44e2f4d",
+    "order": 2
 }
 
 ### update task 
@@ -26,10 +19,11 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId": "5fab63fabd7b174b5c2d689a",
+    "taskId": "5fb64d2a845bd32914dbcb3f",
     "body" : "bbbb nnnn",
     "status": "To-do",
-    "title": "jhub"
+    "title": "jhub",
+    "order": 3
 }
 
 ### for above use status, body, title to update

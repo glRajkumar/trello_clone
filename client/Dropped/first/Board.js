@@ -6,55 +6,15 @@ import Lists from './Lists'
 import OtherUser from '../User/OtherUser'
 import SearchUser from '../User/SearchUser'
 import useDetailed from '../Customs/useDetailed'
-import { useDispatch } from 'react-redux'
-import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
-
-const initDnDState = {
-    id: "",
-    dragFrom: null,
-    dragTo: null,
-    isDragging: false
-}
 
 function Board({ headers }) {
     const { boardid } = useParams()
-    const dispatch = useDispatch()
     const { taskStatus, isMine, loading, detailed, Private, createNewStatus } = useDetailed(boardid, headers)
     const [showMem, setshowMem] = useState(false)
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
-    const [listDnD, setlistDnD] = useState(initDnDState)
-
-    const setListDnDData = (data) => {
-        setlistDnD(prev => {
-            return {
-                ...prev,
-                ...data
-            }
-        })
-    }
-
-    const reOrder = () => {
-        let payload = {
-            boardid,
-            from: listDnD.dragFrom,
-            to: listDnD.dragTo,
-            id: listDnD.id
-        }
-        if (payload.from.status === payload.to.status) {
-            dispatch({ type: TASK_REORDER, payload })
-        } else {
-            dispatch({ type: TASK_REGROUP, payload })
-        }
-        setlistDnD({
-            id: "",
-            dragFrom: null,
-            dragTo: null,
-            isDragging: false
-        })
-    }
 
     return !loading ? (
         <div className="board" style={detailed[0].bg?.isColour ? { backgroundColor: detailed[0].bg?.name } : { backgroundImage: `url(${'/static/' + detailed[0].bg?.name})` }}>
@@ -109,8 +69,6 @@ function Board({ headers }) {
                                     boardid={boardid}
                                     isMine={isMine}
                                     taskStatus={taskStatus}
-                                    setListDnDData={setListDnDData}
-                                    reOrder={reOrder}
                                 />
                             </div>
                         )

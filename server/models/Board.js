@@ -21,6 +21,11 @@ const boardSchema = new mongoose.Schema({
         ref: "Task"
     }],
 
+    taskStatus: {
+        type: Array,
+        default: ["To-do", "Doing", "Done"],
+    },
+
     isPublic: {
         type: Boolean,
         default: false

@@ -62,6 +62,10 @@
     margin-bottom: .3rem;
 }
 
+.list-cont p:first-child{
+    word-break: break-all;
+}
+
 .list-lasts button:last-child{
     margin-left: .5rem;
 }
@@ -92,4 +96,21 @@
 
 .board-useroption > div{
     margin: .5rem 0;
+}
+
+
+#dropArea{
+    background-color: aqua;
+    position: relative;
+}
+
+#dropArea::before{
+    content: "Drop here";
+    color: brown;
+    position: absolute;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed red;
 }

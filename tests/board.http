@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzNmMzMzMTY1ZTA4MTg0NmQzODkiLCJpYXQiOjE2MDU1MzA2MTYsImV4cCI6MTYwNTU5NTQxNn0.b-8UpuwZCfZiTjShqn2E161Fd17B04C_haEB4kEpcUQ
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU4NDc2MTAsImV4cCI6MTYwNTkxMjQxMH0.vWEdMvogaARVngmVUROovrf7s6iXUUKk3SwSXI3_UCQ
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fb23452a818ff17bcdf2df0
+GET {{host}}/board/5fb737a75ec63b2ed44e2f4d
 Authorization: {{token}}
 
 ### get members by id
@@ -19,11 +19,11 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "nb", 
+    "boardName" : "bbvvfc", 
     "catagery" : "Blog",
     "bg": {
-        "isColour" : "false",
-        "name" : "1.jpeg"
+        "isColour" : "true",
+        "name" : "rgb(82 , 157, 52)"
     }   
 }
 
@@ -35,6 +35,26 @@ Content-Type: application/json
 {
     "boardId" : "5fb2767231c776206c51e7da", 
     "isPublic" : "true"   
+}
+
+### add new status
+PUT {{host}}/board/add-status
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fb737a75ec63b2ed44e2f4d", 
+    "name":"tfr"
+}
+
+### delete the status
+PUT {{host}}/board/del-status
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fb65f2042d651309cc6e01b", 
+    "name":"Doing"
 }
 
 ### add member to the board

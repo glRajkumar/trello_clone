@@ -3,8 +3,11 @@ import {
     DET_GET,
     DET_EDIT,
     NEWSTATUS,
+    TASK_REORDER,
+    TASK_REGROUP,
     TASK_ADD,
     TASK_EDIT,
+    TASK_EDIT_WSTATUS,
     TASK_DELETE,
     DET_DELETE
 } from '../actionTypes'
@@ -51,6 +54,13 @@ const taskReducer = (state = initState, { type, payload }) => {
                             taskStatus: [
                                 ...board.taskStatus,
                                 payload.name
+                            ],
+                            tasks: [
+                                ...board.tasks,
+                                {
+                                    status: payload.name,
+                                    tasks: []
+                                }
                             ]
                         }
                     } else {
@@ -65,10 +75,19 @@ const taskReducer = (state = initState, { type, payload }) => {
                     if (board._id === payload.boardid) {
                         return {
                             ...board,
-                            tasks: [
-                                ...board.tasks,
-                                payload
-                            ]
+                            tasks: board.tasks.map(task => {
+                                if (task.status === payload.status) {
+                                    return {
+                                        ...task,
+                                        tasks: [
+                                            ...task.tasks,
+                                            payload
+                                        ]
+                                    }
+                                } else {
+                                    return task
+                                }
+                            })
                         }
                     } else {
                         return board
@@ -83,10 +102,50 @@ const taskReducer = (state = initState, { type, payload }) => {
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
-                                if (task._id === payload.taskid) {
+                                if (task.status === payload.status) {
                                     return {
                                         ...task,
-                                        ...payload.info
+                                        tasks: task.tasks.map(task => {
+                                            if (task._id === payload.taskid) {
+                                                return {
+                                                    ...task,
+                                                    ...payload.info
+                                                }
+                                            } else {
+                                                return task
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    return task
+                                }
+                            })
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
+        case TASK_EDIT_WSTATUS:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardid) {
+                        return {
+                            ...board,
+                            tasks: board.tasks.map(task => {
+                                if (task.status === payload.status) {
+                                    return {
+                                        ...task,
+                                        tasks: task.tasks.filter(t => t._id !== payload.taskid)
+                                    }
+                                } else if (task.status === payload.info.status) {
+                                    return {
+                                        ...task,
+                                        tasks: [
+                                            ...task.tasks,
+                                            payload.info
+                                        ]
                                     }
                                 } else {
                                     return task
@@ -105,7 +164,92 @@ const taskReducer = (state = initState, { type, payload }) => {
                     if (board._id === payload.boardid) {
                         return {
                             ...board,
-                            tasks: board.tasks.filter(t => t._id !== payload.taskid)
+                            tasks: board.tasks.map(task => {
+                                if (task.status === payload.status) {
+                                    return {
+                                        ...task,
+                                        tasks: task.tasks.filter(t => t._id !== payload.taskid),
+                                    }
+                                } else {
+                                    return task
+                                }
+                            })
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
+        case TASK_REORDER:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardid) {
+                        return {
+                            ...board,
+                            tasks: board.tasks.map(task => {
+                                if (task.status === payload.from.status) {
+                                    let current = task.tasks[payload.from.pos]
+                                    let remaings = task.tasks.filter((item, i) => i !== payload.from.pos)
+                                    let newList = [
+                                        ...remaings.slice(0, payload.to.pos),
+                                        current,
+                                        ...remaings.slice(payload.to.pos)
+                                    ]
+                                    return {
+                                        ...task,
+                                        tasks: newList
+                                    }
+                                } else {
+                                    return task
+                                }
+                            })
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
+        case TASK_REGROUP:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardid) {
+                        let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter(task => task._id === payload.id)[0]
+                        current.status = payload.to.status
+                        return {
+                            ...board,
+                            tasks: board.tasks.map(task => {
+                                if (task.status === payload.to.status) {
+                                    if (payload.to.pos === 0) {
+                                        return {
+                                            ...task,
+                                            tasks: [
+                                                current,
+                                                ...task.tasks
+                                            ]
+                                        }
+                                    } else {
+                                        let remaings = task.tasks
+                                        let newList = [
+                                            ...remaings.slice(0, payload.to.pos),
+                                            current,
+                                            ...remaings.slice(payload.to.pos)
+                                        ]
+                                        return {
+                                            ...task,
+                                            tasks: newList
+                                        }
+                                    }
+                                } else if (task.status === payload.from.status) {
+                                    return {
+                                        ...task,
+                                        tasks: task.tasks.filter(t => t._id !== payload.id)
+                                    }
+                                } else {
+                                    return task
+                                }
+                            })
                         }
                     } else {
                         return board

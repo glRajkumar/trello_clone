@@ -19,8 +19,11 @@ export const DET_GET = "DET_GET"
 export const DET_EDIT = "DET_EDIT"
 export const DET_DELETE = "DET_DELETE"
 export const NEWSTATUS = "NEWSTATUS"
+export const TASK_REORDER = "TASK_REORDER"
+export const TASK_REGROUP = "TASK_REGROUP"
 export const TASK_ADD = "TASK_ADD"
 export const TASK_EDIT = "TASK_EDIT"
+export const TASK_EDIT_WSTATUS = "TASK_EDIT_WSTATUS"
 export const TASK_DELETE = "TASK_DELETE"
 
 //Shared Boards

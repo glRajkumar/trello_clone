@@ -1,102 +1,24 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-const initDnDState = {
-    id: "",
-    dragFrom: null,
-    dragTo: null,
-    isDragging: false
-}
 
-function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, reOrder }) {
+function Lists({ headers, boardid, status, isMine, taskStatus }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const detailed = useSelector(state => state.task)
-    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
+    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
-    const currentItem = useRef(null)
-    const targeItem = useRef(null)
-
-    const [dnd, setDnd] = useState(initDnDState)
-
-    const hanDragStart = e => {
-        let dragFrom = {
-            status: e.currentTarget.dataset.status,
-            pos: Number(e.currentTarget.dataset.position)
-        }
-        let id = e.currentTarget.dataset.id
-
-        let data = {
-            dragFrom,
-            isDragging: true,
-            id
-        }
-        currentItem.current = e.target
-        setTimeout(() => {
-            currentItem.current.style.display = "none"
-        }, 0)
-        setListDnDData(data)
-        setDnd({
-            ...dnd,
-            dragFrom,
-            isDragging: true,
-            id
-        })
-    }
-
-    const hanDragOver = e => {
-        e.preventDefault()
-    }
-
-    const hanDragDrop = e => {
-        e.preventDefault()
-        e.currentTarget.id = ""
-
-        reOrder()
-        setDnd({ ...initDnDState })
-    }
-
-    const hanDragEnter = (e) => {
-        e.preventDefault()
-        let dragTo = {
-            status: e.currentTarget.dataset.status,
-            pos: Number(e.currentTarget.dataset.position)
-        }
-        let id = e.currentTarget.dataset.id
-        targeItem.current = e.target
-        targeItem.current.style.marginTop = "30px"
-
-        setListDnDData({ dragTo })
-        if (id !== dnd.id) {
-            setDnd({
-                ...dnd,
-                dragTo
-            })
-        }
-        e.currentTarget.id = ""
-    }
-
-    const hanDragLeave = e => {
-        e.currentTarget.id = ""
-        targeItem.current.style.marginTop = "0"
-    }
-
-    const hanDragEnd = e => {
-        console.log("end")
-        currentItem.current.style.display = "flex"
-    }
 
     const Submit = () => {
         if (title !== "") {
             const payload = {
                 boardid,
-                title,
-                order: tasks.length
+                title
             }
 
             if (status !== "To-do") payload.status = status
@@ -107,8 +29,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
                         _id: res.data.id,
                         boardid,
                         title,
-                        status,
-                        order: tasks.length
+                        status
                     }
                     dispatch({ type: TASK_ADD, payload })
                 })
@@ -125,8 +46,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
             .then(() => {
                 let payload = {
                     boardid,
-                    taskid: id,
-                    status
+                    taskid: id
                 }
                 dispatch({ type: TASK_DELETE, payload })
             })
@@ -152,18 +72,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
                 tasks.map((list, i) => {
                     return (
                         <div
-                            draggable="true"
-                            onDragStart={e => hanDragStart(e)}
-                            onDragEnter={e => hanDragEnter(e)}
-                            onDragOver={e => hanDragOver(e)}
-                            onDrop={e => hanDragDrop(e)}
-                            onDragLeave={e => hanDragLeave(e)}
-                            onDragEnd={e => hanDragEnd(e)}
-                            data-position={i}
-                            data-id={list._id}
-                            data-status={status}
                             className="list-cont"
-                            id={dnd.dragTo?.pos === Number(i) ? "dropArea" : ""}
                             key={list._id}
                         >
                             <p onClick={() => detailForword(list)}>

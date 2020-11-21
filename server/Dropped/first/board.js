@@ -24,24 +24,12 @@ router.get("/:boardId", auth, async (req, res) => {
     const { boardId } = req.params
 
     try {
-        let boards = await Board.find({ _id: boardId })
+        const boards = await Board.find({ _id: boardId })
             .select("-members -createdAt -__v")
             .populate("tasks", "status title body order")
             .sort('-createdAt')
             .lean()
 
-        let tasks = boards[0].tasks
-        let status = boards[0].taskStatus
-        let grouped = []
-
-        status.map(status => {
-            grouped.push({
-                status,
-                tasks: tasks.filter(t => t.status === status)
-            })
-        })
-
-        boards[0].tasks = grouped
         res.json({ boards })
 
     } catch (error) {
@@ -92,34 +80,6 @@ router.put("/public", auth, async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ error, msg: "Board public status updation failed" })
-    }
-})
-
-router.put("/add-status", auth, async (req, res) => {
-    const { boardId, name } = req.body
-
-    try {
-        await Board.findByIdAndUpdate(boardId, {
-            $push: { taskStatus: name }
-        })
-        res.json({ msg: "new status added successfully" })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot add new status" })
-    }
-})
-
-router.put("/del-status", auth, async (req, res) => {
-    const { boardId, name } = req.body
-
-    try {
-        await Board.findByIdAndUpdate(boardId, {
-            $pull: { taskStatus: name }
-        })
-        res.json({ msg: "status deleted successfully" })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot delete the status" })
     }
 })
 

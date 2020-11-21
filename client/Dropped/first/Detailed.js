@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useDispatch } from "react-redux"
-import { TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
+import { TASK_EDIT } from '../../Store/actionTypes'
 import Axios from 'axios'
 
 function Detailed({ headers }) {
@@ -32,21 +32,9 @@ function Detailed({ headers }) {
                 const actPayload = {
                     taskid: taskId,
                     boardid: state.forwordState.boardid,
-                    status: original.status,
                     info: changes
                 }
-
-                if (payload.status) {
-                    const { boardid, isMine, taskStatus, ...onlyNeeded } = original
-                    actPayload.info = {
-                        ...onlyNeeded,
-                        ...changes
-                    }
-                    dispatch({ type: TASK_EDIT_WSTATUS, payload: actPayload })
-                } else {
-                    dispatch({ type: TASK_EDIT, payload: actPayload })
-                }
-
+                dispatch({ type: TASK_EDIT, payload: actPayload })
                 history.goBack()
             })
             .catch((err) => {
