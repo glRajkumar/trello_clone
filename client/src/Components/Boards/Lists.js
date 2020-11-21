@@ -20,7 +20,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
     const currentItem = useRef(null)
-    const targeItem = useRef(null)
+    // const targeItem = useRef(null)
 
     const [dnd, setDnd] = useState(initDnDState)
 
@@ -68,8 +68,8 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
             pos: Number(e.currentTarget.dataset.position)
         }
         let id = e.currentTarget.dataset.id
-        targeItem.current = e.target
-        targeItem.current.style.marginTop = "30px"
+        // targeItem.current = e.target
+        // targeItem.current.style.marginTop = "30px"
 
         setListDnDData({ dragTo })
         if (id !== dnd.id) {
@@ -83,7 +83,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
 
     const hanDragLeave = e => {
         e.currentTarget.id = ""
-        targeItem.current.style.marginTop = "0"
+        // targeItem.current.style.marginTop = "0"
     }
 
     const hanDragEnd = e => {

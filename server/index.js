@@ -21,9 +21,6 @@ app.use("/board", boardControllers)
 app.use("/shared", sharedControllers)
 app.use("/task", taskControllers)
 
-
-app.use("/test", require('./test'))
-
 // Serve static assets if in production
 app.use('/static', express.static(path.resolve(__dirname, 'imgs')))
 
