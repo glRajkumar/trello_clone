@@ -25,23 +25,11 @@ router.get("/:boardId", auth, async (req, res) => {
 
     try {
         let boards = await Board.find({ _id: boardId })
-            .select("-members -createdAt -__v")
-            .populate("tasks", "status title body order")
+            .select("-members -createdAt -__v -tasks.status -tasks._id")
+            .populate("tasks.orderedList", "title body")
             .sort('-createdAt')
             .lean()
 
-        let tasks = boards[0].tasks
-        let status = boards[0].taskStatus
-        let grouped = []
-
-        status.map(status => {
-            grouped.push({
-                status,
-                tasks: tasks.filter(t => t.status === status)
-            })
-        })
-
-        boards[0].tasks = grouped
         res.json({ boards })
 
     } catch (error) {
@@ -96,11 +84,15 @@ router.put("/public", auth, async (req, res) => {
 })
 
 router.put("/add-status", auth, async (req, res) => {
-    const { boardId, name } = req.body
+    const { boardId, status } = req.body
+    const tasks = {
+        status,
+        orderedList: []
+    }
 
     try {
         await Board.findByIdAndUpdate(boardId, {
-            $push: { taskStatus: name }
+            $push: { tasks, taskStatus: status }
         })
         res.json({ msg: "new status added successfully" })
 
@@ -110,16 +102,90 @@ router.put("/add-status", auth, async (req, res) => {
 })
 
 router.put("/del-status", auth, async (req, res) => {
-    const { boardId, name } = req.body
+    const { boardId, status } = req.body
 
     try {
         await Board.findByIdAndUpdate(boardId, {
-            $pull: { taskStatus: name }
+            $pull: { taskStatus: status, tasks: { status } }
         })
         res.json({ msg: "status deleted successfully" })
 
     } catch (error) {
         res.status(400).json({ error, msg: "cannot delete the status" })
+    }
+})
+
+router.put("/reorder-task", async (req, res) => {
+    const { boardId, status, taskid, to } = req.body
+
+    try {
+        //deleting the item
+        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
+            $pull: { "tasks.$.orderedList": taskid }
+        })
+
+        // inserting the item in the position 
+        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
+            $push: { "tasks.$.orderedList": { $each: [taskid], $position: to } }
+        })
+
+        res.json({ msg: "tasks reodered successfully" })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "tasks reodered operation failed" })
+    }
+})
+
+router.put("/restatus-task", async (req, res) => {
+    const { boardId, fromStatus, toStatus, taskid, to } = req.body
+
+    try {
+        //deleting the item
+        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": fromStatus }, {
+            $pull: { "tasks.$.orderedList": taskid }
+        })
+
+        // inserting the item in the position 
+        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": toStatus }, {
+            $push: { "tasks.$.orderedList": { $each: [taskid], $position: to } }
+        })
+
+        res.json({ msg: "tasks restatus successfully" })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "tasks restatus operation failed" })
+    }
+})
+
+router.put("/reorder-status", async (req, res) => {
+    const { boardId, from, to } = req.body
+
+    try {
+        let board = await Board.findById(boardId).select("taskStatus tasks")
+        let { taskStatus, tasks } = board
+        let remaingTaskStatus = taskStatus.filter((status, i) => i !== from)
+        let remaingTasks = tasks.filter((task, i) => i !== from)
+
+        let newTaskStatus = [
+            ...remaingTaskStatus.slice(0, to),
+            taskStatus[from],
+            ...remaingTaskStatus.slice(to)
+        ]
+
+        let newTasks = [
+            ...remaingTasks.slice(0, to),
+            tasks[from],
+            ...remaingTasks.slice(to)
+        ]
+
+        board.taskStatus = newTaskStatus
+        board.tasks = newTasks
+        await board.save()
+
+        res.json({ board })
+
+    } catch (error) {
+        res.status(400).json({ error, msg: "Board public status updation failed" })
     }
 })
 

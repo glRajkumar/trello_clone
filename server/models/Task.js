@@ -15,10 +15,6 @@ const taskSchema = new mongoose.Schema({
         default: "To-do"
     },
 
-    order: {
-        type: Number
-    },
-
     board: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Board"

@@ -11,7 +11,9 @@ router.post("/", auth, async (req, res) => {
     try {
         const task = new Task({ board: boardid, ...details })
         await task.save()
-        await Board.findByIdAndUpdate(boardid, { $push: { tasks: task._id } })
+        await Board.findOneAndUpdate({ _id: boardid, "tasks.status": details.status }, {
+            $push: { "tasks.$.orderedList": task._id }
+        })
         res.json({ id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
@@ -31,12 +33,14 @@ router.put("/", auth, async (req, res) => {
     }
 })
 
-router.delete("/:boardId/:taskId", auth, async (req, res) => {
-    const { boardId, taskId } = req.params
+router.delete("/:boardId/:taskId/:status", auth, async (req, res) => {
+    const { boardId, status, taskId } = req.params
 
     try {
         await Task.findByIdAndRemove(taskId)
-        await Board.findByIdAndUpdate(boardId, { $pull: { tasks: taskId } })
+        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
+            $pull: { "tasks.$.orderedList": taskId }
+        })
         res.json({ msg: "Task deleted successfully" })
 
     } catch (error) {

@@ -1,16 +1,16 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU4NDc2MTAsImV4cCI6MTYwNTkxMjQxMH0.vWEdMvogaARVngmVUROovrf7s6iXUUKk3SwSXI3_UCQ
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJiYmE2MDVkNTViMTEzODg2OWEwNWMiLCJpYXQiOjE2MDYyMTEyNTgsImV4cCI6MTYwNjI3NjA1OH0.6sNAeK_Lwnq1FP8ReJKd5U-gLoSIpbqwqQtCDey_35g
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fb737a75ec63b2ed44e2f4d
+GET {{host}}/board/5fbcd738a4ebe51774835d50
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5fae4cc30118a51b30ea74e1
+GET {{host}}/board/members/5fbcd738a4ebe51774835d50
 Authorization: {{token}}
 
 ### create new board
@@ -43,8 +43,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fb737a75ec63b2ed44e2f4d", 
-    "name":"tfr"
+    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "status" : "Doing"
 }
 
 ### delete the status
@@ -53,8 +53,44 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fb65f2042d651309cc6e01b", 
-    "name":"Doing"
+    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "status" : "Doing"
+}
+
+### reorder-task
+PUT {{host}}/board/reorder-task
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "status" : "To-do",
+    "taskid" : "5fbcdb3395937d27e08afc0b",
+    "to" : 0
+}
+
+### restatus-task
+PUT {{host}}/board/restatus-task
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "fromStatus" : "To-do",
+    "toStatus" : "Done",
+    "taskid" : "5fbcdb4195937d27e08afc0d",
+    "to" : 0
+}
+
+### reorder-status
+PUT {{host}}/board/reorder-status
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "from" : 3,
+    "to" : 0
 }
 
 ### add member to the board
@@ -78,5 +114,5 @@ Content-Type: application/json
 }
 
 ### delete the board
-DELETE {{host}}/board/5fb2768f31c776206c51e7dd
+DELETE {{host}}/board/5fbbba9c5d55b1138869a05d
 Authorization: {{token}}

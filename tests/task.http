@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU3ODI1NDYsImV4cCI6MTYwNTg0NzM0Nn0.doE-Bcv3_J9G_fgSTMyEsbBCA3WIobDGiXTeR_UFFi8
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJiYmE2MDVkNTViMTEzODg2OWEwNWMiLCJpYXQiOjE2MDYyMTEyNTgsImV4cCI6MTYwNjI3NjA1OH0.6sNAeK_Lwnq1FP8ReJKd5U-gLoSIpbqwqQtCDey_35g
 
 ### create a task
 POST {{host}}/task
@@ -7,10 +7,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "nhbgvvf hgtfff cnhgt",
-    "status": "Done",
-    "boardid" : "5fb737a75ec63b2ed44e2f4d",
-    "order": 2
+    "title": "hhj mmmmjjnnnnh",
+    "status": "To-do",
+    "boardid" : "5fbcd738a4ebe51774835d50"
 }
 
 ### update task 
@@ -19,15 +18,14 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId": "5fb64d2a845bd32914dbcb3f",
+    "taskId": "5fbbbb8b3076c21460fc1d54",
     "body" : "bbbb nnnn",
     "status": "To-do",
-    "title": "jhub",
-    "order": 3
+    "title": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
 }
 
 ### for above use status, body, title to update
 
 ### delete the tasks
-DELETE {{host}}/task/5fa8e58d89686809904c85ec/5fa8ea6982cbf735a80325c8
+DELETE {{host}}/task/5fbcd738a4ebe51774835d50/5fbcdb2395937d27e08afc09/Done
 Authorization: {{token}}

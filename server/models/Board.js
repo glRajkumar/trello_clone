@@ -16,10 +16,31 @@ const boardSchema = new mongoose.Schema({
         required: true
     },
 
-    tasks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Task"
-    }],
+    tasks: {
+        type: [
+            {
+                status: String,
+                orderedList: [{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Task"
+                }]
+            }
+        ],
+        default: [
+            {
+                status: "To-do",
+                orderedList: []
+            },
+            {
+                status: "Doing",
+                orderedList: []
+            },
+            {
+                status: "Done",
+                orderedList: []
+            }
+        ]
+    },
 
     taskStatus: {
         type: Array,
