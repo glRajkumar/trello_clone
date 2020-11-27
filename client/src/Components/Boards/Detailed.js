@@ -12,6 +12,8 @@ function Detailed({ headers }) {
     const [details, setDetails] = useState(state.forwordState)
     const [original] = useState(state.forwordState)
 
+    console.log("original", original)
+
     const Submit = () => {
         const payload = {
             taskId

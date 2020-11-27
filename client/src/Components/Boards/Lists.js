@@ -155,7 +155,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrd
             >
                 {
                     tasks?.length > 0 &&
-                    tasks.map((list, i) => {
+                    tasks.map(list => {
                         return (
                             <Draggable key={list._id}>
                                 <div className="list-cont">

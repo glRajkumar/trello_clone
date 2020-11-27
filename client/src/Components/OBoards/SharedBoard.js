@@ -4,41 +4,144 @@ import { Loading } from '../Common'
 import "../../CSS/board.css"
 import SharedLists from './SharedLists'
 import useSDetailed from '../Customs/useSDetailed'
+import { Container, Draggable } from 'react-smooth-dnd'
+import { useDispatch } from 'react-redux'
+import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
+import axios from 'axios'
+
+const initDnDState = {
+    dragFrom: null,
+    dragTo: null
+}
+
+const colDragStyle = {
+    overflowX: "scroll",
+    minHeight: "80vh",
+    display: "grid",
+    gridTemplateColumns: "repeat(100, minmax(250px, 1fr))"
+}
 
 function SharedBoard({ headers }) {
     const { boardid } = useParams()
+    const dispatch = useDispatch()
     const { permision, detailed, loading, taskStatus, createNewStatus } = useSDetailed(boardid, headers)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
+    const [listDnD, setlistDnD] = useState(initDnDState)
+
+    const reOrder = () => {
+        let payload = {
+            boardid,
+            from: listDnD.dragFrom,
+            to: listDnD.dragTo
+        }
+        if (payload.from && payload.to) {
+            let from = `${payload.from.status} ${payload.from.pos}`
+            let to = `${payload.to.status} ${payload.to.pos}`
+            let sameCheck = from === to
+
+            if (!sameCheck) {
+                if (payload.from.status === payload.to.status) {
+                    axios.put("/board/reorder-task", {
+                        boardId: boardid,
+                        taskid: payload.from.id,
+                        status: payload.from.status,
+                        to: payload.to.pos
+                    }, { headers })
+                        .then((res) => {
+                            console.log(res)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    dispatch({ type: TASK_REORDER, payload })
+                } else {
+                    axios.put("/board/restatus-task", {
+                        boardId: boardid,
+                        taskid: payload.from.id,
+                        fromStatus: payload.from.status,
+                        toStatus: payload.to.status,
+                        to: payload.to.pos
+                    }, { headers })
+                        .then((res) => {
+                            console.log(res)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                    dispatch({ type: TASK_REGROUP, payload })
+                }
+            }
+        }
+        setlistDnD({
+            dragFrom: null,
+            dragTo: null
+        })
+    }
+
+    const onColumnDrop = (e) => {
+        // console.log("drag drop col", e)
+        const { removedIndex, addedIndex } = e
+        if (removedIndex !== null && addedIndex !== null && removedIndex !== addedIndex) {
+            let payload = {
+                boardid,
+                dragFrom: removedIndex,
+                dragTo: addedIndex
+            }
+            // reOrderStatus(payload)
+        }
+        setlistDnD({
+            dragFrom: null,
+            dragTo: null
+        })
+    }
 
     return !loading ? (
-        <div className="board" style={detailed[0].bg?.isColour ? { backgroundColor: detailed[0].bg?.name } : { backgroundImage: `url(${'/static/' + detailed[0].bg?.name})` }}>
+        <div className="board" style={detailed.bg?.isColour ? { backgroundColor: detailed.bg?.name } : { backgroundImage: `url(${'/static/' + detailed.bg?.name})` }}>
             <div className="board-head">
-                <div className="bh-top"> {detailed[0].boardName} </div>
-                <div className="bh-top"> {detailed[0].catagery} </div>
+                <div className="bh-top"> {detailed.boardName} </div>
+                <div className="bh-top"> {detailed.catagery} </div>
             </div>
 
-            <div className="board-lists">
+            <Container
+                groupName="status"
+                style={colDragStyle}
+                orientation="horizontal"
+                getChildPayload={i => i}
+                nonDragAreaSelector=".nondrag"
+                onDragStart={e => console.log("drag col start ", e)}
+                onDragEnd={e => console.log("drag col end ", e)}
+                onDrop={e => onColumnDrop(e)}
+                onDragEnter={() => console.log("drag col enter ")}
+                onDragLeave={() => console.log("drag col leave ")}
+                onDropReady={p => console.log("drag col drop ready ", p)}
+                dropPlaceholder={{
+                    animationDuration: 150,
+                    showOnTop: true,
+                    className: 'staus-drop-preview'
+                }}
+            >
                 {
                     taskStatus.map(status => {
                         return (
-                            <div key={status}>
-                                <strong> {status} </strong>
+                            <Draggable key={status}>
+                                <strong>{status}</strong>
                                 <SharedLists
                                     status={status}
                                     headers={headers}
                                     boardid={boardid}
-                                    permision={permision}
                                     taskStatus={taskStatus}
+                                    setlistDnD={setlistDnD}
+                                    reOrder={reOrder}
                                 />
-                            </div>
+                            </Draggable>
                         )
                     })
                 }
 
                 {
                     permision !== "View" &&
-                    <div>
+                    <div className="nondrag">
                         {
                             !create
                                 ?
@@ -64,7 +167,7 @@ function SharedBoard({ headers }) {
                         }
                     </div>
                 }
-            </div>
+            </Container>
         </div>
     )
         : (<Loading />)

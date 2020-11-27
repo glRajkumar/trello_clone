@@ -1,17 +1,86 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Container, Draggable } from 'react-smooth-dnd'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { STASK_ADD, STASK_DELETE } from '../../Store/actionTypes'
 
-function SharedLists({ headers, boardid, status, permision, taskStatus }) {
+function SharedLists({ headers, boardid, status, permision, taskStatus, setlistDnD, reOrder }) {
     const dispatch = useDispatch()
-    const detailed = useSelector(state => state.stask)
+    const { detailed } = useSelector(state => state.stask)
     const history = useHistory()
-    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)
+    const tasks = detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
+
+    const getCardPayload = (status, pos) => {
+        let id = tasks.filter((task, i) => i === pos)[0]._id
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragFrom: {
+                    id,
+                    status,
+                    pos
+                }
+            }
+        })
+        return {
+            id,
+            pos,
+            status
+        }
+    }
+
+    const onDragStart = e => {
+        // console.log("drag started", e)
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    status: e.payload.status
+                }
+            }
+        })
+    }
+
+    const onDragEnter = (status) => {
+        // console.log("drag enter:", status)
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    status
+                }
+            }
+        })
+    }
+
+    const onDragDropReady = (p) => {
+        // console.log('Drop ready: ', p)
+        const { addedIndex } = p
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    pos: addedIndex
+                }
+            }
+        })
+    }
+
+    const onDragEnd = e => {
+        // console.log("drag end", e)
+    }
+
+    const onDropCard = (e) => {
+        // console.log("drag drop", e)
+        reOrder()
+    }
 
     const Submit = () => {
         if (title !== "") {
@@ -65,24 +134,45 @@ function SharedLists({ headers, boardid, status, permision, taskStatus }) {
 
     return (
         <div className="lists">
-            {
-                tasks?.length > 0 &&
-                tasks.map((list) => {
-                    return (
-                        <div className="list-cont" key={list._id}>
-                            <p onClick={() => detailForword(list)}>
-                                {list.title}
-                            </p>
-                            {
-                                permision !== "View" &&
-                                <p onClick={() => DelTitle(list._id)}>
-                                    <DeleteIcon />
-                                </p>
-                            }
-                        </div>
-                    )
-                })
-            }
+            <Container
+                groupName="list"
+                getChildPayload={i => getCardPayload(status, i)}
+                onDragStart={e => onDragStart(e)}
+                onDragEnd={e => onDragEnd(e)}
+                onDrop={e => onDropCard(e)}
+                onDragEnter={() => onDragEnter(status)}
+                onDragLeave={() => console.log("drag leave:", status)}
+                onDropReady={p => onDragDropReady(p)}
+                dragClass="list-ghost"
+                dropClass="list-ghost-drop"
+                dropPlaceholder={{
+                    animationDuration: 150,
+                    showOnTop: true,
+                    className: 'list-drop-preview'
+                }}
+                dropPlaceholderAnimationDuration={200}
+            >
+                {
+                    tasks?.length > 0 &&
+                    tasks.map(list => {
+                        return (
+                            <Draggable key={list._id}>
+                                <div className="list-cont">
+                                    <p onClick={() => detailForword(list)}>
+                                        {list.title}
+                                    </p>
+                                    {
+                                        permision !== "View" &&
+                                        <p onClick={() => DelTitle(list._id)}>
+                                            <DeleteIcon />
+                                        </p>
+                                    }
+                                </div>
+                            </Draggable>
+                        )
+                    })
+                }
+            </Container>
 
             {
                 permision !== "View" && !showForm &&

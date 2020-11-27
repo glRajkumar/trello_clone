@@ -27,7 +27,6 @@ router.get("/:boardId", auth, async (req, res) => {
         let board = await Board.find({ _id: boardId })
             .select("postedBy tasks")
             .populate("tasks.orderedList", "title body")
-            .sort('-createdAt')
             .lean()
 
         board = board[0]

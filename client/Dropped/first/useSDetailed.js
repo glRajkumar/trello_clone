@@ -4,34 +4,39 @@ import { SDET_GET, SNEWSTATUS } from '../../Store/actionTypes'
 import axios from "axios"
 
 function useSDetailed(boardid, headers) {
-    const { sboard, stask } = useSelector(state => state)
+    const { stask } = useSelector(state => state)
     const [isPresent] = useState(stask.detailed.some(d => d._id === boardid))
     const [detailed, setDetailed] = useState(
         isPresent
-            ? stask.detailed.filter(d => d._id === boardid)[0]
-            : {
+            ? stask.detailed.filter(d => d._id === boardid)
+            : [{
                 boardName: "",
                 catagery: "",
                 postedBy: "",
                 tasks: [],
-            }
+            }]
     )
     const [loading, setLoad] = useState(!isPresent)
     const dispatch = useDispatch()
 
-    console.log("detailed", detailed)
     useEffect(() => {
         if (!isPresent) {
             axios.get(`/shared/${boardid}`, { headers })
                 .then((res) => {
-                    let boardDetails = sboard.boards.filter(b => b._id === boardid)
+                    let otherStatus = [
+                        ...new Set([
+                            ...res.data.boards[0]
+                                .tasks
+                                .map(task => task.status)
+                                .filter(a => a !== "To-do" && a !== "Done" && a !== "Doing")
+                        ])
+                    ]
                     let payload = {
-                        ...boardDetails[0],
-                        ...res.data.board,
-                        taskStatus: res.data.board.tasks.map(task => task.status)
+                        ...res.data.boards[0],
+                        taskStatus: ["To-do", "Doing", "Done", ...otherStatus]
                     }
                     setLoad(false)
-                    setDetailed(payload)
+                    setDetailed([payload])
                     dispatch({ type: SDET_GET, payload })
                 })
                 .catch((err) => {
@@ -42,7 +47,7 @@ function useSDetailed(boardid, headers) {
 
     const createNewStatus = (name) => {
         let payload = {
-            boardId: detailed._id,
+            boardId: detailed[0]._id,
             name
         }
         dispatch({ type: SNEWSTATUS, payload })
@@ -58,10 +63,10 @@ function useSDetailed(boardid, headers) {
     }
 
     return {
-        permision: detailed?.permision,
+        permision: detailed[0]?.permision,
         loading,
         detailed,
-        taskStatus: detailed?.taskStatus || [],
+        taskStatus: detailed[0]?.taskStatus || [],
         createNewStatus,
     }
 }

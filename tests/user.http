@@ -4,11 +4,11 @@
 ### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzcxMzMxYzc3NjIwNmM1MWU3ZTAiLCJpYXQiOjE2MDU1MzE0MTcsImV4cCI6MTYwNTU5NjIxN30.FPHI1xmfXUmBttsd5P9s0YVmgo1LfEMe2f_91V6AgWk
 ### rrr@gmail.com, rrrr, 5fb2771331c776206c51e7e0
 
-### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmFlNGMyMjAxMThhNTFiMzBlYTc0ZGQiLCJpYXQiOjE2MDUyNTgyODEsImV4cCI6MTYwNTMyMzA4MX0._B02X0d_5dyo8vL1ozhoIEkjg6lQ3bziTI1fHMBjgpY
-### ccc@gmail.com, cccc, 5fae4c220118a51b30ea74dd
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMwZTEyMmZjMmU3MjVhNTAxNGMzMTciLCJpYXQiOjE2MDY0NzYwNjksImV4cCI6MTYwNjU0MDg2OX0.pD3uc067zB2jAbCthXa2GzPX_m7eVrwDVMM3j6YfvDo
+### yyy@gmail.com, yyy, 5fc0e122fc2e725a5014c317
 
-### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmIyNzNmMzMzMTY1ZTA4MTg0NmQzODkiLCJpYXQiOjE2MDU1MzA2MTYsImV4cCI6MTYwNTU5NTQxNn0.b-8UpuwZCfZiTjShqn2E161Fd17B04C_haEB4kEpcUQ
-### ddd@gmail.com, dddd, 5fb273f333165e081846d389
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMwZTE1Y2ZjMmU3MjVhNTAxNGMzMTgiLCJpYXQiOjE2MDY0NzYxMjYsImV4cCI6MTYwNjU0MDkyNn0.4APCDMcwL_Hc0faw-RGV6QCHHdRQNQH4BMz6RKi3K3o
+### hhh@gmail.com, hhhh, 5fc0e15cfc2e725a5014c318
 
 ### get me 
 GET {{host}}/user/me
@@ -19,8 +19,8 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-    "userName": "rrrr",
-    "email" : "rrr@gmail.com",
+    "userName": "hhhh",
+    "email" : "hhhh@gmail.com",
     "password" : "aA1!aa"
 }
 
@@ -29,7 +29,7 @@ POST {{host}}/user/login
 Content-Type: application/json
 
 {
-    "email" : "rrr@gmail.com",
+    "email" : "hhhh@gmail.com",
     "password" : "aA1!aa"
 }
 
