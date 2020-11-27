@@ -3,6 +3,7 @@ import {
     DET_GET,
     DET_EDIT,
     NEWSTATUS,
+    TASK_RELIST,
     TASK_REORDER,
     TASK_REGROUP,
     TASK_ADD,
@@ -53,12 +54,12 @@ const taskReducer = (state = initState, { type, payload }) => {
                             ...board,
                             taskStatus: [
                                 ...board.taskStatus,
-                                payload.name
+                                payload.status
                             ],
                             tasks: [
                                 ...board.tasks,
                                 {
-                                    status: payload.name,
+                                    status: payload.status,
                                     tasks: []
                                 }
                             ]
@@ -181,6 +182,21 @@ const taskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
+        case TASK_RELIST:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardid) {
+                        return {
+                            ...board,
+                            taskStatus: payload.newTaskStatus,
+                            tasks: payload.newTasks
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
         case TASK_REORDER:
             return {
                 detailed: state.detailed.map(board => {
@@ -215,36 +231,26 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardid) {
-                        let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter(task => task._id === payload.id)[0]
+                        let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter((task, i) => i === payload.from.pos)[0]
                         current.status = payload.to.status
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
                                 if (task.status === payload.to.status) {
-                                    if (payload.to.pos === 0) {
-                                        return {
-                                            ...task,
-                                            tasks: [
-                                                current,
-                                                ...task.tasks
-                                            ]
-                                        }
-                                    } else {
-                                        let remaings = task.tasks
-                                        let newList = [
-                                            ...remaings.slice(0, payload.to.pos),
-                                            current,
-                                            ...remaings.slice(payload.to.pos)
-                                        ]
-                                        return {
-                                            ...task,
-                                            tasks: newList
-                                        }
+                                    let remaings = task.tasks
+                                    let newList = [
+                                        ...remaings.slice(0, payload.to.pos),
+                                        current,
+                                        ...remaings.slice(payload.to.pos)
+                                    ]
+                                    return {
+                                        ...task,
+                                        tasks: newList
                                     }
                                 } else if (task.status === payload.from.status) {
                                     return {
                                         ...task,
-                                        tasks: task.tasks.filter(t => t._id !== payload.id)
+                                        tasks: task.tasks.filter((t, i) => i !== payload.from.pos)
                                     }
                                 } else {
                                     return task

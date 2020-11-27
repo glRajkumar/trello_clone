@@ -9,7 +9,7 @@ router.get("/boards", auth, async (req, res) => {
 
     try {
         const boards = await Board.find({ postedBy: userId })
-            .select('boardName catagery bg')
+            .select('boardName catagery bg isPublic')
             .sort('-createdAt')
             .lean()
 
@@ -24,16 +24,23 @@ router.get("/:boardId", auth, async (req, res) => {
     const { boardId } = req.params
 
     try {
-        let boards = await Board.find({ _id: boardId })
-            .select("-members -createdAt -__v -tasks.status -tasks._id")
+        let board = await Board.find({ _id: boardId })
+            .select("postedBy tasks")
             .populate("tasks.orderedList", "title body")
             .sort('-createdAt')
             .lean()
 
-        res.json({ boards })
+        board = board[0]
+        board.tasks = board.tasks.map(task => {
+            return {
+                status: task.status,
+                tasks: task.orderedList
+            }
+        })
+        res.json({ board })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "Cannot get boards" })
+        res.status(400).json({ error, msg: "Cannot get board" })
     }
 })
 
@@ -115,7 +122,7 @@ router.put("/del-status", auth, async (req, res) => {
     }
 })
 
-router.put("/reorder-task", async (req, res) => {
+router.put("/reorder-task", auth, async (req, res) => {
     const { boardId, status, taskid, to } = req.body
 
     try {
@@ -132,11 +139,11 @@ router.put("/reorder-task", async (req, res) => {
         res.json({ msg: "tasks reodered successfully" })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "tasks reodered operation failed" })
+        res.status(400).json({ error, msg: "tasks reoder operation failed" })
     }
 })
 
-router.put("/restatus-task", async (req, res) => {
+router.put("/restatus-task", auth, async (req, res) => {
     const { boardId, fromStatus, toStatus, taskid, to } = req.body
 
     try {
@@ -150,14 +157,14 @@ router.put("/restatus-task", async (req, res) => {
             $push: { "tasks.$.orderedList": { $each: [taskid], $position: to } }
         })
 
-        res.json({ msg: "tasks restatus successfully" })
+        res.json({ msg: "tasks restatused successfully" })
 
     } catch (error) {
         res.status(400).json({ error, msg: "tasks restatus operation failed" })
     }
 })
 
-router.put("/reorder-status", async (req, res) => {
+router.put("/reorder-status", auth, async (req, res) => {
     const { boardId, from, to } = req.body
 
     try {
@@ -182,10 +189,10 @@ router.put("/reorder-status", async (req, res) => {
         board.tasks = newTasks
         await board.save()
 
-        res.json({ board })
+        res.json({ msg: "stauts reordered successfully" })
 
     } catch (error) {
-        res.status(400).json({ error, msg: "Board public status updation failed" })
+        res.status(400).json({ error, msg: "stauts reorder updation failed" })
     }
 })
 

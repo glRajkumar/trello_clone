@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJiYmE2MDVkNTViMTEzODg2OWEwNWMiLCJpYXQiOjE2MDYyMTEyNTgsImV4cCI6MTYwNjI3NjA1OH0.6sNAeK_Lwnq1FP8ReJKd5U-gLoSIpbqwqQtCDey_35g
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJjZjNkMDc4Y2VhMDI4OTBjNTEwMDMiLCJpYXQiOjE2MDYyMTg3MTAsImV4cCI6MTYwNjI4MzUxMH0.k6g8cNRUx1i94-d_oJf2KoXgcb6qXmgqeI__a-rtpos
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fbcd738a4ebe51774835d50
+GET {{host}}/board/5fbcf3f378cea02890c51004
 Authorization: {{token}}
 
 ### get members by id
@@ -43,7 +43,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fbcd738a4ebe51774835d50", 
+    "boardId" : "5fbcf3f378cea02890c51004", 
     "status" : "Doing"
 }
 

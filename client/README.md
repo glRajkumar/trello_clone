@@ -1,6 +1,9 @@
 ### Trello clone
 trello like website for handling tasks
 
+### dnd feature
+for drag and drop, I used react-smooth-dnd package.
+
 ### Client folder structure
 Every files are arranged by their use.
 All task related js files are separated in Boards folder.

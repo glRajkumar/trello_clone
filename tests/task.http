@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJiYmE2MDVkNTViMTEzODg2OWEwNWMiLCJpYXQiOjE2MDYyMTEyNTgsImV4cCI6MTYwNjI3NjA1OH0.6sNAeK_Lwnq1FP8ReJKd5U-gLoSIpbqwqQtCDey_35g
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJjZjNkMDc4Y2VhMDI4OTBjNTEwMDMiLCJpYXQiOjE2MDYyMTg3MTAsImV4cCI6MTYwNjI4MzUxMH0.k6g8cNRUx1i94-d_oJf2KoXgcb6qXmgqeI__a-rtpos
 
 ### create a task
 POST {{host}}/task
@@ -7,9 +7,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "hhj mmmmjjnnnnh",
-    "status": "To-do",
-    "boardid" : "5fbcd738a4ebe51774835d50"
+    "title": "nnnnhmk nbh bbb",
+    "status": "Done",
+    "boardid" : "5fbcf3f378cea02890c51004"
 }
 
 ### update task 

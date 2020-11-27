@@ -1,103 +1,101 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Container, Draggable } from 'react-smooth-dnd'
-import { useDispatch } from 'react-redux'
-import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
-import { OtherUser, SearchUser } from '../User'
-import useDetailed from '../Customs/useDetailed'
 import { Loading } from '../Common'
-import Lists from './Lists'
-import axios from 'axios'
 import "../../CSS/board.css"
+import Lists from './Lists'
+import OtherUser from '../User/OtherUser'
+import SearchUser from '../User/SearchUser'
+import useDetailed from '../Customs/useDetailed'
+import { useDispatch } from 'react-redux'
+import { TASK_RELIST, TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
 
 const initDnDState = {
+    id: "",
     dragFrom: null,
-    dragTo: null
-}
-
-const colDragStyle = {
-    overflowX: "scroll",
-    minHeight: "80vh",
-    display: "grid",
-    gridTemplateColumns: "repeat(100, minmax(250px, 1fr))"
+    dragTo: null,
+    isDragging: false
 }
 
 function Board({ headers }) {
     const { boardid } = useParams()
     const dispatch = useDispatch()
-    const { taskStatus, isMine, loading, detailed, Private, createNewStatus, reOrderStatus } = useDetailed(boardid, headers)
+    const { taskStatus, isMine, loading, detailed, Private, createNewStatus } = useDetailed(boardid, headers)
     const [showMem, setshowMem] = useState(false)
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
+    const [dnd, setDnd] = useState(initDnDState)
+
+    const hanDragStart = e => {
+        let dragFrom = Number(e.currentTarget.dataset.position)
+        setDnd({
+            ...dnd,
+            dragFrom,
+            isDragging: true
+        })
+    }
+
+    const hanDragOver = e => {
+        e.preventDefault()
+    }
+
+    const hanDragDrop = e => {
+        e.preventDefault()
+        e.currentTarget.id = ""
+        let payload = {
+            boardid,
+            ...dnd
+        }
+        console.log("drop")
+        console.log(payload)
+        dispatch({ type: TASK_RELIST, payload })
+        setDnd({ ...initDnDState })
+    }
+    // console.log(dnd)
+    const hanDragEnter = (e) => {
+        e.preventDefault()
+        let dragTo = Number(e.currentTarget.dataset.position)
+        console.log(dragTo)
+        if (dragTo !== dnd.dragTo) {
+            setDnd({
+                ...dnd,
+                dragTo
+            })
+        }
+    }
+
+    const hanDragLeave = e => {
+        e.currentTarget.id = ""
+    }
+
+    const hanDragEnd = e => {
+        console.log("end")
+    }
+
+    const setListDnDData = (data) => {
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                ...data
+            }
+        })
+    }
 
     const reOrder = () => {
         let payload = {
             boardid,
             from: listDnD.dragFrom,
-            to: listDnD.dragTo
+            to: listDnD.dragTo,
+            id: listDnD.id
         }
-        if (payload.from && payload.to) {
-            let from = `${payload.from.status} ${payload.from.pos}`
-            let to = `${payload.to.status} ${payload.to.pos}`
-            let sameCheck = from === to
-
-            if (!sameCheck) {
-                if (payload.from.status === payload.to.status) {
-                    axios.put("/board/reorder-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
-                        status: payload.from.status,
-                        to: payload.to.pos
-                    }, { headers })
-                        .then((res) => {
-                            console.log(res)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                    dispatch({ type: TASK_REORDER, payload })
-                } else {
-                    axios.put("/board/restatus-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
-                        fromStatus: payload.from.status,
-                        toStatus: payload.to.status,
-                        to: payload.to.pos
-                    }, { headers })
-                        .then((res) => {
-                            console.log(res)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                    dispatch({ type: TASK_REGROUP, payload })
-                }
-            }
+        if (payload.from.status === payload.to.status) {
+            dispatch({ type: TASK_REORDER, payload })
+        } else {
+            dispatch({ type: TASK_REGROUP, payload })
         }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
-    }
-
-    const onColumnDrop = (e) => {
-        // console.log("drag drop col", e)
-        const { removedIndex, addedIndex } = e
-        if (removedIndex !== null && addedIndex !== null && removedIndex !== addedIndex) {
-            let payload = {
-                boardid,
-                dragFrom: removedIndex,
-                dragTo: addedIndex
-            }
-            reOrderStatus(payload)
-        }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
+        setlistDnD({ ...initDnDState })
     }
 
     return !loading ? (
@@ -141,28 +139,22 @@ function Board({ headers }) {
                 }
             </div>
 
-            <Container
-                groupName="status"
-                style={colDragStyle}
-                orientation="horizontal"
-                getChildPayload={i => i}
-                nonDragAreaSelector=".nondrag"
-                onDragStart={e => console.log("drag col start ", e)}
-                onDragEnd={e => console.log("drag col end ", e)}
-                onDrop={e => onColumnDrop(e)}
-                onDragEnter={() => console.log("drag col enter ")}
-                onDragLeave={() => console.log("drag col leave ")}
-                onDropReady={p => console.log("drag col drop ready ", p)}
-                dropPlaceholder={{
-                    animationDuration: 150,
-                    showOnTop: true,
-                    className: 'staus-drop-preview'
-                }}
-            >
+            <div className="board-lists">
                 {
-                    taskStatus.map(status => {
+                    taskStatus.map((status, i) => {
                         return (
-                            <Draggable key={status}>
+                            <div
+                                className="list-holder"
+                                // draggable="true"
+                                // onDragStart={e => hanDragStart(e)}
+                                // onDragEnter={e => hanDragEnter(e)}
+                                // onDragOver={e => hanDragOver(e)}
+                                // onDrop={e => hanDragDrop(e)}
+                                // onDragLeave={e => hanDragLeave(e)}
+                                // onDragEnd={e => hanDragEnd(e)}
+                                // data-position={i}
+                                key={status}
+                            >
                                 <strong>{status}</strong>
                                 <Lists
                                     status={status}
@@ -170,15 +162,15 @@ function Board({ headers }) {
                                     boardid={boardid}
                                     isMine={isMine}
                                     taskStatus={taskStatus}
-                                    setlistDnD={setlistDnD}
+                                    setListDnDData={setListDnDData}
                                     reOrder={reOrder}
                                 />
-                            </Draggable>
+                            </div>
                         )
                     })
                 }
 
-                <div className="nondrag">
+                <div>
                     {
                         !create
                             ?
@@ -203,7 +195,7 @@ function Board({ headers }) {
                             </div>
                     }
                 </div>
-            </Container>
+            </div>
         </div>
     )
         : (<Loading />)

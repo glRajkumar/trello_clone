@@ -1,94 +1,85 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Container, Draggable } from 'react-smooth-dnd'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-const initDnDState = {
-    id: "",
-    dragFrom: null,
-    dragTo: null,
-    isDragging: false
-}
-
-function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, reOrder }) {
+function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrder }) {
     const dispatch = useDispatch()
     const history = useHistory()
-    const detailed = useSelector(state => state.task)
-    const tasks = detailed.detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
+    const { detailed } = useSelector(state => state.task)
+    const tasks = detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
-    const currentItem = useRef(null)
-    // const targeItem = useRef(null)
 
-    const [dnd, setDnd] = useState(initDnDState)
-
-    const hanDragStart = e => {
-        let dragFrom = {
-            status: e.currentTarget.dataset.status,
-            pos: Number(e.currentTarget.dataset.position)
+    const getCardPayload = (status, pos) => {
+        let id = tasks.filter((task, i) => i === pos)[0]._id
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragFrom: {
+                    id,
+                    status,
+                    pos
+                }
+            }
+        })
+        return {
+            id,
+            pos,
+            status
         }
-        let id = e.currentTarget.dataset.id
+    }
 
-        let data = {
-            dragFrom,
-            isDragging: true,
-            id
-        }
-        currentItem.current = e.target
-        setTimeout(() => {
-            currentItem.current.style.display = "none"
-        }, 0)
-        setListDnDData(data)
-        setDnd({
-            ...dnd,
-            dragFrom,
-            isDragging: true,
-            id
+    const onDragStart = e => {
+        // console.log("drag started", e)
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    status: e.payload.status
+                }
+            }
         })
     }
 
-    const hanDragOver = e => {
-        e.preventDefault()
+    const onDragEnter = (status) => {
+        // console.log("drag enter:", status)
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    status
+                }
+            }
+        })
     }
 
-    const hanDragDrop = e => {
-        e.preventDefault()
-        e.currentTarget.id = ""
+    const onDragDropReady = (p) => {
+        // console.log('Drop ready: ', p)
+        const { addedIndex } = p
+        setlistDnD(prev => {
+            return {
+                ...prev,
+                dragTo: {
+                    ...prev.dragTo,
+                    pos: addedIndex
+                }
+            }
+        })
+    }
 
+    const onDragEnd = e => {
+        // console.log("drag end", e)
+    }
+
+    const onDropCard = (e) => {
+        // console.log("drag drop", e)
         reOrder()
-        setDnd({ ...initDnDState })
-    }
-
-    const hanDragEnter = (e) => {
-        e.preventDefault()
-        let dragTo = {
-            status: e.currentTarget.dataset.status,
-            pos: Number(e.currentTarget.dataset.position)
-        }
-        let id = e.currentTarget.dataset.id
-        // targeItem.current = e.target
-        // targeItem.current.style.marginTop = "30px"
-
-        setListDnDData({ dragTo })
-        if (id !== dnd.id) {
-            setDnd({
-                ...dnd,
-                dragTo
-            })
-        }
-        e.currentTarget.id = ""
-    }
-
-    const hanDragLeave = e => {
-        e.currentTarget.id = ""
-        // targeItem.current.style.marginTop = "0"
-    }
-
-    const hanDragEnd = e => {
-        console.log("end")
-        currentItem.current.style.display = "flex"
     }
 
     const Submit = () => {
@@ -96,21 +87,18 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
             const payload = {
                 boardid,
                 title,
-                order: tasks.length
+                status
             }
-
-            if (status !== "To-do") payload.status = status
 
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
-                    let payload = {
-                        _id: res.data.id,
-                        boardid,
-                        title,
-                        status,
-                        order: tasks.length
-                    }
-                    dispatch({ type: TASK_ADD, payload })
+                    dispatch({
+                        type: TASK_ADD,
+                        payload: {
+                            _id: res.data.id,
+                            ...payload
+                        }
+                    })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -121,7 +109,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
     }
 
     const DelTitle = (id) => {
-        axios.delete(`/task/${boardid}/${id}`, { headers })
+        axios.delete(`/task/${boardid}/${id}/${status}`, { headers })
             .then(() => {
                 let payload = {
                     boardid,
@@ -147,38 +135,45 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setListDnDData, r
 
     return (
         <div className="lists">
-            {
-                tasks?.length > 0 &&
-                tasks.map((list, i) => {
-                    return (
-                        <div
-                            draggable="true"
-                            onDragStart={e => hanDragStart(e)}
-                            onDragEnter={e => hanDragEnter(e)}
-                            onDragOver={e => hanDragOver(e)}
-                            onDrop={e => hanDragDrop(e)}
-                            onDragLeave={e => hanDragLeave(e)}
-                            onDragEnd={e => hanDragEnd(e)}
-                            data-position={i}
-                            data-id={list._id}
-                            data-status={status}
-                            className="list-cont"
-                            id={dnd.dragTo?.pos === Number(i) ? "dropArea" : ""}
-                            key={list._id}
-                        >
-                            <p onClick={() => detailForword(list)}>
-                                {list.title}
-                            </p>
-                            {
-                                isMine &&
-                                <p onClick={() => DelTitle(list._id)}>
-                                    <DeleteIcon />
-                                </p>
-                            }
-                        </div>
-                    )
-                })
-            }
+            <Container
+                groupName="list"
+                getChildPayload={i => getCardPayload(status, i)}
+                onDragStart={e => onDragStart(e)}
+                onDragEnd={e => onDragEnd(e)}
+                onDrop={e => onDropCard(e)}
+                onDragEnter={() => onDragEnter(status)}
+                onDragLeave={() => console.log("drag leave:", status)}
+                onDropReady={p => onDragDropReady(p)}
+                dragClass="list-ghost"
+                dropClass="list-ghost-drop"
+                dropPlaceholder={{
+                    animationDuration: 150,
+                    showOnTop: true,
+                    className: 'list-drop-preview'
+                }}
+                dropPlaceholderAnimationDuration={200}
+            >
+                {
+                    tasks?.length > 0 &&
+                    tasks.map((list, i) => {
+                        return (
+                            <Draggable key={list._id}>
+                                <div className="list-cont">
+                                    <p onClick={() => detailForword(list)}>
+                                        {list.title}
+                                    </p>
+                                    {
+                                        isMine &&
+                                        <p onClick={() => DelTitle(list._id)}>
+                                            <DeleteIcon />
+                                        </p>
+                                    }
+                                </div>
+                            </Draggable>
+                        )
+                    })
+                }
+            </Container>
 
             {
                 isMine && !showForm &&

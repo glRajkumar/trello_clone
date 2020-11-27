@@ -28,13 +28,6 @@
     cursor: pointer;
 }
 
-.board-lists{
-    overflow-x: scroll;
-    min-height: 80vh;
-    display: grid;
-    grid-template-columns: repeat(100, minmax(250px, 1fr));
-}
-
 .lists{
     margin-right: 1rem;
     padding: .5rem;
@@ -98,19 +91,25 @@
     margin: .5rem 0;
 }
 
-
-#dropArea{
-    background-color: aqua;
-    position: relative;
+.list-ghost{
+    transition: transform 0.18s ease;
+    transform: rotateZ(5deg)   
 }
 
-#dropArea::before{
-    content: "Drop here";
-    color: brown;
-    position: absolute;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed red;
+.list-ghost-drop{
+    transition: transform 0.18s ease;
+    transform: rotateZ(0deg)   
 }
+
+.list-drop-preview {
+    background-color: rgba(0,0, 0, 0.3);
+    margin: 5px;
+}
+
+.staus-drop-preview{
+    height: 250px;
+    background-color: rgba(0,0, 0, 0.3);
+}
+
+/* #ebecf0  back */
+/* #5e6c84 color */
