@@ -1,16 +1,16 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMwZTE1Y2ZjMmU3MjVhNTAxNGMzMTgiLCJpYXQiOjE2MDY0NzYxMjYsImV4cCI6MTYwNjU0MDkyNn0.4APCDMcwL_Hc0faw-RGV6QCHHdRQNQH4BMz6RKi3K3o
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMxZTlmMGM2ZTUyZTYzZDQ2ODU1ZjMiLCJpYXQiOjE2MDY1NDM4NjYsImV4cCI6MTYwNjYwODY2Nn0.CM6alBQdg4SzfrswYrfIZYIH-Wt3uaFPrKNwuR7NiMM
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fbcf3f378cea02890c51004
+GET {{host}}/board/5fc219d120cac65794c32026
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5fc0e1fafc2e725a5014c339
+GET {{host}}/board/members/5fc2194c20cac65794c32020
 Authorization: {{token}}
 
 ### create new board
@@ -19,8 +19,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "nnhb", 
-    "catagery" : "Blog",
+    "boardName" : "vfrd", 
+    "catagery" : "Education",
     "bg": {
         "isColour" : "true",
         "name" : "rgb(82 , 157, 52)"
@@ -33,7 +33,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fb2767231c776206c51e7da", 
+    "boardId" : "5fc1f3f61e617c558021e542", 
     "isPublic" : "true"   
 }
 
@@ -65,7 +65,7 @@ Content-Type: application/json
 {
     "boardId" : "5fbcd738a4ebe51774835d50", 
     "status" : "To-do",
-    "taskid" : "5fbcdb3395937d27e08afc0b",
+    "taskId" : "5fbcdb3395937d27e08afc0b",
     "to" : 0
 }
 
@@ -78,7 +78,7 @@ Content-Type: application/json
     "boardId" : "5fbcd738a4ebe51774835d50", 
     "fromStatus" : "To-do",
     "toStatus" : "Done",
-    "taskid" : "5fbcdb4195937d27e08afc0d",
+    "taskId" : "5fbcdb4195937d27e08afc0d",
     "to" : 0
 }
 
@@ -99,8 +99,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fc0e1d2fc2e725a5014c319", 
-    "memId" : "5fc0e122fc2e725a5014c317",
+    "boardId" : "5fc219d120cac65794c32026", 
+    "memId" : "5fc2196520cac65794c32024",
     "permision": "Admin"
 }
 
@@ -115,5 +115,5 @@ Content-Type: application/json
 }
 
 ### delete the board
-DELETE {{host}}/board/5fbbba9c5d55b1138869a05d
+DELETE {{host}}/board/5fc1f1419fec761808c236d7
 Authorization: {{token}}

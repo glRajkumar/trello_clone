@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Loading } from '../Common'
-import "../../CSS/board.css"
-import SharedLists from './SharedLists'
-import useSDetailed from '../Customs/useSDetailed'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useDispatch } from 'react-redux'
-import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
+import { STASK_REORDER, STASK_REGROUP } from '../../Store/actionTypes'
+import useSDetailed from '../Customs/useSDetailed'
+import SharedLists from './SharedLists'
+import { Loading } from '../Common'
+import "../../CSS/board.css"
 import axios from 'axios'
 
 const initDnDState = {
@@ -22,16 +22,16 @@ const colDragStyle = {
 }
 
 function SharedBoard({ headers }) {
-    const { boardid } = useParams()
+    const { boardId } = useParams()
     const dispatch = useDispatch()
-    const { permision, detailed, loading, taskStatus, createNewStatus } = useSDetailed(boardid, headers)
+    const { permision, detailed, loading, taskStatus, createNewStatus, reOrderStatus } = useSDetailed(boardId, headers)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
 
     const reOrder = () => {
         let payload = {
-            boardid,
+            boardId,
             from: listDnD.dragFrom,
             to: listDnD.dragTo
         }
@@ -43,8 +43,8 @@ function SharedBoard({ headers }) {
             if (!sameCheck) {
                 if (payload.from.status === payload.to.status) {
                     axios.put("/board/reorder-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
+                        boardId,
+                        taskId: payload.from.id,
                         status: payload.from.status,
                         to: payload.to.pos
                     }, { headers })
@@ -54,11 +54,11 @@ function SharedBoard({ headers }) {
                         .catch((err) => {
                             console.log(err)
                         })
-                    dispatch({ type: TASK_REORDER, payload })
+                    dispatch({ type: STASK_REORDER, payload })
                 } else {
                     axios.put("/board/restatus-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
+                        boardId,
+                        taskId: payload.from.id,
                         fromStatus: payload.from.status,
                         toStatus: payload.to.status,
                         to: payload.to.pos
@@ -69,7 +69,7 @@ function SharedBoard({ headers }) {
                         .catch((err) => {
                             console.log(err)
                         })
-                    dispatch({ type: TASK_REGROUP, payload })
+                    dispatch({ type: STASK_REGROUP, payload })
                 }
             }
         }
@@ -84,16 +84,20 @@ function SharedBoard({ headers }) {
         const { removedIndex, addedIndex } = e
         if (removedIndex !== null && addedIndex !== null && removedIndex !== addedIndex) {
             let payload = {
-                boardid,
+                boardId,
                 dragFrom: removedIndex,
                 dragTo: addedIndex
             }
-            // reOrderStatus(payload)
+            reOrderStatus(payload)
         }
         setlistDnD({
             dragFrom: null,
             dragTo: null
         })
+    }
+
+    const doNothing = e => {
+        return
     }
 
     return !loading ? (
@@ -108,13 +112,14 @@ function SharedBoard({ headers }) {
                 style={colDragStyle}
                 orientation="horizontal"
                 getChildPayload={i => i}
+                dragHandleSelector=".column-drag-handle"
                 nonDragAreaSelector=".nondrag"
-                onDragStart={e => console.log("drag col start ", e)}
-                onDragEnd={e => console.log("drag col end ", e)}
+                onDragStart={e => doNothing(e)}
+                onDragEnd={e => doNothing(e)}
                 onDrop={e => onColumnDrop(e)}
-                onDragEnter={() => console.log("drag col enter ")}
-                onDragLeave={() => console.log("drag col leave ")}
-                onDropReady={p => console.log("drag col drop ready ", p)}
+                onDragEnter={() => doNothing()}
+                onDragLeave={() => doNothing()}
+                onDropReady={e => doNothing(e)}
                 dropPlaceholder={{
                     animationDuration: 150,
                     showOnTop: true,
@@ -125,11 +130,12 @@ function SharedBoard({ headers }) {
                     taskStatus.map(status => {
                         return (
                             <Draggable key={status}>
-                                <strong>{status}</strong>
+                                <strong className={permision !== "View" ? "column-drag-handle" : "nondrag"}>{status}</strong>
                                 <SharedLists
                                     status={status}
                                     headers={headers}
-                                    boardid={boardid}
+                                    boardId={boardId}
+                                    permision={permision}
                                     taskStatus={taskStatus}
                                     setlistDnD={setlistDnD}
                                     reOrder={reOrder}

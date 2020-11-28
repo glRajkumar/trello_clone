@@ -1,5 +1,14 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmJjZjNkMDc4Y2VhMDI4OTBjNTEwMDMiLCJpYXQiOjE2MDYyMTg3MTAsImV4cCI6MTYwNjI4MzUxMH0.k6g8cNRUx1i94-d_oJf2KoXgcb6qXmgqeI__a-rtpos
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMxZTlmMGM2ZTUyZTYzZDQ2ODU1ZjMiLCJpYXQiOjE2MDY1NDM4NjYsImV4cCI6MTYwNjYwODY2Nn0.CM6alBQdg4SzfrswYrfIZYIH-Wt3uaFPrKNwuR7NiMM
+
+### get a task
+GET {{host}}/task
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "taskId" : "5fc1f217ec9c885d984ab15b"
+}
 
 ### create a task
 POST {{host}}/task
@@ -7,25 +16,25 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "nnnnhmk nbh bbb",
-    "status": "Done",
-    "boardid" : "5fbcf3f378cea02890c51004"
+    "title": "xxd vgrf bbgv bbb",
+    "status": "To-do",
+    "boardId" : "5fc219d120cac65794c32026"
 }
 
 ### update task 
+# optionals : { title, body, (fromStatus && toStatus) }
 PUT {{host}}/task
 Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId": "5fbbbb8b3076c21460fc1d54",
-    "body" : "bbbb nnnn",
-    "status": "To-do",
-    "title": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+    "taskId": "5fc1f40e1e617c558021e546",
+    "body": "xbhgvvx",
+    "title": "wmkns",
+    "fromStatus":"Done", 
+    "toStatus": "To-do"
 }
 
-### for above use status, body, title to update
-
 ### delete the tasks
-DELETE {{host}}/task/5fbcd738a4ebe51774835d50/5fbcdb2395937d27e08afc09/Done
+DELETE {{host}}/task/5fc1ded8497d0c4f14b894fc/5fc1eb83c6e52e63d46855f8/Done
 Authorization: {{token}}

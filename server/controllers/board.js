@@ -29,13 +29,16 @@ router.get("/:boardId", auth, async (req, res) => {
             .populate("tasks.orderedList", "title body")
             .lean()
 
-        board = board[0]
-        board.tasks = board.tasks.map(task => {
-            return {
-                status: task.status,
-                tasks: task.orderedList
-            }
-        })
+        if (board.length > 0) {
+            board = board[0]
+            board.tasks = board.tasks.map(task => {
+                return {
+                    status: task.status,
+                    tasks: task.orderedList
+                }
+            })
+        }
+
         res.json({ board })
 
     } catch (error) {
@@ -122,17 +125,17 @@ router.put("/del-status", auth, async (req, res) => {
 })
 
 router.put("/reorder-task", auth, async (req, res) => {
-    const { boardId, status, taskid, to } = req.body
+    const { boardId, status, taskId, to } = req.body
 
     try {
         //deleting the item
         await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
-            $pull: { "tasks.$.orderedList": taskid }
+            $pull: { "tasks.$.orderedList": taskId }
         })
 
         // inserting the item in the position 
         await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
-            $push: { "tasks.$.orderedList": { $each: [taskid], $position: to } }
+            $push: { "tasks.$.orderedList": { $each: [taskId], $position: to } }
         })
 
         res.json({ msg: "tasks reodered successfully" })
@@ -143,17 +146,17 @@ router.put("/reorder-task", auth, async (req, res) => {
 })
 
 router.put("/restatus-task", auth, async (req, res) => {
-    const { boardId, fromStatus, toStatus, taskid, to } = req.body
+    const { boardId, fromStatus, toStatus, taskId, to } = req.body
 
     try {
         //deleting the item
         await Board.findOneAndUpdate({ _id: boardId, "tasks.status": fromStatus }, {
-            $pull: { "tasks.$.orderedList": taskid }
+            $pull: { "tasks.$.orderedList": taskId }
         })
 
         // inserting the item in the position 
         await Board.findOneAndUpdate({ _id: boardId, "tasks.status": toStatus }, {
-            $push: { "tasks.$.orderedList": { $each: [taskid], $position: to } }
+            $push: { "tasks.$.orderedList": { $each: [taskId], $position: to } }
         })
 
         res.json({ msg: "tasks restatused successfully" })

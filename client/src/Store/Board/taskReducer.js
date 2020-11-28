@@ -73,7 +73,7 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_ADD:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -99,7 +99,8 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_EDIT:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
+                        let { taskId, boardId, status, ...changes } = payload
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -107,10 +108,10 @@ const taskReducer = (state = initState, { type, payload }) => {
                                     return {
                                         ...task,
                                         tasks: task.tasks.map(task => {
-                                            if (task._id === payload.taskid) {
+                                            if (task._id === payload.taskId) {
                                                 return {
                                                     ...task,
-                                                    ...payload.info
+                                                    ...changes
                                                 }
                                             } else {
                                                 return task
@@ -131,21 +132,26 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_EDIT_WSTATUS:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
+                        let current = board.tasks.filter(t => t.status === payload.fromStatus)[0].tasks.filter(t => t._id === payload.taskId)[0]
+                        let { taskId, boardId, fromStatus, toStatus, ...changes } = payload
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
-                                if (task.status === payload.status) {
+                                if (task.status === payload.fromStatus) {
                                     return {
                                         ...task,
-                                        tasks: task.tasks.filter(t => t._id !== payload.taskid)
+                                        tasks: task.tasks.filter(t => t._id !== payload.taskId)
                                     }
-                                } else if (task.status === payload.info.status) {
+                                } else if (task.status === payload.toStatus) {
                                     return {
                                         ...task,
                                         tasks: [
                                             ...task.tasks,
-                                            payload.info
+                                            {
+                                                ...current,
+                                                ...changes
+                                            }
                                         ]
                                     }
                                 } else {
@@ -162,14 +168,14 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_DELETE:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
                                 if (task.status === payload.status) {
                                     return {
                                         ...task,
-                                        tasks: task.tasks.filter(t => t._id !== payload.taskid),
+                                        tasks: task.tasks.filter(t => t._id !== payload.taskId),
                                     }
                                 } else {
                                     return task
@@ -185,7 +191,7 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_RELIST:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
                         return {
                             ...board,
                             taskStatus: payload.newTaskStatus,
@@ -200,7 +206,7 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_REORDER:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -230,7 +236,7 @@ const taskReducer = (state = initState, { type, payload }) => {
         case TASK_REGROUP:
             return {
                 detailed: state.detailed.map(board => {
-                    if (board._id === payload.boardid) {
+                    if (board._id === payload.boardId) {
                         let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter((task, i) => i === payload.from.pos)[0]
                         current.status = payload.to.status
                         return {

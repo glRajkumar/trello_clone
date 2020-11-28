@@ -12,8 +12,6 @@ function Detailed({ headers }) {
     const [details, setDetails] = useState(state.forwordState)
     const [original] = useState(state.forwordState)
 
-    console.log("original", original)
-
     const Submit = () => {
         const payload = {
             taskId
@@ -25,28 +23,18 @@ function Detailed({ headers }) {
             payload.body = details.body
         }
         if (original.status !== details.status) {
-            payload.status = details.status
+            payload.fromStatus = original.status
+            payload.toStatus = details.status
         }
 
         Axios.put('/task', { ...payload }, { headers })
             .then(() => {
-                const { taskId, ...changes } = payload
-                const actPayload = {
-                    taskid: taskId,
-                    boardid: state.forwordState.boardid,
-                    status: original.status,
-                    info: changes
-                }
-
-                if (payload.status) {
-                    const { boardid, isMine, taskStatus, ...onlyNeeded } = original
-                    actPayload.info = {
-                        ...onlyNeeded,
-                        ...changes
-                    }
-                    dispatch({ type: TASK_EDIT_WSTATUS, payload: actPayload })
+                payload.boardId = original.boardId
+                if (payload.toStatus) {
+                    dispatch({ type: TASK_EDIT_WSTATUS, payload })
                 } else {
-                    dispatch({ type: TASK_EDIT, payload: actPayload })
+                    payload.status = original.status
+                    dispatch({ type: TASK_EDIT, payload })
                 }
 
                 history.goBack()

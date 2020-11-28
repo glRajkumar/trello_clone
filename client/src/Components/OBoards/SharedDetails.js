@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
-import { STASK_EDIT } from '../../Store/actionTypes'
+import { STASK_EDIT, STASK_EDIT_WSTATUS } from '../../Store/actionTypes'
 import { useDispatch } from 'react-redux'
 import Axios from 'axios'
 
@@ -23,18 +23,20 @@ function SharedDetails({ headers }) {
             payload.body = details.body
         }
         if (original.status !== details.status) {
-            payload.status = details.status
+            payload.fromStatus = original.status
+            payload.toStatus = details.status
         }
 
         Axios.put('/task', { ...payload }, { headers })
             .then(() => {
-                const { taskId, ...changes } = payload
-                const actPayload = {
-                    taskid: taskId,
-                    boardid: state.forwordState.boardid,
-                    info: changes
+                payload.boardId = original.boardId
+                if (payload.toStatus) {
+                    dispatch({ type: STASK_EDIT_WSTATUS, payload })
+                } else {
+                    payload.status = original.status
+                    dispatch({ type: STASK_EDIT, payload })
                 }
-                dispatch({ type: STASK_EDIT, payload: actPayload })
+
                 history.goBack()
             })
             .catch((err) => {

@@ -23,9 +23,9 @@ const colDragStyle = {
 }
 
 function Board({ headers }) {
-    const { boardid } = useParams()
+    const { boardId } = useParams()
     const dispatch = useDispatch()
-    const { taskStatus, isMine, loading, detailed, Private, createNewStatus, reOrderStatus } = useDetailed(boardid, headers)
+    const { taskStatus, isMine, loading, detailed, Private, createNewStatus, reOrderStatus } = useDetailed(boardId, headers)
     const [showMem, setshowMem] = useState(false)
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
@@ -35,7 +35,7 @@ function Board({ headers }) {
 
     const reOrder = () => {
         let payload = {
-            boardid,
+            boardId,
             from: listDnD.dragFrom,
             to: listDnD.dragTo
         }
@@ -47,8 +47,8 @@ function Board({ headers }) {
             if (!sameCheck) {
                 if (payload.from.status === payload.to.status) {
                     axios.put("/board/reorder-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
+                        boardId,
+                        taskId: payload.from.id,
                         status: payload.from.status,
                         to: payload.to.pos
                     }, { headers })
@@ -61,8 +61,8 @@ function Board({ headers }) {
                     dispatch({ type: TASK_REORDER, payload })
                 } else {
                     axios.put("/board/restatus-task", {
-                        boardId: boardid,
-                        taskid: payload.from.id,
+                        boardId,
+                        taskId: payload.from.id,
                         fromStatus: payload.from.status,
                         toStatus: payload.to.status,
                         to: payload.to.pos
@@ -88,7 +88,7 @@ function Board({ headers }) {
         const { removedIndex, addedIndex } = e
         if (removedIndex !== null && addedIndex !== null && removedIndex !== addedIndex) {
             let payload = {
-                boardid,
+                boardId,
                 dragFrom: removedIndex,
                 dragTo: addedIndex
             }
@@ -98,6 +98,15 @@ function Board({ headers }) {
             dragFrom: null,
             dragTo: null
         })
+    }
+
+    const doNothing = e => {
+        return
+        // onDragEnter and onDragLeave doesn't have any parameter
+        // if (e) {
+        //     console.log("put the property name")
+        //     console.log(e)
+        // }
     }
 
     return !loading ? (
@@ -120,7 +129,7 @@ function Board({ headers }) {
                                             {
                                                 showMem &&
                                                 <div>
-                                                    <OtherUser headers={headers} boardId={boardid} />
+                                                    <OtherUser headers={headers} boardId={boardId} />
                                                 </div>
                                             }
                                         </div>
@@ -129,7 +138,7 @@ function Board({ headers }) {
                                             {
                                                 addU &&
                                                 <div>
-                                                    <SearchUser headers={headers} boardId={boardid} />
+                                                    <SearchUser headers={headers} boardId={boardId} />
                                                 </div>
                                             }
                                         </div>
@@ -146,13 +155,14 @@ function Board({ headers }) {
                 style={colDragStyle}
                 orientation="horizontal"
                 getChildPayload={i => i}
+                dragHandleSelector=".column-drag-handle"
                 nonDragAreaSelector=".nondrag"
-                onDragStart={e => console.log("drag col start ", e)}
-                onDragEnd={e => console.log("drag col end ", e)}
+                onDragStart={e => doNothing(e)}
+                onDragEnd={e => doNothing(e)}
                 onDrop={e => onColumnDrop(e)}
-                onDragEnter={() => console.log("drag col enter ")}
-                onDragLeave={() => console.log("drag col leave ")}
-                onDropReady={p => console.log("drag col drop ready ", p)}
+                onDragEnter={() => doNothing()}
+                onDragLeave={() => doNothing()}
+                onDropReady={e => doNothing(e)}
                 dropPlaceholder={{
                     animationDuration: 150,
                     showOnTop: true,
@@ -163,11 +173,11 @@ function Board({ headers }) {
                     taskStatus.map(status => {
                         return (
                             <Draggable key={status}>
-                                <strong>{status}</strong>
+                                <strong className="column-drag-handle">{status}</strong>
                                 <Lists
                                     status={status}
                                     headers={headers}
-                                    boardid={boardid}
+                                    boardId={boardId}
                                     isMine={isMine}
                                     taskStatus={taskStatus}
                                     setlistDnD={setlistDnD}

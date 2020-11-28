@@ -6,11 +6,11 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { STASK_ADD, STASK_DELETE } from '../../Store/actionTypes'
 
-function SharedLists({ headers, boardid, status, permision, taskStatus, setlistDnD, reOrder }) {
+function SharedLists({ headers, boardId, status, permision, taskStatus, setlistDnD, reOrder }) {
     const dispatch = useDispatch()
     const { detailed } = useSelector(state => state.stask)
     const history = useHistory()
-    const tasks = detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
+    const tasks = detailed.filter(d => d._id === boardId)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
@@ -85,20 +85,20 @@ function SharedLists({ headers, boardid, status, permision, taskStatus, setlistD
     const Submit = () => {
         if (title !== "") {
             const payload = {
-                boardid,
-                title
+                boardId,
+                title,
+                status
             }
-            if (status !== "To-do") payload.status = status
 
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
-                    let payload = {
-                        _id: res.data.id,
-                        boardid,
-                        title,
-                        status
-                    }
-                    dispatch({ type: STASK_ADD, payload })
+                    dispatch({
+                        type: STASK_ADD,
+                        payload: {
+                            _id: res.data.id,
+                            ...payload
+                        }
+                    })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -108,12 +108,13 @@ function SharedLists({ headers, boardid, status, permision, taskStatus, setlistD
         setShow(prev => !prev)
     }
 
-    const DelTitle = (id) => {
-        axios.delete(`/task/${boardid}/${id}`, { headers })
+    const DelTitle = (taskId) => {
+        axios.delete(`/task/${boardId}/${taskId}/${status}`, { headers })
             .then(() => {
                 let payload = {
-                    boardid,
-                    taskid: id
+                    boardId,
+                    taskId,
+                    status
                 }
                 dispatch({ type: STASK_DELETE, payload })
             })
@@ -125,7 +126,8 @@ function SharedLists({ headers, boardid, status, permision, taskStatus, setlistD
     const detailForword = (list) => {
         const forwordState = {
             ...list,
-            boardid,
+            boardId,
+            status,
             permision,
             taskStatus
         }
@@ -136,12 +138,16 @@ function SharedLists({ headers, boardid, status, permision, taskStatus, setlistD
         <div className="lists">
             <Container
                 groupName="list"
+                nonDragAreaSelector=".nondrag"
                 getChildPayload={i => getCardPayload(status, i)}
                 onDragStart={e => onDragStart(e)}
                 onDragEnd={e => onDragEnd(e)}
                 onDrop={e => onDropCard(e)}
                 onDragEnter={() => onDragEnter(status)}
-                onDragLeave={() => console.log("drag leave:", status)}
+                onDragLeave={() => {
+                    return
+                    // console.log("drag leave:", status)
+                }}
                 onDropReady={p => onDragDropReady(p)}
                 dragClass="list-ghost"
                 dropClass="list-ghost-drop"
@@ -157,7 +163,7 @@ function SharedLists({ headers, boardid, status, permision, taskStatus, setlistD
                     tasks.map(list => {
                         return (
                             <Draggable key={list._id}>
-                                <div className="list-cont">
+                                <div className={`list-cont ${permision !== "View" ? "" : "nondrag"} `}>
                                     <p onClick={() => detailForword(list)}>
                                         {list.title}
                                     </p>

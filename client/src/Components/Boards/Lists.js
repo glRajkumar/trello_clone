@@ -6,11 +6,11 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrder }) {
+function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrder }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const { detailed } = useSelector(state => state.task)
-    const tasks = detailed.filter(d => d._id === boardid)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
+    const tasks = detailed.filter(d => d._id === boardId)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
 
@@ -85,7 +85,7 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrd
     const Submit = () => {
         if (title !== "") {
             const payload = {
-                boardid,
+                boardId,
                 title,
                 status
             }
@@ -108,12 +108,12 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrd
         setShow(prev => !prev)
     }
 
-    const DelTitle = (id) => {
-        axios.delete(`/task/${boardid}/${id}/${status}`, { headers })
+    const DelTitle = (taskId) => {
+        axios.delete(`/task/${boardId}/${taskId}/${status}`, { headers })
             .then(() => {
                 let payload = {
-                    boardid,
-                    taskid: id,
+                    boardId,
+                    taskId,
                     status
                 }
                 dispatch({ type: TASK_DELETE, payload })
@@ -126,7 +126,8 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrd
     const detailForword = (list) => {
         const forwordState = {
             ...list,
-            boardid,
+            status,
+            boardId,
             isMine,
             taskStatus
         }
@@ -142,7 +143,10 @@ function Lists({ headers, boardid, status, isMine, taskStatus, setlistDnD, reOrd
                 onDragEnd={e => onDragEnd(e)}
                 onDrop={e => onDropCard(e)}
                 onDragEnter={() => onDragEnter(status)}
-                onDragLeave={() => console.log("drag leave:", status)}
+                onDragLeave={() => {
+                    return
+                    // console.log("drag leave:", status)
+                }}
                 onDropReady={p => onDragDropReady(p)}
                 dragClass="list-ghost"
                 dropClass="list-ghost-drop"

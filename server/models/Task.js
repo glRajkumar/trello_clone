@@ -10,11 +10,6 @@ const taskSchema = new mongoose.Schema({
         type: String
     },
 
-    status: {
-        type: String,
-        default: "To-do"
-    },
-
     board: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Board"

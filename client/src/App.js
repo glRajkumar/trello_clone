@@ -27,8 +27,8 @@ function App() {
 
         <Protected exact path="/public" component={PublicBoards} />
         <Protected exact path="/allsharedboards" component={AllSharedBoards} />
-        <Protected exact path="/board/:boardid" component={Board} />
-        <Protected exact path="/sharedboard/:boardid" component={SharedBoard} />
+        <Protected exact path="/board/:boardId" component={Board} />
+        <Protected exact path="/sharedboard/:boardId" component={SharedBoard} />
         <Protected exact path="/create-board" component={CreateBoard} />
         <Protected exact path="/taskdetails/:taskId" component={Detailed} />
         <Protected exact path="/sharedtask/:taskId" component={SharedDetails} />
