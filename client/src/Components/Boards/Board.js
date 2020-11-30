@@ -33,6 +33,21 @@ function Board({ headers }) {
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
 
+    const getBg = (bg) => {
+        let background = {}
+        if (bg) {
+            if (bg.isColour) {
+                background.backgroundColor = bg.name
+                return background
+            } else {
+                background.backgroundImage = `url('/static/${bg.name}')`
+                return background
+            }
+        } else {
+            return
+        }
+    }
+
     const reOrder = () => {
         let payload = {
             boardId,
@@ -110,7 +125,7 @@ function Board({ headers }) {
     }
 
     return !loading ? (
-        <div className="board" style={detailed.bg?.isColour ? { backgroundColor: detailed.bg?.name } : { backgroundImage: `url(${'/static/' + detailed.bg?.name})` }}>
+        <div className="board" style={getBg(detailed.bg)}>
             <div className="board-head">
                 <div className="bh-top"> {detailed.boardName} </div>
                 <div className="bh-top"> {detailed.catagery} </div>
