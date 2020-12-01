@@ -10,3 +10,25 @@
 .svg_ic:hover{
     fill: #000;
 }
+
+.trello{
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.trello path{
+    fill: #0277BD;
+}
+
+#trello-boxes path{
+    fill: #ECEFF1;
+}
+
+#reverse path{
+    fill: #ECEFF1;
+}
+
+#reverse #trello-boxes path{
+    fill: #0277BD;
+}

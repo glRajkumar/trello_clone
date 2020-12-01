@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import axios from 'axios'
@@ -10,6 +10,7 @@ function SharedLists({ headers, boardId, status, permision, taskStatus, setlistD
     const dispatch = useDispatch()
     const { detailed } = useSelector(state => state.stask)
     const history = useHistory()
+    const newTitleRef = useRef(null)
     const tasks = detailed.filter(d => d._id === boardId)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
     const [title, setTitle] = useState('')
@@ -105,7 +106,7 @@ function SharedLists({ headers, boardId, status, permision, taskStatus, setlistD
                 })
         }
         setTitle("")
-        setShow(prev => !prev)
+        newTitleRef.current.focus()
     }
 
     const DelTitle = (taskId) => {
@@ -184,7 +185,12 @@ function SharedLists({ headers, boardId, status, permision, taskStatus, setlistD
                 permision !== "View" && !showForm &&
                 <p
                     className="list-add"
-                    onClick={() => setShow(prev => !prev)}
+                    onClick={() => {
+                        setShow(prev => !prev)
+                        setTimeout(() => {
+                            newTitleRef.current.focus()
+                        }, 0)
+                    }}
                 >
                     Add new title
                 </p>
@@ -198,6 +204,8 @@ function SharedLists({ headers, boardId, status, permision, taskStatus, setlistD
                         type="text"
                         placeholder="add new title..."
                         value={title}
+                        ref={newTitleRef}
+                        onKeyDown={e => e.key === "Enter" ? Submit() : null}
                         onChange={e => setTitle(e.target.value)}
                     />
                     <button onClick={Submit}>Save</button>

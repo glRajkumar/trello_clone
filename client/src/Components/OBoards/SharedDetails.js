@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { STASK_EDIT, STASK_EDIT_WSTATUS } from '../../Store/actionTypes'
 import { useDispatch } from 'react-redux'
 import Axios from 'axios'
 
 function SharedDetails({ headers }) {
+    const textAreaRef = useRef(null)
     const history = useHistory()
     const { state } = useLocation()
     const { taskId } = useParams()
     const dispatch = useDispatch
     const [details, setDetails] = useState(state.forwordState)
     const [original] = useState(state.forwordState)
+
+    const autoResize = (e) => {
+        setDetails(prev => {
+            return {
+                ...prev,
+                body: e.target.value
+            }
+        })
+
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`
+    }
 
     const Submit = () => {
         const payload = {
@@ -61,15 +73,11 @@ function SharedDetails({ headers }) {
 
             <textarea
                 className="input-box"
-                type="text"
+                ref={textAreaRef}
                 placeholder="describe the details of your task..."
                 value={details.body}
-                onChange={e => setDetails(prev => {
-                    return {
-                        ...prev,
-                        body: e.target.value
-                    }
-                })}
+                style={{ minHeight: "200px" }}
+                onChange={e => autoResize(e)}
             />
 
             <select

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_LOGOUT, BOARD_INIT, SBOARD_INIT, SDET_INIT, DET_INIT } from '../../Store/actionTypes'
 import { Link, useHistory } from 'react-router-dom'
-import { HomeIcon } from '../Common/Icons'
+import { HomeIcon, Trello } from '../Common/Icons'
 import "../../CSS/nav.css"
 
 function NavBar() {
@@ -36,19 +36,34 @@ function NavBar() {
 
     return (
         <div className="nav">
-            <div className="home">
+            {
+                auth &&
+                <div className="home">
+                    <Link to="/">
+                        <HomeIcon id="homehover" />
+                    </Link>
+                    <Link to="/">
+                        <p id="nav-board">
+                            <Trello />
+                            <span>Boards</span>
+                        </p>
+                    </Link>
+                </div>
+            }
+
+            <div className="logo">
                 <Link to="/">
-                    <HomeIcon />
+                    <Trello id="reverse" />
                     <strong>Trello</strong>
                 </Link>
             </div>
 
             {
                 !auth ?
-                    <ul className="nav-container">
-                        <li><Link to="/signup">Sign up</Link></li>
-                        <li><Link to="/login">Log in</Link></li>
-                    </ul>
+                    <div id="login">
+                        <p><Link to="/signup">Sign up</Link></p>
+                        <p><Link to="/login">Log in</Link></p>
+                    </div>
                     :
                     <div className="pro-con">
                         <div id="fl">

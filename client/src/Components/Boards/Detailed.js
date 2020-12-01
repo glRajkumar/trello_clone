@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useDispatch } from "react-redux"
 import { TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
 import Axios from 'axios'
 
 function Detailed({ headers }) {
+    const textAreaRef = useRef(null)
     const history = useHistory()
     const { taskId } = useParams()
     const { state } = useLocation()
     const dispatch = useDispatch()
     const [details, setDetails] = useState(state.forwordState)
     const [original] = useState(state.forwordState)
+
+    const autoResize = (e) => {
+        setDetails(prev => {
+            return {
+                ...prev,
+                body: e.target.value
+            }
+        })
+
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`
+    }
 
     const Submit = () => {
         const payload = {
@@ -60,16 +72,12 @@ function Detailed({ headers }) {
             />
 
             <textarea
+                ref={textAreaRef}
                 className="input-box"
-                type="text"
                 placeholder="describe the details of your task..."
+                style={{ minHeight: "200px" }}
                 value={details.body}
-                onChange={e => setDetails(prev => {
-                    return {
-                        ...prev,
-                        body: e.target.value
-                    }
-                })}
+                onChange={e => autoResize(e)}
             />
 
             <select

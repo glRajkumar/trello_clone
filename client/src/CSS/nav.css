@@ -1,45 +1,53 @@
-.nav,
-.nav-container{
+.nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: .5rem 1rem;
+    background-color: #026aa7;
 }
 
-.nav{
-    background-color: royalblue;
-}
-
-.nav-container{
-    padding: 0;
-}
-
-.nav-container li{
-    margin: 0 1rem;
-}
-
-.nav-container li a{
-    color: #fff;
-}
-
-.nav-container li a:hover{
-    color: rgba(255, 255,255, .9);
-}
-
-.home a,
+.nav > div,
+#nav-board,
 #fl{
     display: flex;
     align-items: center;
 }
 
-.home strong{
-    cursor: pointer;
-    margin: 0 .3rem;
-    color: #000;
+#nav-board{
+    margin-left: .4rem;
 }
 
-.home strong:hover{
-    color: #fff;
+#nav-board span{
+    margin-left: .2rem;
+}
+
+.nav a{
+    position: relative;
+    display: contents;
+    color: rgba(255, 255, 255, .8);
+}
+
+.nav a:hover,
+.logo strong:hover{
+    color: rgba(255, 255,255, 1);
+}
+
+#login p:first-child{
+    margin-right: 1rem;
+}
+
+#homehover{
+    fill: rgba(255, 255, 255, .8);
+}
+
+#homehover:hover{
+    fill: rgba(255, 255, 255, 1);
+}
+
+.logo strong{
+    cursor: pointer;
+    margin: 0 .3rem;
+    color: rgba(255, 255, 255, .8);
 }
 
 .pro-con{
@@ -95,6 +103,14 @@
 
 .mini ul li{
     padding: .4rem 0;
+}
+
+.mini ul li a{
+    color: rgb(65, 105, 225);
+}
+
+.mini ul li a:hover{
+    color: rgb(65, 105, 225, .7);
 }
 
 .mini ul li:first-child{

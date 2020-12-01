@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useDispatch } from 'react-redux'
@@ -24,6 +24,7 @@ const colDragStyle = {
 function SharedBoard({ headers }) {
     const { boardId } = useParams()
     const dispatch = useDispatch()
+    const createStatusRef = useRef(null)
     const { permision, detailed, loading, taskStatus, createNewStatus, reOrderStatus } = useSDetailed(boardId, headers)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
@@ -115,6 +116,12 @@ function SharedBoard({ headers }) {
         return
     }
 
+    const addStatus = () => {
+        createNewStatus(newStatus)
+        setStatus("")
+        createStatusRef.current.focus()
+    }
+
     return !loading ? (
         <div className="board" style={getBg(detailed.bg)}>
             <div className="board-head">
@@ -144,8 +151,12 @@ function SharedBoard({ headers }) {
                 {
                     taskStatus.map(status => {
                         return (
-                            <Draggable key={status}>
-                                <strong className={permision !== "View" ? "column-drag-handle" : "nondrag"}>{status}</strong>
+                            <Draggable key={status} className="status-holder">
+                                <p className="status-title">
+                                    <strong className={permision !== "View" ? "column-drag-handle" : "nondrag"}>
+                                        {status}
+                                    </strong>
+                                </p>
                                 <SharedLists
                                     status={status}
                                     headers={headers}
@@ -166,7 +177,16 @@ function SharedBoard({ headers }) {
                         {
                             !create
                                 ?
-                                <p className="list-add new-status" onClick={() => setCreate(prev => !prev)}>Create new status</p>
+                                <p
+                                    className="new-status"
+                                    onClick={() => {
+                                        setCreate(prev => !prev)
+                                        setTimeout(() => {
+                                            createStatusRef.current.focus()
+                                        }, 0)
+                                    }}>
+                                    Create new status
+                            </p>
                                 :
                                 <div className="list-lasts">
                                     <input
@@ -174,13 +194,11 @@ function SharedBoard({ headers }) {
                                         type="text"
                                         placeholder="add new title..."
                                         value={newStatus}
+                                        ref={createStatusRef}
+                                        onKeyDown={e => e.key === "Enter" ? addStatus() : null}
                                         onChange={e => setStatus(e.target.value)}
                                     />
-                                    <button onClick={() => {
-                                        createNewStatus(newStatus)
-                                        setCreate(false)
-                                        setStatus("")
-                                    }}>
+                                    <button onClick={addStatus}>
                                         Create
                                 </button>
                                     <button onClick={() => setCreate(prev => !prev)}>Cancel</button>

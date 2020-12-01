@@ -4,6 +4,7 @@
     height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
     background-color: rgba(0, 0, 0, .1);
 }
 
@@ -28,21 +29,32 @@
     cursor: pointer;
 }
 
-.lists{
-    margin-right: 1rem;
+.status-holder{
+    margin: 0 5px;
+}
+
+.status-title{
+    background-color: #ebecf0;
     padding: .5rem;
-    background-color: rgba(0, 0, 0, .1);
+    padding-bottom: 0;
+}
+
+.lists{
+    padding: .5rem;
+    background-color: #ebecf0;
     max-height: 70vh;
     overflow-y: scroll;
 }
 
-.list-add{
+.list-add,
+.new-status{
     cursor: pointer;
     text-align: center;
 }
 
-.list-add:hover{
-    color: #fff;
+.list-add:hover,
+.new-status:hover{
+    color: rgba(0,0, 0, .8);
 }
 
 .list-cont{
@@ -71,7 +83,7 @@
 
 .new-status{
     padding: .5rem;
-    background-color: rgba(0, 0, 0, .1);
+    background-color: #ebecf0;
 }
 
 .board-users{
@@ -114,12 +126,11 @@
 }
 
 .column-drag-handle{
+    background-color: #ebecf0;
     cursor: move;
+    padding: .5rem 0;
 }
 
 .nondrag{
     cursor: default;
 }
-
-/* #ebecf0  back */
-/* #5e6c84 color */
