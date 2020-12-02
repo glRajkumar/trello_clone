@@ -1,0 +1,56 @@
+.board-listurl{
+    background-color: #ebecf0;
+    margin: 0 .5rem;
+    padding: .5rem;
+    width: 20vw;
+    height: 95vh;
+}
+
+section.url-cont{
+    display: flex;
+    align-items: center;
+    margin: .4rem 0;
+    cursor: pointer;
+}
+
+section.url-cont:hover{
+    background-color: rgba(0, 0, 0, .2);
+}
+
+.url-bg{
+    width: 60px;
+    height: 40px;
+    border-radius: 3px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.url-name{
+    color: #000;
+    padding: 0 .5rem;
+}
+
+@media(max-width:1200px){
+    .board-listurl{
+        width: 30vw;
+    }    
+}
+
+@media(max-width:750px){
+    .board-listurl{
+        width: 50vw;
+    }    
+}
+
+@media(max-width:450px){
+    .board-listurl{
+        width: 70vw;
+    }    
+}
+
+@media(max-width:300px){
+    .board-listurl{
+        width: 100vw;
+    }    
+}

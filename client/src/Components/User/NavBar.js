@@ -4,8 +4,10 @@ import { AUTH_LOGOUT, BOARD_INIT, SBOARD_INIT, SDET_INIT, DET_INIT } from '../..
 import { Link, useHistory } from 'react-router-dom'
 import { HomeIcon, Trello } from '../Common/Icons'
 import "../../CSS/nav.css"
+import AllBoardsUrl from '../Boards/AllBoardsUrl'
 
 function NavBar() {
+    const [listOpen, setListOpen] = useState(false)
     const [open, setOpen] = useState(false)
     const { userName, auth } = useSelector(state => state.auth)
     const history = useHistory()
@@ -37,17 +39,21 @@ function NavBar() {
     return (
         <div className="nav">
             {
+                listOpen &&
+                <div className="nav-board-list">
+                    <AllBoardsUrl click={() => setListOpen(prev => !prev)} />
+                </div>
+            }
+            {
                 auth &&
                 <div className="home">
                     <Link to="/">
                         <HomeIcon id="homehover" />
                     </Link>
-                    <Link to="/">
-                        <p id="nav-board">
-                            <Trello />
-                            <span>Boards</span>
-                        </p>
-                    </Link>
+                    <p id="nav-board" onClick={() => setListOpen(prev => !prev)}>
+                        <Trello />
+                        <span>Boards</span>
+                    </p>
                 </div>
             }
 
