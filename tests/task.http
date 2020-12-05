@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMxZTlmMGM2ZTUyZTYzZDQ2ODU1ZjMiLCJpYXQiOjE2MDY1NDM4NjYsImV4cCI6MTYwNjYwODY2Nn0.CM6alBQdg4SzfrswYrfIZYIH-Wt3uaFPrKNwuR7NiMM
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDcwNjY1OTEsImV4cCI6MTYwNzEzMTM5MX0.oZjSGMZ6mRnVjtvcrcr3JqIWBR_ZtRnXElPEnCNDu4I
 
 ### get a task
 GET {{host}}/task
@@ -18,7 +18,7 @@ Authorization: {{token}}
 {
     "title": "xxd vgrf bbgv bbb",
     "status": "To-do",
-    "boardId" : "5fc219d120cac65794c32026"
+    "boardId" : "5fc1fd71ed95933e0c9f67af"
 }
 
 ### update task 

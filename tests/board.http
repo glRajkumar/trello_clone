@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMxZTlmMGM2ZTUyZTYzZDQ2ODU1ZjMiLCJpYXQiOjE2MDY1NDM4NjYsImV4cCI6MTYwNjYwODY2Nn0.CM6alBQdg4SzfrswYrfIZYIH-Wt3uaFPrKNwuR7NiMM
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDcwNjY1OTEsImV4cCI6MTYwNzEzMTM5MX0.oZjSGMZ6mRnVjtvcrcr3JqIWBR_ZtRnXElPEnCNDu4I
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fc219d120cac65794c32026
+GET {{host}}/board/5fc9e42095ee3641d4d64e4b
 Authorization: {{token}}
 
 ### get members by id

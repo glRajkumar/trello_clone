@@ -1,0 +1,31 @@
+@host = http://localhost:5000
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDcwNjY1OTEsImV4cCI6MTYwNzEzMTM5MX0.oZjSGMZ6mRnVjtvcrcr3JqIWBR_ZtRnXElPEnCNDu4I
+
+### get room details
+GEt {{host}}/room/5fc9e4e095ee3641d4d64e4f
+Authorization: {{token}}
+
+### create room admin
+POST {{host}}/room/create
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId":"5fc9e42095ee3641d4d64e4b",
+    "room":"nnh",
+    "pass":"pass"
+}
+
+### join in the room 
+POST {{host}}/room/join
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "room":"nnh",
+    "pass":"pass"
+}
+
+### delete the room
+DELETE {{host}}/room/5fc884b6944b1f15047ff582
+Authorization: {{token}}

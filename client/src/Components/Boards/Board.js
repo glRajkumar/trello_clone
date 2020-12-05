@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useDispatch } from 'react-redux'
@@ -33,10 +33,6 @@ function Board({ headers }) {
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
-
-    useEffect(() => {
-        console.log("reloaded")
-    }, [boardId])
 
     const getBg = (bg) => {
         let background = {}

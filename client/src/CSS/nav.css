@@ -20,6 +20,7 @@
 
 #nav-board span{
     margin-left: .2rem;
+    color: rgba(255, 255, 255, .8);
 }
 
 .nav a{
@@ -29,7 +30,8 @@
 }
 
 .nav a:hover,
-.logo strong:hover{
+.logo strong:hover,
+#nav-board span:hover{
     color: rgba(255, 255,255, 1);
 }
 
@@ -54,8 +56,8 @@
 .nav-board-list{
     position: absolute;
     z-index: 10;
-    top: 2.8rem;
-    left: -.5rem;
+    top: calc(2.8rem + 1px);
+    left: 0;
 }
 
 .pro-con{

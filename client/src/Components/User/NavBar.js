@@ -31,6 +31,8 @@ function NavBar() {
                 <li><strong> {userName} </strong></li>
                 <li><Link onClick={() => setOpen(prev => !prev)} to="/public">Public Boards</Link></li>
                 <li><Link onClick={() => setOpen(prev => !prev)} to="/allsharedboards">Shared Boards</Link></li>
+                <li><Link onClick={() => setOpen(prev => !prev)} to="/join-live">Join in live</Link></li>
+                <li><Link onClick={() => setOpen(prev => !prev)} to="/create-live">Create live</Link></li>
                 <li><button onClick={logout}>Log out</button></li>
             </ul>
         </div>
@@ -40,7 +42,7 @@ function NavBar() {
         <div className="nav">
             {
                 listOpen &&
-                <div className="nav-board-list">
+                <div className={`nav-board-list ${listOpen ? "open" : null}`}>
                     <AllBoardsUrl click={() => setListOpen(prev => !prev)} />
                 </div>
             }

@@ -1,9 +1,8 @@
 .board-listurl{
     background-color: #ebecf0;
-    margin: 0 .5rem;
-    padding: .5rem;
+    padding: .5rem 1rem;
     width: 20vw;
-    height: 95vh;
+    height: calc(100vh - 2.8rem - 1px);
 }
 
 section.url-cont{

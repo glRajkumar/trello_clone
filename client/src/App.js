@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { NotFound, Protected, UnAuthor, FirstCheck } from './Components/Common';
 import { NavBar, Login, Signup } from './Components/User';
-import { AllBoards, Board, CreateBoard, Detailed } from "./Components/Boards"
+import { AllBoards, Board, CreateBoard, Detailed, LiveBoard } from "./Components/Boards"
 import { PublicBoards, AllSharedBoards, SharedBoard, SharedDetails } from './Components/OBoards'
+import { CreateLive, Join } from "./Components/Socket"
 import './CSS/app.css'
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
         <Protected exact path="/create-board" component={CreateBoard} />
         <Protected exact path="/taskdetails/:taskId" component={Detailed} />
         <Protected exact path="/sharedtask/:taskId" component={SharedDetails} />
+
+        <Protected exact path="/join-live" component={Join} />
+        <Protected exact path="/create-live" component={CreateLive} />
+        <Protected exact path="/live/:room" component={LiveBoard} />
 
         <Route exact path="/unauth" component={UnAuthor} />
         <Route path="*" component={NotFound} />
