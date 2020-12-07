@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Catageries, bgs } from "../utils"
+import { Catageries, bgs } from "../utils/general"
 import { BOARD_ADD } from '../../Store/actionTypes'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'

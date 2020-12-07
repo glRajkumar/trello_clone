@@ -1,17 +1,13 @@
 import {
-    DET_INIT,
-    DET_GET,
-    DET_EDIT,
-    NEWSTATUS,
-    TASK_RELIST,
-    TASK_REORDER,
-    TASK_REGROUP,
-    TASK_ADD,
-    TASK_EDIT,
-    TASK_EDIT_WSTATUS,
-    TASK_DELETE,
-    DET_DELETE
+    DET_INIT, DET_GET, DET_EDIT, NEWSTATUS,
+    TASK_RELIST, TASK_REORDER, TASK_REGROUP, TASK_ADD,
+    TASK_EDIT, TASK_EDIT_WSTATUS, TASK_DELETE, DET_DELETE
 } from '../actionTypes'
+import {
+    newStatusBuilder, addNewTask, taskEditer,
+    taskEditerWithStatus, delExistTask, reOrderStatusHelp,
+    reOrderListHelp, reGroupListHelp
+} from '../../Components/utils/dataManager'
 
 const initState = {
     detailed: []
@@ -50,6 +46,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(newStatusBuilder(board, payload))
                         return {
                             ...board,
                             taskStatus: [
@@ -74,6 +71,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(addNewTask(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -100,6 +98,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(taskEditer(board.tasks, payload))
                         let { taskId, boardId, status, ...changes } = payload
                         return {
                             ...board,
@@ -133,6 +132,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(taskEditerWithStatus(board.tasks, payload))
                         let current = board.tasks.filter(t => t.status === payload.fromStatus)[0].tasks.filter(t => t._id === payload.taskId)[0]
                         let { taskId, boardId, fromStatus, toStatus, ...changes } = payload
                         return {
@@ -169,6 +169,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(delExistTask(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -192,6 +193,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(reOrderStatusHelp(board, payload))
                         return {
                             ...board,
                             taskStatus: payload.newTaskStatus,
@@ -207,6 +209,7 @@ const taskReducer = (state = initState, { type, payload }) => {
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(reOrderListHelp(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -218,6 +221,7 @@ const taskReducer = (state = initState, { type, payload }) => {
                                         current,
                                         ...remaings.slice(payload.to.pos)
                                     ]
+                                    console.log("newList", newList)
                                     return {
                                         ...task,
                                         tasks: newList
@@ -239,6 +243,7 @@ const taskReducer = (state = initState, { type, payload }) => {
                     if (board._id === payload.boardId) {
                         let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter((task, i) => i === payload.from.pos)[0]
                         current.status = payload.to.status
+                        console.log(reGroupListHelp(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {

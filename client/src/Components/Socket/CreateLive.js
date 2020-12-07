@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Catageries } from "../utils"
+import { Catageries } from "../utils/general"
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 

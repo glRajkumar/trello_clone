@@ -1,21 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
+import { initDnDState, colDragStyle, getBg } from '../utils/general'
+import decideUpdate from '../utils/decideUpdate'
 import io from 'socket.io-client'
 import LiveLists from './LiveLists'
 import axios from 'axios'
-
-const initDnDState = {
-    dragFrom: null,
-    dragTo: null
-}
-
-const colDragStyle = {
-    overflowX: "scroll",
-    minHeight: "80vh",
-    display: "grid",
-    gridTemplateColumns: "repeat(100, minmax(250px, 1fr))"
-}
 
 let socket;
 
@@ -34,7 +24,7 @@ function LiveBoard({ headers }) {
         socket.emit("enter-room", { room: detailed.room })
 
         socket.on("update-board", (data) => {
-            console.log(data)
+            setDetailed(prev => decideUpdate(prev, data))
         })
 
         return () => leave()
@@ -71,7 +61,6 @@ function LiveBoard({ headers }) {
                         ]
                     }
                 })
-                console.log(payload)
                 socket.emit("update-board", {
                     room,
                     payload: {
@@ -104,7 +93,6 @@ function LiveBoard({ headers }) {
                 })
             }
         })
-        console.log(payload)
         payload.action = "new-title"
         socket.emit("update-board", {
             room,
@@ -128,7 +116,6 @@ function LiveBoard({ headers }) {
                 })
             }
         })
-        console.log(payload)
         payload.action = "del-title"
         socket.emit("update-board", {
             room,
@@ -164,21 +151,6 @@ function LiveBoard({ headers }) {
             .catch((err) => {
                 console.log(err)
             })
-    }
-
-    const getBg = (bg) => {
-        let background = {}
-        if (bg) {
-            if (bg.isColour) {
-                background.backgroundColor = bg.name
-                return background
-            } else {
-                background.backgroundImage = `url('/static/${bg.name}')`
-                return background
-            }
-        } else {
-            return
-        }
     }
 
     const reOrder = () => {
@@ -224,7 +196,6 @@ function LiveBoard({ headers }) {
                                     })
                                 }
                             })
-                            console.log(payload)
                             payload.action = "reorder-list"
                             socket.emit("update-board", {
                                 room,
@@ -272,7 +243,6 @@ function LiveBoard({ headers }) {
                                     })
                                 }
                             })
-                            console.log(payload)
                             payload.action = "restatus-list"
                             socket.emit("update-board", {
                                 room,
@@ -285,10 +255,7 @@ function LiveBoard({ headers }) {
                 }
             }
         }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
+        setlistDnD({ ...initDnDState })
     }
 
     const onColumnDrop = (e) => {
@@ -300,17 +267,13 @@ function LiveBoard({ headers }) {
                 dragTo: addedIndex
             }
             reOrderStatus(payload)
-            console.log(payload)
             payload.action = "reorder-status"
             socket.emit("update-board", {
                 room,
                 payload
             })
         }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
+        setlistDnD({ ...initDnDState })
     }
 
     const doNothing = e => { return }
@@ -326,6 +289,7 @@ function LiveBoard({ headers }) {
             <div className="board-head">
                 <div className="bh-top"> {detailed.boardName} </div>
                 <div className="bh-top"> {detailed.catagery} </div>
+                <div className="bh-top" onClick={leave}>Leave room</div>
             </div>
 
             <Container

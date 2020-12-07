@@ -5,22 +5,11 @@ import { useDispatch } from 'react-redux'
 import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
 import { OtherUser, SearchUser } from '../User'
 import useDetailed from '../Customs/useDetailed'
+import { initDnDState, colDragStyle, getBg } from '../utils/general'
 import { Loading } from '../Common'
 import Lists from './Lists'
 import axios from 'axios'
 import "../../CSS/board.css"
-
-const initDnDState = {
-    dragFrom: null,
-    dragTo: null
-}
-
-const colDragStyle = {
-    overflowX: "scroll",
-    minHeight: "80vh",
-    display: "grid",
-    gridTemplateColumns: "repeat(100, minmax(250px, 1fr))"
-}
 
 function Board({ headers }) {
     const { boardId } = useParams()
@@ -33,21 +22,6 @@ function Board({ headers }) {
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
-
-    const getBg = (bg) => {
-        let background = {}
-        if (bg) {
-            if (bg.isColour) {
-                background.backgroundColor = bg.name
-                return background
-            } else {
-                background.backgroundImage = `url('/static/${bg.name}')`
-                return background
-            }
-        } else {
-            return
-        }
-    }
 
     const reOrder = () => {
         let payload = {
@@ -93,10 +67,7 @@ function Board({ headers }) {
                 }
             }
         }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
+        setlistDnD({ ...initDnDState })
     }
 
     const onColumnDrop = (e) => {
@@ -110,10 +81,7 @@ function Board({ headers }) {
             }
             reOrderStatus(payload)
         }
-        setlistDnD({
-            dragFrom: null,
-            dragTo: null
-        })
+        setlistDnD({ ...initDnDState })
     }
 
     const doNothing = e => {

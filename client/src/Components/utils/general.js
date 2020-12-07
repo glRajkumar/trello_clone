@@ -80,3 +80,30 @@ export const bgs = [
         name: "4.jpeg"
     }
 ]
+
+export const initDnDState = {
+    dragFrom: null,
+    dragTo: null
+}
+
+export const colDragStyle = {
+    overflowX: "scroll",
+    minHeight: "80vh",
+    display: "grid",
+    gridTemplateColumns: "repeat(100, minmax(250px, 1fr))"
+}
+
+export const getBg = (bg) => {
+    let background = {}
+    if (bg) {
+        if (bg.isColour) {
+            background.backgroundColor = bg.name
+            return background
+        } else {
+            background.backgroundImage = `url('/static/${bg.name}')`
+            return background
+        }
+    } else {
+        return
+    }
+}

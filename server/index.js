@@ -41,7 +41,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on("update-board", ({ room, payload }) => {
-        console.log({ room, payload })
         socket.broadcast.to(room).emit('update-board', payload);
     })
 
