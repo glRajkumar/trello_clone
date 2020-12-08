@@ -122,7 +122,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
             status,
             taskStatus
         }
-        history.push(`/task/${list._id}`, { forwordState })
+        history.push(`/sharedtask/${list._id}`, { forwordState })
     }
 
     return (

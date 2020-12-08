@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
-import { DeleteIcon } from '../Common/Icons'
 import axios from 'axios'
+import { DeleteIcon } from '../Common/Icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reOrder, addTitle, delTitle }) {
+function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrder }) {
+    const dispatch = useDispatch()
     const history = useHistory()
     const newTitleRef = useRef(null)
+    const { detailed } = useSelector(state => state.task)
+    const tasks = detailed.filter(d => d._id === boardId)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
     const [showForm, setShow] = useState(false)
-    const [tasks, setTasks] = useState(list)
     const [title, setTitle] = useState('')
-
-    useEffect(() => {
-        setTasks(list)
-    }, [list])
 
     const getCardPayload = (status, pos) => {
         let id = tasks.filter((task, i) => i === pos)[0]._id
@@ -35,6 +35,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     }
 
     const onDragStart = e => {
+        // console.log("drag started", e)
         setlistDnD(prev => {
             return {
                 ...prev,
@@ -47,6 +48,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     }
 
     const onDragEnter = (status) => {
+        // console.log("drag enter:", status)
         setlistDnD(prev => {
             return {
                 ...prev,
@@ -59,6 +61,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     }
 
     const onDragDropReady = (p) => {
+        // console.log('Drop ready: ', p)
         const { addedIndex } = p
         setlistDnD(prev => {
             return {
@@ -76,6 +79,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     }
 
     const onDropCard = (e) => {
+        // console.log("drag drop", e)
         reOrder()
     }
 
@@ -89,8 +93,13 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
 
             axios.post("/task", { ...payload }, { headers })
                 .then((res) => {
-                    payload._id = res.data.id
-                    addTitle(payload)
+                    dispatch({
+                        type: TASK_ADD,
+                        payload: {
+                            _id: res.data.id,
+                            ...payload
+                        }
+                    })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -108,7 +117,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
                     taskId,
                     status
                 }
-                delTitle(payload)
+                dispatch({ type: TASK_DELETE, payload })
             })
             .catch((err) => {
                 console.log(err)
@@ -118,18 +127,18 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     const detailForword = (list) => {
         const forwordState = {
             ...list,
-            boardId,
             status,
+            boardId,
+            isMine,
             taskStatus
         }
-        history.push(`/task/${list._id}`, { forwordState })
+        history.push(`/taskdetails/${list._id}`, { forwordState })
     }
 
     return (
         <div className="lists">
             <Container
                 groupName="list"
-                nonDragAreaSelector=".nondrag"
                 getChildPayload={i => getCardPayload(status, i)}
                 onDragStart={e => onDragStart(e)}
                 onDragEnd={e => onDragEnd(e)}
@@ -137,6 +146,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
                 onDragEnter={() => onDragEnter(status)}
                 onDragLeave={() => {
                     return
+                    // console.log("drag leave:", status)
                 }}
                 onDropReady={p => onDragDropReady(p)}
                 dragClass="list-ghost"
@@ -149,7 +159,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
                 dropPlaceholderAnimationDuration={200}
             >
                 {
-                    tasks.length > 0 &&
+                    tasks?.length > 0 &&
                     tasks.map(list => {
                         return (
                             <Draggable key={list._id}>
@@ -158,6 +168,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
                                         {list.title}
                                     </p>
                                     {
+                                        isMine &&
                                         <p onClick={() => DelTitle(list._id)}>
                                             <DeleteIcon />
                                         </p>
@@ -170,7 +181,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
             </Container>
 
             {
-                !showForm &&
+                isMine && !showForm &&
                 <p
                     className="list-add"
                     onClick={() => {
@@ -204,4 +215,4 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
     )
 }
 
-export default LiveLists
+export default Lists

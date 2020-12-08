@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useDispatch } from 'react-redux'
 import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
@@ -13,9 +13,14 @@ import "../../CSS/board.css"
 
 function Board({ headers }) {
     const { boardId } = useParams()
+    const { state } = useLocation()
     const dispatch = useDispatch()
     const createStatusRef = useRef(null)
-    const { taskStatus, isMine, loading, detailed, Private, createNewStatus, reOrderStatus } = useDetailed(boardId, headers)
+    const {
+        loading, detailed,
+        taskStatus, isMine, permision,
+        Private, createNewStatus, reOrderStatus
+    } = useDetailed(boardId, headers, state.isMine)
     const [showMem, setshowMem] = useState(false)
     const [open, setOpen] = useState(false)
     const [addU, setAddU] = useState(false)
@@ -163,12 +168,17 @@ function Board({ headers }) {
                     taskStatus.map(status => {
                         return (
                             <Draggable key={status} className="status-holder">
-                                <p className="status-title"><strong className="column-drag-handle">{status}</strong></p>
+                                <p className="status-title">
+                                    <strong className={(isMine || permision !== "View") ? "column-drag-handle" : "nondrag"}>
+                                        {status}
+                                    </strong>
+                                </p>
                                 <Lists
                                     status={status}
                                     headers={headers}
                                     boardId={boardId}
                                     isMine={isMine}
+                                    permision={permision}
                                     taskStatus={taskStatus}
                                     setlistDnD={setlistDnD}
                                     reOrder={reOrder}
@@ -178,38 +188,41 @@ function Board({ headers }) {
                     })
                 }
 
-                <div className="nondrag">
-                    {
-                        !create
-                            ?
-                            <p
-                                className="new-status"
-                                onClick={() => {
-                                    setCreate(prev => !prev)
-                                    setTimeout(() => {
-                                        createStatusRef.current.focus()
-                                    }, 0)
-                                }}>
-                                Create new status
-                            </p>
-                            :
-                            <div className="list-lasts">
-                                <input
-                                    className="input-box"
-                                    type="text"
-                                    placeholder="add new title..."
-                                    value={newStatus}
-                                    ref={createStatusRef}
-                                    onKeyDown={e => e.key === "Enter" ? addStatus() : null}
-                                    onChange={e => setStatus(e.target.value)}
-                                />
-                                <button onClick={addStatus}>
-                                    Create
+                {
+                    permision !== "View" &&
+                    <div className="nondrag">
+                        {
+                            !create
+                                ?
+                                <p
+                                    className="new-status"
+                                    onClick={() => {
+                                        setCreate(prev => !prev)
+                                        setTimeout(() => {
+                                            createStatusRef.current.focus()
+                                        }, 0)
+                                    }}>
+                                    Create new status
+                                </p>
+                                :
+                                <div className="list-lasts">
+                                    <input
+                                        className="input-box"
+                                        type="text"
+                                        placeholder="add new title..."
+                                        value={newStatus}
+                                        ref={createStatusRef}
+                                        onKeyDown={e => e.key === "Enter" ? addStatus() : null}
+                                        onChange={e => setStatus(e.target.value)}
+                                    />
+                                    <button onClick={addStatus}>
+                                        Create
                                 </button>
-                                <button onClick={() => setCreate(prev => !prev)}>Cancel</button>
-                            </div>
-                    }
-                </div>
+                                    <button onClick={() => setCreate(prev => !prev)}>Cancel</button>
+                                </div>
+                        }
+                    </div>
+                }
             </Container>
         </div>
     )

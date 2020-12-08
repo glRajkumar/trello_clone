@@ -100,7 +100,7 @@ function Detailed({ headers }) {
             </select>
 
             {
-                (details.isMine || details.permision !== "View") &&
+                details.isMine &&
                 <button onClick={Submit}>Save</button>
             }
 

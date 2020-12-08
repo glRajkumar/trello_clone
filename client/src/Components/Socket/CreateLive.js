@@ -56,7 +56,7 @@ function CreateLive({ headers }) {
     }
 
     return (
-        <div>
+        <div className="form-box">
             <h2>Create a live board</h2>
 
             {

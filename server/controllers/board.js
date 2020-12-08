@@ -9,7 +9,7 @@ router.get("/boards", auth, async (req, res) => {
 
     try {
         const boards = await Board.find({ postedBy: userId })
-            .select('boardName catagery bg isPublic')
+            .select('boardName catagery bg')
             .sort('-createdAt')
             .lean()
 
@@ -24,20 +24,30 @@ router.get("/:boardId", auth, async (req, res) => {
     const { boardId } = req.params
 
     try {
-        let board = await Board.find({ _id: boardId })
-            .select("postedBy tasks")
+        let board = await Board.findOne({ _id: boardId })
+            .select("postedBy tasks members isPublic")
             .populate("tasks.orderedList", "title body")
             .lean()
 
-        if (board.length > 0) {
-            board = board[0]
-            board.tasks = board.tasks.map(task => {
-                return {
-                    status: task.status,
-                    tasks: task.orderedList
-                }
-            })
+        if (!board) return res.status(400).json({ msg: "cannot find board" })
+
+        if (board.postedBy.toString() === req.user._id.toString()) {
+            board.permision = "Admin"
+        } else {
+            if (board.isPublic) {
+                board.permision = "View"
+            } else {
+                board.permision = board.members.filter(m => m.user.toString() === req.user._id.toString())[0]?.permision || "View"
+            }
         }
+
+        board.members = ""
+        board.tasks = board.tasks.map(task => {
+            return {
+                status: task.status,
+                tasks: task.orderedList
+            }
+        })
 
         res.json({ board })
 
@@ -50,7 +60,7 @@ router.get("/members/:boardId", auth, async (req, res) => {
     const { boardId } = req.params
 
     try {
-        const members = await Board.find({ _id: boardId })
+        const { members } = await Board.findById(boardId)
             .select("members -_id")
             .populate("members.user", "userName")
             .lean()

@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmMwZTEyMmZjMmU3MjVhNTAxNGMzMTciLCJpYXQiOjE2MDY0NzYwNjksImV4cCI6MTYwNjU0MDg2OX0.pD3uc067zB2jAbCthXa2GzPX_m7eVrwDVMM3j6YfvDo
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5YjY2MTZjMmQzNjRkMDA1NTFlN2IiLCJpYXQiOjE2MDc0MDA5NzUsImV4cCI6MTYwNzQ2NTc3NX0._54JfJFo1CEKGUsRCbYwQ0HJe0sjyAZ8cXRqSmVD0j4
 
 ### get shared
 GET {{host}}/shared/boards/?skip=0
@@ -7,8 +7,4 @@ Authorization: {{token}}
 
 ### get public boards 
 GET {{host}}/shared/public/?skip=0
-Authorization: {{token}}
-
-### get shared board by id
-GET {{host}}/shared/5fbd06424c1f1e0f3804464e
 Authorization: {{token}}

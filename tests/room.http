@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDcwNjY1OTEsImV4cCI6MTYwNzEzMTM5MX0.oZjSGMZ6mRnVjtvcrcr3JqIWBR_ZtRnXElPEnCNDu4I
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDczMTQ1ODUsImV4cCI6MTYwNzM3OTM4NX0.BDwA6NMJXck-yWqgf-siPb1gvSQUWX7WIpR3dQn2jEo
 
 ### get room details
 GEt {{host}}/room/5fc9e4e095ee3641d4d64e4f
@@ -11,8 +11,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId":"5fc9e42095ee3641d4d64e4b",
-    "room":"nnh",
+    "boardId":"5fc9e42095eeee3641d4de4b",
+    "room":"nnjnh",
     "pass":"pass"
 }
 
@@ -22,7 +22,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "room":"nnh",
+    "room":"nnjnh",
     "pass":"pass"
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import useBoards from '../Customs/useBoards'
 import { useHistory } from 'react-router-dom'
+import { getBg } from '../utils/general'
 import "../../CSS/boardurl.css"
 
 function AllBoardsUrl({ headers, click }) {
@@ -27,7 +28,7 @@ function AllBoardsUrl({ headers, click }) {
                         >
                             <div
                                 className="url-bg"
-                                style={board.bg.isColour ? { backgroundColor: board.bg.name } : { backgroundImage: `url('/static/${board.bg.name}')` }}>
+                                style={getBg(board.bg)}>
                             </div>
                             <div className="url-name">
                                 {board.boardName}

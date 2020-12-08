@@ -9,7 +9,7 @@ function OtherUser({ headers, boardId }) {
     useEffect(() => {
         axios.get(`/board/members/${boardId}`, { headers })
             .then((res) => {
-                setUser(res.data.members[0].members)
+                setUser(res.data.members)
                 setLoad(false)
             })
             .catch((err) => {

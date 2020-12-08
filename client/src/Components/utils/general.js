@@ -94,16 +94,16 @@ export const colDragStyle = {
 }
 
 export const getBg = (bg) => {
+    if (!bg) return
     let background = {}
-    if (bg) {
-        if (bg.isColour) {
-            background.backgroundColor = bg.name
-            return background
-        } else {
-            background.backgroundImage = `url('/static/${bg.name}')`
-            return background
+    if (bg.isColour) {
+        background.backgroundColor = bg.name
+        if (bg.name === "rgb(255,255,255)") {
+            background.border = "1px solid rgba(0,0,0,.2)"
         }
+        return background
     } else {
-        return
+        background.backgroundImage = `url('/static/${bg.name}')`
+        return background
     }
 }

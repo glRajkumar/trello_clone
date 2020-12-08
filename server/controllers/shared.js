@@ -17,11 +17,10 @@ router.get("/boards", auth, async (req, res) => {
             .limit(10)
             .lean()
 
-        boards = boards.map(board => {
+        boards = boards.map(({ members, ...board }) => {
             return {
                 ...board,
-                members: "",
-                permision: board.members.filter(m => m.user.toString() === userId.toString())[0].permision
+                permision: members.filter(m => m.user.toString() === userId.toString())[0].permision
             }
         })
 
@@ -54,36 +53,6 @@ router.get('/public', auth, async (req, res) => {
 
     } catch (error) {
         res.status(400).json({ error, msg: "cannot get public boards" })
-    }
-})
-
-router.get("/:boardId", auth, async (req, res) => {
-    const { boardId } = req.params
-
-    try {
-        let board = await Board.find({ _id: boardId })
-            .select("postedBy isPublic members tasks")
-            .populate("tasks.orderedList", "title body")
-            .lean()
-
-        board = board[0]
-        board.permision = !board.isPublic
-            ? board.members.filter(m => m.user.toString() === req.user._id.toString())[0].permision
-            : "View"
-
-        board.tasks = board.tasks.map(task => {
-            return {
-                status: task.status,
-                tasks: task.orderedList
-            }
-        })
-
-        board.members = ""
-
-        res.json({ board })
-
-    } catch (error) {
-        res.status(400).json({ error, msg: "cannot gt the shared board" })
     }
 })
 

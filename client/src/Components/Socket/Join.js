@@ -29,7 +29,7 @@ function Join({ headers }) {
     }
 
     return (
-        <div>
+        <div className="form-box">
             <h1>Join</h1>
 
             {

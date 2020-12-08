@@ -59,12 +59,10 @@ export function taskEditer(arr, payload) {
 }
 
 export function taskEditerWithStatus(arr, payload) {
-    let current
     let { taskId, boardId, fromStatus, toStatus, ...changes } = payload
-
+    let current = arr.filter(t => t.status === fromStatus)[0].tasks.filter(t => t._id === taskId)[0]
     let newArr = arr.map(task => {
         if (task.status === fromStatus) {
-            current = task.tasks.filter(t => t._id === taskId)[0]
             return {
                 ...task,
                 tasks: task.tasks.filter(t => t._id !== taskId)

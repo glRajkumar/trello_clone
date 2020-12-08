@@ -1,16 +1,16 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDcwNjY1OTEsImV4cCI6MTYwNzEzMTM5MX0.oZjSGMZ6mRnVjtvcrcr3JqIWBR_ZtRnXElPEnCNDu4I
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmNlZmMwYmEyMGFjYzJiZDQ2NTZjMjQiLCJpYXQiOjE2MDc0MDA0NjEsImV4cCI6MTYwNzQ2NTI2MX0.bfjOUFF8MfS99MVlbi6DaHrsA-qY2gFHqPwUPUtrjTY
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fc9e42095ee3641d4d64e4b
+GET {{host}}/board/5fcefdc3a20acc2bd4656c25
 Authorization: {{token}}
 
 ### get members by id
-GET {{host}}/board/members/5fc2194c20cac65794c32020
+GET {{host}}/board/members/5fcefdc3a20acc2bd4656c25
 Authorization: {{token}}
 
 ### create new board
@@ -19,7 +19,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "vfrd", 
+    "boardName" : "fff", 
     "catagery" : "Education",
     "bg": {
         "isColour" : "true",
@@ -99,8 +99,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fc219d120cac65794c32026", 
-    "memId" : "5fc2196520cac65794c32024",
+    "boardId" : "5fcefdc3a20acc2bd4656c25", 
+    "memId" : "5fc9b6616c2d364d00551e7b",
     "permision": "Admin"
 }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { initDnDState, colDragStyle, getBg } from '../utils/general'
-import { addNewTask, delExistTask, newStatusBuilder, reGroupListHelp, reOrderListHelp, reOrderStatusHelp } from '../utils/dataManager'
 import decideUpdate from '../utils/decideUpdate'
 import io from 'socket.io-client'
 import LiveLists from './LiveLists'
@@ -44,8 +43,24 @@ function LiveBoard({ headers }) {
         }
 
         axios.put("/board/add-status", { ...payload }, { headers })
-            .then(() => {
-                setDetailed(prev => newStatusBuilder(prev, payload))
+            .then((res) => {
+                console.log(res.data)
+                setDetailed(prev => {
+                    return {
+                        ...prev,
+                        taskStatus: [
+                            ...prev.taskStatus,
+                            status
+                        ],
+                        tasks: [
+                            ...prev.tasks,
+                            {
+                                status,
+                                tasks: []
+                            }
+                        ]
+                    }
+                })
                 socket.emit("update-board", {
                     room,
                     payload: {
@@ -63,7 +78,19 @@ function LiveBoard({ headers }) {
         setDetailed(prev => {
             return {
                 ...prev,
-                tasks: addNewTask(prev.tasks, payload)
+                tasks: prev.tasks.map(task => {
+                    if (task.status === payload.status) {
+                        return {
+                            ...task,
+                            tasks: [
+                                ...task.tasks,
+                                payload
+                            ]
+                        }
+                    } else {
+                        return task
+                    }
+                })
             }
         })
         payload.action = "new-title"
@@ -77,7 +104,16 @@ function LiveBoard({ headers }) {
         setDetailed(prev => {
             return {
                 ...prev,
-                tasks: delExistTask(prev.tasks, payload)
+                tasks: prev.tasks.map(task => {
+                    if (task.status === payload.status) {
+                        return {
+                            ...task,
+                            tasks: task.tasks.filter(t => t._id !== payload.taskId)
+                        }
+                    } else {
+                        return task
+                    }
+                })
             }
         })
         payload.action = "del-title"
@@ -88,7 +124,26 @@ function LiveBoard({ headers }) {
     }
 
     const reOrderStatus = (payload) => {
-        setDetailed(prev => reOrderStatusHelp(prev, payload))
+        let { taskStatus, tasks } = detailed
+        let remaings = taskStatus.filter((item, i) => i !== payload.dragFrom)
+        let newTaskStatus = [
+            ...remaings.slice(0, payload.dragTo),
+            taskStatus[payload.dragFrom],
+            ...remaings.slice(payload.dragTo)
+        ]
+        let remaingTasks = tasks.filter((item, i) => i !== payload.dragFrom)
+        let newTasks = [
+            ...remaingTasks.slice(0, payload.dragTo),
+            tasks[payload.dragFrom],
+            ...remaingTasks.slice(payload.dragTo)
+        ]
+        setDetailed(prev => {
+            return {
+                ...prev,
+                taskStatus: newTaskStatus,
+                tasks: newTasks
+            }
+        })
         axios.put("/board/reorder-status", { boardId: detailed._id, from: payload.dragFrom, to: payload.dragTo }, { headers })
             .then((res) => {
                 console.log(res)
@@ -117,11 +172,28 @@ function LiveBoard({ headers }) {
                         status: payload.from.status,
                         to: payload.to.pos
                     }, { headers })
-                        .then(() => {
+                        .then((res) => {
+                            console.log(res)
                             setDetailed(prev => {
                                 return {
                                     ...prev,
-                                    tasks: reOrderListHelp(prev.tasks, payload)
+                                    tasks: prev.tasks.map(task => {
+                                        if (task.status === payload.from.status) {
+                                            let current = task.tasks[payload.from.pos]
+                                            let remaings = task.tasks.filter((item, i) => i !== payload.from.pos)
+                                            let newList = [
+                                                ...remaings.slice(0, payload.to.pos),
+                                                current,
+                                                ...remaings.slice(payload.to.pos)
+                                            ]
+                                            return {
+                                                ...task,
+                                                tasks: newList
+                                            }
+                                        } else {
+                                            return task
+                                        }
+                                    })
                                 }
                             })
                             payload.action = "reorder-list"
@@ -141,11 +213,34 @@ function LiveBoard({ headers }) {
                         toStatus: payload.to.status,
                         to: payload.to.pos
                     }, { headers })
-                        .then(() => {
+                        .then((res) => {
+                            console.log(res)
                             setDetailed(prev => {
                                 return {
                                     ...prev,
-                                    tasks: reGroupListHelp(prev.tasks, payload)
+                                    tasks: prev.tasks.map(task => {
+                                        let current = prev.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter((task, i) => i === payload.from.pos)[0]
+                                        current.status = payload.to.status
+                                        if (task.status === payload.to.status) {
+                                            let remaings = task.tasks
+                                            let newList = [
+                                                ...remaings.slice(0, payload.to.pos),
+                                                current,
+                                                ...remaings.slice(payload.to.pos)
+                                            ]
+                                            return {
+                                                ...task,
+                                                tasks: newList
+                                            }
+                                        } else if (task.status === payload.from.status) {
+                                            return {
+                                                ...task,
+                                                tasks: task.tasks.filter((t, i) => i !== payload.from.pos)
+                                            }
+                                        } else {
+                                            return task
+                                        }
+                                    })
                                 }
                             })
                             payload.action = "restatus-list"

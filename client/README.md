@@ -8,6 +8,9 @@ for drag and drop, I used react-smooth-dnd package.
 Every files are arranged by their use.
 All task related js files are separated in Boards folder.
 
+### Dropped folder
+Dropped folder is just for my knowledge. It doesn't have any meaning for the project, so delete it.
+
 ### User guide to use the website
 1) User need to register first.
 
@@ -29,3 +32,5 @@ All task related js files are separated in Boards folder.
 9) User can add and remove other users. The shared boards are can be viewed 
 in SharedBoard section.(for now, other user who have the permision of either "Ask" 
 or "Admin" can edit the board)
+
+10) User can create a live board with room id and password.

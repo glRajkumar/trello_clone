@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Loading from './Loading'
 import axios from 'axios'
-import { AUTH_ACTION, AUTH_LOGOUT, AUTH_ERROR, BOARD_INIT, SBOARD_INIT, SDET_INIT, DET_INIT } from "../../Store/actionTypes"
+import { AUTH_ACTION, AUTH_LOGOUT, AUTH_ERROR, BOARD_INIT, SBOARD_INIT, DET_INIT } from "../../Store/actionTypes"
 
 function FirstCheck() {
     const history = useHistory()
@@ -17,7 +17,6 @@ function FirstCheck() {
         dispatch({ type: BOARD_INIT })
         dispatch({ type: SBOARD_INIT })
         dispatch({ type: DET_INIT })
-        dispatch({ type: SDET_INIT })
         history.push('/login')
     }
 

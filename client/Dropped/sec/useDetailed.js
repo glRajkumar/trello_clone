@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { SDET_GET, SNEWSTATUS, STASK_RELIST } from '../../Store/actionTypes'
+import { DET_EDIT, DET_GET, NEWSTATUS, TASK_RELIST } from '../../Store/actionTypes'
 import axios from "axios"
 
-function useSDetailed(boardId, headers) {
-    const { sboard, stask } = useSelector(state => state)
-    const [isPresent] = useState(stask.detailed.some(d => d._id === boardId))
+function useDetailed(boardId, headers) {
+    const { auth, board, task } = useSelector(state => state)
+    const [isPresent] = useState(task.detailed.some(d => d._id === boardId))
     const [detailed, setDetailed] = useState(
         isPresent
-            ? stask.detailed.filter(d => d._id === boardId)[0]
+            ? task.detailed.filter(d => d._id === boardId)[0]
             : {
                 boardName: "",
                 catagery: "",
                 postedBy: "",
+                isPublic: "",
                 tasks: [],
                 taskStatus: []
             }
@@ -22,9 +23,9 @@ function useSDetailed(boardId, headers) {
 
     useEffect(() => {
         if (!isPresent) {
-            axios.get(`/shared/${boardId}`, { headers })
+            axios.get(`/board/${boardId}`, { headers })
                 .then((res) => {
-                    let boardDetails = sboard.boards.filter(b => b._id === boardId)
+                    let boardDetails = board.boards.filter(b => b._id === boardId)
                     let payload = {
                         ...boardDetails[0],
                         ...res.data.board,
@@ -32,7 +33,7 @@ function useSDetailed(boardId, headers) {
                     }
                     setLoad(false)
                     setDetailed(payload)
-                    dispatch({ type: SDET_GET, payload })
+                    dispatch({ type: DET_GET, payload })
                 })
                 .catch((err) => {
                     console.log(err)
@@ -45,9 +46,10 @@ function useSDetailed(boardId, headers) {
             boardId,
             status
         }
+
         axios.put("/board/add-status", { ...payload }, { headers })
             .then(() => {
-                dispatch({ type: SNEWSTATUS, payload })
+                dispatch({ type: NEWSTATUS, payload })
                 setDetailed(prev => {
                     return {
                         ...prev,
@@ -70,8 +72,30 @@ function useSDetailed(boardId, headers) {
             })
     }
 
+    const Private = () => {
+        const payload = {
+            boardId,
+            info: {
+                isPublic: !detailed.isPublic
+            }
+        }
+        axios.put('/board/public', { boardId, isPublic: !detailed.isPublic }, { headers })
+            .then(() => {
+                setDetailed(prev => {
+                    return {
+                        ...prev,
+                        isPublic: !detailed.isPublic
+                    }
+                })
+                dispatch({ type: DET_EDIT, payload })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     const reOrderStatus = (payload) => {
-        let { taskStatus, tasks } = stask.detailed.filter(d => d._id === boardId)[0]
+        let { taskStatus, tasks } = task.detailed.filter(d => d._id === boardId)[0]
         let remaings = taskStatus.filter((item, i) => i !== payload.dragFrom)
         let newTaskStatus = [
             ...remaings.slice(0, payload.dragTo),
@@ -100,17 +124,18 @@ function useSDetailed(boardId, headers) {
             })
         payload.newTaskStatus = newTaskStatus
         payload.newTasks = newTasks
-        dispatch({ type: STASK_RELIST, payload })
+        dispatch({ type: TASK_RELIST, payload })
     }
 
     return {
-        permision: detailed?.permision,
+        isMine: detailed?.postedBy === auth._id,
         loading,
         detailed,
         taskStatus: detailed.taskStatus,
         createNewStatus,
-        reOrderStatus
+        reOrderStatus,
+        Private
     }
 }
 
-export default useSDetailed
+export default useDetailed

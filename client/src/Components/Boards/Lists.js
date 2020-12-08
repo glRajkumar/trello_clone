@@ -6,7 +6,7 @@ import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrder }) {
+function Lists({ headers, boardId, status, isMine, permision, taskStatus, setlistDnD, reOrder }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const newTitleRef = useRef(null)
@@ -130,6 +130,7 @@ function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrd
             status,
             boardId,
             isMine,
+            permision,
             taskStatus
         }
         history.push(`/taskdetails/${list._id}`, { forwordState })
@@ -139,6 +140,7 @@ function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrd
         <div className="lists">
             <Container
                 groupName="list"
+                nonDragAreaSelector=".nondrag"
                 getChildPayload={i => getCardPayload(status, i)}
                 onDragStart={e => onDragStart(e)}
                 onDragEnd={e => onDragEnd(e)}
@@ -163,12 +165,12 @@ function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrd
                     tasks.map(list => {
                         return (
                             <Draggable key={list._id}>
-                                <div className="list-cont">
+                                <div className={`list-cont ${permision !== "View" ? "" : "nondrag"} `}>
                                     <p onClick={() => detailForword(list)}>
                                         {list.title}
                                     </p>
                                     {
-                                        isMine &&
+                                        permision !== "View" &&
                                         <p onClick={() => DelTitle(list._id)}>
                                             <DeleteIcon />
                                         </p>
@@ -181,7 +183,7 @@ function Lists({ headers, boardId, status, isMine, taskStatus, setlistDnD, reOrd
             </Container>
 
             {
-                isMine && !showForm &&
+                permision !== "View" && !showForm &&
                 <p
                     className="list-add"
                     onClick={() => {

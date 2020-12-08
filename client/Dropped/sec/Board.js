@@ -1,106 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
+import { useDispatch } from 'react-redux'
+import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
+import { OtherUser, SearchUser } from '../User'
+import useDetailed from '../Customs/useDetailed'
 import { initDnDState, colDragStyle, getBg } from '../utils/general'
-import { addNewTask, delExistTask, newStatusBuilder, reGroupListHelp, reOrderListHelp, reOrderStatusHelp } from '../utils/dataManager'
-import decideUpdate from '../utils/decideUpdate'
-import io from 'socket.io-client'
-import LiveLists from './LiveLists'
+import { Loading } from '../Common'
+import Lists from './Lists'
 import axios from 'axios'
+import "../../CSS/board.css"
 
-let socket;
-
-function LiveBoard({ headers }) {
-    const history = useHistory()
-    const { room } = useParams()
-    const { state } = useLocation()
+function Board({ headers }) {
+    const { boardId } = useParams()
+    const dispatch = useDispatch()
     const createStatusRef = useRef(null)
-    const [detailed, setDetailed] = useState(state.board)
+    const { taskStatus, isMine, loading, detailed, Private, createNewStatus, reOrderStatus } = useDetailed(boardId, headers)
+    const [showMem, setshowMem] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [addU, setAddU] = useState(false)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
 
-    useEffect(() => {
-        socket = io("/")
-        socket.emit("enter-room", { room: detailed.room })
-
-        socket.on("update-board", (data) => {
-            setDetailed(prev => decideUpdate(prev, data))
-        })
-
-        return () => leave()
-    }, [])
-
-    const leave = () => {
-        socket.on('disconnect')
-        socket.off()
-        history.push('/')
-    }
-
-    const createNewStatus = (status) => {
-        let payload = {
-            boardId: detailed._id,
-            status
-        }
-
-        axios.put("/board/add-status", { ...payload }, { headers })
-            .then(() => {
-                setDetailed(prev => newStatusBuilder(prev, payload))
-                socket.emit("update-board", {
-                    room,
-                    payload: {
-                        status,
-                        action: "new-status"
-                    }
-                })
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
-    const addTitle = (payload) => {
-        setDetailed(prev => {
-            return {
-                ...prev,
-                tasks: addNewTask(prev.tasks, payload)
-            }
-        })
-        payload.action = "new-title"
-        socket.emit("update-board", {
-            room,
-            payload
-        })
-    }
-
-    const delTitle = (payload) => {
-        setDetailed(prev => {
-            return {
-                ...prev,
-                tasks: delExistTask(prev.tasks, payload)
-            }
-        })
-        payload.action = "del-title"
-        socket.emit("update-board", {
-            room,
-            payload
-        })
-    }
-
-    const reOrderStatus = (payload) => {
-        setDetailed(prev => reOrderStatusHelp(prev, payload))
-        axios.put("/board/reorder-status", { boardId: detailed._id, from: payload.dragFrom, to: payload.dragTo }, { headers })
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
     const reOrder = () => {
         let payload = {
-            boardId: detailed._id,
+            boardId,
             from: listDnD.dragFrom,
             to: listDnD.dragTo
         }
@@ -112,51 +37,33 @@ function LiveBoard({ headers }) {
             if (!sameCheck) {
                 if (payload.from.status === payload.to.status) {
                     axios.put("/board/reorder-task", {
-                        boardId: detailed._id,
+                        boardId,
                         taskId: payload.from.id,
                         status: payload.from.status,
                         to: payload.to.pos
                     }, { headers })
-                        .then(() => {
-                            setDetailed(prev => {
-                                return {
-                                    ...prev,
-                                    tasks: reOrderListHelp(prev.tasks, payload)
-                                }
-                            })
-                            payload.action = "reorder-list"
-                            socket.emit("update-board", {
-                                room,
-                                payload
-                            })
+                        .then((res) => {
+                            console.log(res)
                         })
                         .catch((err) => {
                             console.log(err)
                         })
+                    dispatch({ type: TASK_REORDER, payload })
                 } else {
                     axios.put("/board/restatus-task", {
-                        boardId: detailed._id,
+                        boardId,
                         taskId: payload.from.id,
                         fromStatus: payload.from.status,
                         toStatus: payload.to.status,
                         to: payload.to.pos
                     }, { headers })
-                        .then(() => {
-                            setDetailed(prev => {
-                                return {
-                                    ...prev,
-                                    tasks: reGroupListHelp(prev.tasks, payload)
-                                }
-                            })
-                            payload.action = "restatus-list"
-                            socket.emit("update-board", {
-                                room,
-                                payload
-                            })
+                        .then((res) => {
+                            console.log(res)
                         })
                         .catch((err) => {
                             console.log(err)
                         })
+                    dispatch({ type: TASK_REGROUP, payload })
                 }
             }
         }
@@ -164,24 +71,27 @@ function LiveBoard({ headers }) {
     }
 
     const onColumnDrop = (e) => {
+        // console.log("drag drop col", e)
         const { removedIndex, addedIndex } = e
         if (removedIndex !== null && addedIndex !== null && removedIndex !== addedIndex) {
             let payload = {
-                boardId: detailed._id,
+                boardId,
                 dragFrom: removedIndex,
                 dragTo: addedIndex
             }
             reOrderStatus(payload)
-            payload.action = "reorder-status"
-            socket.emit("update-board", {
-                room,
-                payload
-            })
         }
         setlistDnD({ ...initDnDState })
     }
 
-    const doNothing = e => { return }
+    const doNothing = e => {
+        return
+        // onDragEnter and onDragLeave doesn't have any parameter
+        // if (e) {
+        //     console.log("put the property name")
+        //     console.log(e)
+        // }
+    }
 
     const addStatus = () => {
         createNewStatus(newStatus)
@@ -189,12 +99,45 @@ function LiveBoard({ headers }) {
         createStatusRef.current.focus()
     }
 
-    return (
+    return !loading ? (
         <div className="board" style={getBg(detailed.bg)}>
             <div className="board-head">
                 <div className="bh-top"> {detailed.boardName} </div>
                 <div className="bh-top"> {detailed.catagery} </div>
-                <div className="bh-top" onClick={leave}>Leave room</div>
+                {
+                    isMine &&
+                    <>
+                        <div className="bh-top" onClick={Private}> {detailed.isPublic ? "Make private" : "Make public"} </div>
+                        <div className="board-users bh-top">
+                            <div onClick={() => setOpen(prev => !prev)}>other users</div>
+                            <div>
+                                {
+                                    open &&
+                                    <div className="board-useroption">
+                                        <div>
+                                            <p onClick={() => { setshowMem(prev => !prev); setAddU(false) }}>members</p>
+                                            {
+                                                showMem &&
+                                                <div>
+                                                    <OtherUser headers={headers} boardId={boardId} />
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <p onClick={() => { setAddU(prev => !prev); setshowMem(false) }}>add users</p>
+                                            {
+                                                addU &&
+                                                <div>
+                                                    <SearchUser headers={headers} boardId={boardId} />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </>
+                }
             </div>
 
             <Container
@@ -217,20 +160,18 @@ function LiveBoard({ headers }) {
                 }}
             >
                 {
-                    detailed.taskStatus?.map(status => {
+                    taskStatus.map(status => {
                         return (
                             <Draggable key={status} className="status-holder">
                                 <p className="status-title"><strong className="column-drag-handle">{status}</strong></p>
-                                <LiveLists
+                                <Lists
                                     status={status}
                                     headers={headers}
-                                    boardId={detailed._id}
-                                    list={detailed.tasks.filter(t => t.status === status)[0].tasks}
-                                    taskStatus={detailed.taskStatus}
+                                    boardId={boardId}
+                                    isMine={isMine}
+                                    taskStatus={taskStatus}
                                     setlistDnD={setlistDnD}
                                     reOrder={reOrder}
-                                    addTitle={addTitle}
-                                    delTitle={delTitle}
                                 />
                             </Draggable>
                         )
@@ -272,6 +213,7 @@ function LiveBoard({ headers }) {
             </Container>
         </div>
     )
+        : (<Loading />)
 }
 
-export default LiveBoard
+export default Board

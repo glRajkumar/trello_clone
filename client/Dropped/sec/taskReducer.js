@@ -1,29 +1,26 @@
 import {
-    SDET_INIT,
-    SDET_GET,
-    SNEWSTATUS,
-    STASK_RELIST,
-    STASK_REORDER,
-    STASK_REGROUP,
-    STASK_ADD,
-    STASK_EDIT,
-    STASK_EDIT_WSTATUS,
-    STASK_DELETE
+    DET_INIT, DET_GET, DET_EDIT, NEWSTATUS,
+    TASK_RELIST, TASK_REORDER, TASK_REGROUP, TASK_ADD,
+    TASK_EDIT, TASK_EDIT_WSTATUS, TASK_DELETE, DET_DELETE
 } from '../actionTypes'
+import {
+    newStatusBuilder, addNewTask, taskEditer,
+    taskEditerWithStatus, delExistTask, reOrderStatusHelp,
+    reOrderListHelp, reGroupListHelp
+} from '../../Components/utils/dataManager'
 
 const initState = {
     detailed: []
 }
 
-
-const staskReducer = (state = initState, { type, payload }) => {
+const taskReducer = (state = initState, { type, payload }) => {
     switch (type) {
-        case SDET_INIT:
+        case DET_INIT:
             return {
                 ...initState
             }
 
-        case SDET_GET:
+        case DET_GET:
             return {
                 detailed: [
                     ...state.detailed,
@@ -31,10 +28,25 @@ const staskReducer = (state = initState, { type, payload }) => {
                 ]
             }
 
-        case SNEWSTATUS:
+        case DET_EDIT:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        return {
+                            ...board,
+                            ...payload.info
+                        }
+                    } else {
+                        return board
+                    }
+                })
+            }
+
+        case NEWSTATUS:
+            return {
+                detailed: state.detailed.map(board => {
+                    if (board._id === payload.boardId) {
+                        console.log(newStatusBuilder(board, payload))
                         return {
                             ...board,
                             taskStatus: [
@@ -55,10 +67,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_ADD:
+        case TASK_ADD:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(addNewTask(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -81,10 +94,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_EDIT:
+        case TASK_EDIT:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(taskEditer(board.tasks, payload))
                         let { taskId, boardId, status, ...changes } = payload
                         return {
                             ...board,
@@ -114,10 +128,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_EDIT_WSTATUS:
+        case TASK_EDIT_WSTATUS:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(taskEditerWithStatus(board.tasks, payload))
                         let current = board.tasks.filter(t => t.status === payload.fromStatus)[0].tasks.filter(t => t._id === payload.taskId)[0]
                         let { taskId, boardId, fromStatus, toStatus, ...changes } = payload
                         return {
@@ -150,10 +165,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_DELETE:
+        case TASK_DELETE:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(delExistTask(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -173,10 +189,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_RELIST:
+        case TASK_RELIST:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(reOrderStatusHelp(board, payload))
                         return {
                             ...board,
                             taskStatus: payload.newTaskStatus,
@@ -188,10 +205,11 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_REORDER:
+        case TASK_REORDER:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
+                        console.log(reOrderListHelp(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -203,6 +221,7 @@ const staskReducer = (state = initState, { type, payload }) => {
                                         current,
                                         ...remaings.slice(payload.to.pos)
                                     ]
+                                    console.log("newList", newList)
                                     return {
                                         ...task,
                                         tasks: newList
@@ -218,12 +237,13 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
-        case STASK_REGROUP:
+        case TASK_REGROUP:
             return {
                 detailed: state.detailed.map(board => {
                     if (board._id === payload.boardId) {
                         let current = board.tasks.filter(t => t.status === payload.from.status)[0].tasks.filter((task, i) => i === payload.from.pos)[0]
                         current.status = payload.to.status
+                        console.log(reGroupListHelp(board.tasks, payload))
                         return {
                             ...board,
                             tasks: board.tasks.map(task => {
@@ -254,8 +274,13 @@ const staskReducer = (state = initState, { type, payload }) => {
                 })
             }
 
+        case DET_DELETE:
+            return {
+                detailed: state.detailed.filter(board => board._id !== payload)
+            }
+
         default: return state
     }
 }
 
-export default staskReducer
+export default taskReducer
