@@ -241,8 +241,6 @@ function Board({ headers }) {
                         list={task}
                         headers={headers}
                         taggleTask={taggleTask}
-                        isMine={isMine}
-                        permision={permision}
                     />
                 </div>
             }
