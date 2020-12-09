@@ -12,8 +12,8 @@ export function HomeIcon(props) {
 export function PlusIcon(props) {
     return (
         <svg viewBox="0 0 100 100" className="svg_ic" {...props}>
-            <line x1="32.5" y1="50" x2="67.5" y2="50" />
-            <line x1="50" y1="32.5" x2="50" y2="67.5" />
+            <line x1="1" y1="50" x2="99" y2="50" />
+            <line x1="50" y1="1" x2="50" y2="99" />
         </svg>
     )
 }

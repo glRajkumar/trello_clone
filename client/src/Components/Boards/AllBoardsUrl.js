@@ -12,7 +12,7 @@ function AllBoardsUrl({ headers, click }) {
         history.push('/')
         click()
         setTimeout(() => {
-            history.push(`/board/${id}`)
+            history.push(`/board/${id}`, { isMine: true })
         }, 0)
     }
 

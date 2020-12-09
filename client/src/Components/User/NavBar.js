@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_LOGOUT, BOARD_INIT, SBOARD_INIT, DET_INIT } from '../../Store/actionTypes'
 import { Link, useHistory } from 'react-router-dom'
-import { HomeIcon, Trello } from '../Common/Icons'
-import "../../CSS/nav.css"
+import { HomeIcon, PlusIcon, Trello } from '../Common/Icons'
 import AllBoardsUrl from '../Boards/AllBoardsUrl'
+import "../../CSS/nav.css"
 
 function NavBar() {
     const [listOpen, setListOpen] = useState(false)
@@ -76,7 +76,7 @@ function NavBar() {
                         <div id="fl">
                             <div id="plus">
                                 <Link to="/create-board">
-                                    +
+                                    <PlusIcon />
                                 </Link>
                             </div>
                             <div className="username" onClick={() => setOpen(prev => !prev)}>

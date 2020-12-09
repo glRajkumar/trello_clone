@@ -1,14 +1,12 @@
 import React, { useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import axios from 'axios'
 import { DeleteIcon } from '../Common/Icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { TASK_ADD, TASK_DELETE } from '../../Store/actionTypes'
 
-function Lists({ headers, boardId, status, isMine, permision, taskStatus, setlistDnD, reOrder }) {
+function Lists({ headers, boardId, status, isMine, permision, taskStatus, setlistDnD, reOrder, taggleTask }) {
     const dispatch = useDispatch()
-    const history = useHistory()
     const newTitleRef = useRef(null)
     const { detailed } = useSelector(state => state.task)
     const tasks = detailed.filter(d => d._id === boardId)[0]?.tasks.filter(task => task.status === status)[0]?.tasks
@@ -133,7 +131,7 @@ function Lists({ headers, boardId, status, isMine, permision, taskStatus, setlis
             permision,
             taskStatus
         }
-        history.push(`/taskdetails/${list._id}`, { forwordState })
+        taggleTask(forwordState)
     }
 
     return (

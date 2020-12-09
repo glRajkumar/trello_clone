@@ -3,9 +3,10 @@ import { useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { useDispatch } from 'react-redux'
 import { TASK_REORDER, TASK_REGROUP } from '../../Store/actionTypes'
-import { OtherUser, SearchUser } from '../User'
-import useDetailed from '../Customs/useDetailed'
 import { initDnDState, colDragStyle, getBg } from '../utils/general'
+import useDetailed from '../Customs/useDetailed'
+import { OtherUser, SearchUser } from '../User'
+import TaskDetailed from './TaskDetailed'
 import { Loading } from '../Common'
 import Lists from './Lists'
 import axios from 'axios'
@@ -27,6 +28,8 @@ function Board({ headers }) {
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
+    const [showDetails, setShowDetails] = useState(false)
+    const [task, setTask] = useState({})
 
     const reOrder = () => {
         let payload = {
@@ -102,6 +105,11 @@ function Board({ headers }) {
         createNewStatus(newStatus)
         setStatus("")
         createStatusRef.current.focus()
+    }
+
+    const taggleTask = (payload = {}) => {
+        setTask(payload)
+        setShowDetails(prev => !prev)
     }
 
     return !loading ? (
@@ -182,6 +190,7 @@ function Board({ headers }) {
                                     taskStatus={taskStatus}
                                     setlistDnD={setlistDnD}
                                     reOrder={reOrder}
+                                    taggleTask={taggleTask}
                                 />
                             </Draggable>
                         )
@@ -224,6 +233,17 @@ function Board({ headers }) {
                     </div>
                 }
             </Container>
+
+            {
+                showDetails &&
+                <div className="task-holder">
+                    <TaskDetailed
+                        list={task}
+                        headers={headers}
+                        taggleTask={taggleTask}
+                    />
+                </div>
+            }
         </div>
     )
         : (<Loading />)

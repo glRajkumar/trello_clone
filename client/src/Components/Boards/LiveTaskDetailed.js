@@ -1,17 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
-import { useDispatch } from "react-redux"
-import { TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
-import Axios from 'axios'
+import { PlusIcon } from "../Common/Icons"
+import axios from 'axios'
 
-function Detailed({ headers }) {
+function LiveTaskDetailed({ list, headers, taggleTask, editTask }) {
     const textAreaRef = useRef(null)
-    const history = useHistory()
-    const { taskId } = useParams()
-    const { state } = useLocation()
-    const dispatch = useDispatch()
-    const [details, setDetails] = useState(state.forwordState)
-    const [original] = useState(state.forwordState)
+    const [details, setDetails] = useState(list)
+    const [original] = useState(list)
 
     const autoResize = (e) => {
         setDetails(prev => {
@@ -26,7 +20,7 @@ function Detailed({ headers }) {
 
     const Submit = () => {
         const payload = {
-            taskId
+            taskId: original._id
         }
         if (original.title !== details.title) {
             payload.title = details.title
@@ -39,25 +33,34 @@ function Detailed({ headers }) {
             payload.toStatus = details.status
         }
 
-        Axios.put('/task', { ...payload }, { headers })
+        axios.put('/task', { ...payload }, { headers })
             .then(() => {
                 payload.boardId = original.boardId
-                if (payload.toStatus) {
-                    dispatch({ type: TASK_EDIT_WSTATUS, payload })
-                } else {
-                    payload.status = original.status
-                    dispatch({ type: TASK_EDIT, payload })
-                }
-
-                history.goBack()
+                editTask(payload, original.status)
+                // if (payload.toStatus) {
+                // editTask(payload)
+                // } else {
+                //     payload.status = original.status
+                //     editTask(payload)
+                // }
             })
             .catch((err) => {
                 console.log(err)
             })
     }
 
+    const plusStyle = {
+        width: "24px",
+        height: "24px",
+        transform: "rotate(45deg)",
+        float: "right"
+    }
+
     return (
-        <div className="form-box">
+        <div className="form-box detailed">
+            <p onClick={() => taggleTask()}>
+                <PlusIcon style={plusStyle} />
+            </p>
             <input
                 className="input-box"
                 type="text"
@@ -99,13 +102,10 @@ function Detailed({ headers }) {
                 }
             </select>
 
-            {
-                (details.isMine || details.permision !== "View") &&
-                <button onClick={Submit}>Save</button>
-            }
+            <button onClick={Submit}>Save</button>
 
         </div>
     )
 }
 
-export default Detailed
+export default LiveTaskDetailed

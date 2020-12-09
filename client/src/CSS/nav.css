@@ -65,18 +65,17 @@
 }
 
 #plus{
-    padding: 1px .3rem;
-    font-size: 20px;
-    margin-right: .5rem;
-    border: 1px solid rgba(0, 0,0, 0.1);
-    border-radius: 5px;
+    padding: .2rem;
     line-height: 1;
     cursor: pointer;
+    border-radius: 5px;
+    margin-right: .5rem;
+    border: 1px solid rgba(0, 0,0, 0.1);
     background-color: rgba(255, 255,255, 0.1);
 }
 
-#plus a{
-    color: #fff;
+#plus a svg{
+    stroke: rgba(255,255,255,.8);
 }
 
 #plus:hover{

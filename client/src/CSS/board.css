@@ -1,11 +1,12 @@
 .board{
     padding: 1rem;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 2.8rem - 1px);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-color: rgba(0, 0, 0, .1);
+    position: relative;
 }
 
 .board-head{
@@ -37,6 +38,19 @@
     background-color: #ebecf0;
     padding: .5rem;
     padding-bottom: 0;
+}
+
+.task-holder{
+    position: absolute;
+    background-color: rgba(0,0, 0, 0.5);
+    height: calc(100vh - 2.8rem - 1px);
+    width: calc(100vw + .5rem);
+    left: -.5rem;
+    top: 0;
+}
+
+.detailed{
+    background-color: #ebecf0;
 }
 
 .lists{

@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
-import { initDnDState, colDragStyle, getBg } from '../utils/general'
-import { addNewTask, delExistTask, newStatusBuilder, reGroupListHelp, reOrderListHelp, reOrderStatusHelp } from '../utils/dataManager'
-import decideUpdate from '../utils/decideUpdate'
 import io from 'socket.io-client'
+import { initDnDState, colDragStyle, getBg } from '../utils/general'
+import {
+    addNewTask, delExistTask, newStatusBuilder,
+    reGroupListHelp, reOrderListHelp, reOrderStatusHelp,
+    taskEditer, taskEditerWithStatus
+} from '../utils/dataManager'
+import decideUpdate from '../utils/decideUpdate'
+import LiveTaskDetailed from './LiveTaskDetailed'
 import LiveLists from './LiveLists'
 import axios from 'axios'
 
@@ -19,6 +24,8 @@ function LiveBoard({ headers }) {
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
+    const [showDetails, setShowDetails] = useState(false)
+    const [task, setTask] = useState({})
 
     useEffect(() => {
         socket = io("/")
@@ -37,6 +44,10 @@ function LiveBoard({ headers }) {
         history.push('/')
     }
 
+    const updateOthersBoard = (payload) => {
+        socket.emit("update-board", { room, payload })
+    }
+
     const createNewStatus = (status) => {
         let payload = {
             boardId: detailed._id,
@@ -46,13 +57,8 @@ function LiveBoard({ headers }) {
         axios.put("/board/add-status", { ...payload }, { headers })
             .then(() => {
                 setDetailed(prev => newStatusBuilder(prev, payload))
-                socket.emit("update-board", {
-                    room,
-                    payload: {
-                        status,
-                        action: "new-status"
-                    }
-                })
+                payload.action = "new-status"
+                updateOthersBoard(payload)
             })
             .catch((err) => {
                 console.log(err)
@@ -67,10 +73,7 @@ function LiveBoard({ headers }) {
             }
         })
         payload.action = "new-title"
-        socket.emit("update-board", {
-            room,
-            payload
-        })
+        updateOthersBoard(payload)
     }
 
     const delTitle = (payload) => {
@@ -81,10 +84,7 @@ function LiveBoard({ headers }) {
             }
         })
         payload.action = "del-title"
-        socket.emit("update-board", {
-            room,
-            payload
-        })
+        updateOthersBoard(payload)
     }
 
     const reOrderStatus = (payload) => {
@@ -125,10 +125,7 @@ function LiveBoard({ headers }) {
                                 }
                             })
                             payload.action = "reorder-list"
-                            socket.emit("update-board", {
-                                room,
-                                payload
-                            })
+                            updateOthersBoard(payload)
                         })
                         .catch((err) => {
                             console.log(err)
@@ -149,10 +146,7 @@ function LiveBoard({ headers }) {
                                 }
                             })
                             payload.action = "restatus-list"
-                            socket.emit("update-board", {
-                                room,
-                                payload
-                            })
+                            updateOthersBoard(payload)
                         })
                         .catch((err) => {
                             console.log(err)
@@ -173,10 +167,7 @@ function LiveBoard({ headers }) {
             }
             reOrderStatus(payload)
             payload.action = "reorder-status"
-            socket.emit("update-board", {
-                room,
-                payload
-            })
+            updateOthersBoard(payload)
         }
         setlistDnD({ ...initDnDState })
     }
@@ -187,6 +178,35 @@ function LiveBoard({ headers }) {
         createNewStatus(newStatus)
         setStatus("")
         createStatusRef.current.focus()
+    }
+
+    const taggleTask = (payload = {}) => {
+        setTask(payload)
+        setShowDetails(prev => !prev)
+    }
+
+    const editTask = (payload, originalStatus) => {
+        if (payload.toStatus) {
+            setDetailed(prev => {
+                return {
+                    ...prev,
+                    tasks: taskEditerWithStatus(prev.tasks, payload)
+                }
+            })
+            payload.action = "task-edit-withstatus"
+            updateOthersBoard(payload)
+        } else {
+            payload.status = originalStatus
+            setDetailed(prev => {
+                return {
+                    ...prev,
+                    tasks: taskEditer(prev.tasks, payload)
+                }
+            })
+            payload.action = "task-edit"
+            updateOthersBoard(payload)
+        }
+        taggleTask()
     }
 
     return (
@@ -231,6 +251,7 @@ function LiveBoard({ headers }) {
                                     reOrder={reOrder}
                                     addTitle={addTitle}
                                     delTitle={delTitle}
+                                    taggleTask={taggleTask}
                                 />
                             </Draggable>
                         )
@@ -270,6 +291,18 @@ function LiveBoard({ headers }) {
                     }
                 </div>
             </Container>
+
+            {
+                showDetails &&
+                <div className="task-holder">
+                    <LiveTaskDetailed
+                        list={task}
+                        headers={headers}
+                        editTask={editTask}
+                        taggleTask={taggleTask}
+                    />
+                </div>
+            }
         </div>
     )
 }

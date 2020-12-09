@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { DeleteIcon } from '../Common/Icons'
 import axios from 'axios'
 
-function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reOrder, addTitle, delTitle }) {
-    const history = useHistory()
+function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reOrder, addTitle, delTitle, taggleTask }) {
     const newTitleRef = useRef(null)
     const [showForm, setShow] = useState(false)
     const [tasks, setTasks] = useState(list)
@@ -122,7 +120,7 @@ function LiveLists({ headers, boardId, status, taskStatus, list, setlistDnD, reO
             status,
             taskStatus
         }
-        history.push(`/task/${list._id}`, { forwordState })
+        taggleTask(forwordState)
     }
 
     return (
