@@ -72,6 +72,11 @@ const boardSchema = new mongoose.Schema({
             type: String,
             default: "#fff"
         }
+    },
+
+    activitiId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity"
     }
 
 }, { timestamps: true })

@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmNlZmMwYmEyMGFjYzJiZDQ2NTZjMjQiLCJpYXQiOjE2MDc0MDA0NjEsImV4cCI6MTYwNzQ2NTI2MX0.bfjOUFF8MfS99MVlbi6DaHrsA-qY2gFHqPwUPUtrjTY
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2MTI0NTAsImV4cCI6MTYwNzY3NzI1MH0.zsA2l5eYIwGFXawjlitkIC4rtoZSOlNSym-FGel0tE4
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fcefdc3a20acc2bd4656c25
+GET {{host}}/board/5fd24f25ebdb0d055008e11e
 Authorization: {{token}}
 
 ### get members by id
@@ -19,7 +19,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "fff", 
+    "boardName" : "hyk", 
     "catagery" : "Education",
     "bg": {
         "isColour" : "true",
@@ -43,8 +43,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fbcf3f378cea02890c51004", 
-    "status" : "Doing"
+    "boardId" : "5fd24f25ebdb0d055008e11e", 
+    "status" : "wwuyj"
 }
 
 ### delete the status
@@ -75,10 +75,10 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fbcd738a4ebe51774835d50", 
-    "fromStatus" : "To-do",
-    "toStatus" : "Done",
-    "taskId" : "5fbcdb4195937d27e08afc0d",
+    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
+    "fromStatus" : "Done",
+    "toStatus" : "Doing",
+    "taskId" : "5fd2463999d2ce2e443618ca",
     "to" : 0
 }
 
@@ -99,8 +99,9 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fcefdc3a20acc2bd4656c25", 
+    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
     "memId" : "5fc9b6616c2d364d00551e7b",
+    "memName":"Def",
     "permision": "Admin"
 }
 
@@ -110,8 +111,9 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fab59917b56184058ac519e", 
-    "_id" : "5fab59f57b56184058ac519f"   
+    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
+    "memName":"Def",
+    "_id" : "5fc9b6616c2d364d00551e7b"
 }
 
 ### delete the board

@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5ZTNkYzk1ZWUzNjQxZDRkNjRlNGEiLCJpYXQiOjE2MDczMTQ1ODUsImV4cCI6MTYwNzM3OTM4NX0.BDwA6NMJXck-yWqgf-siPb1gvSQUWX7WIpR3dQn2jEo
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2MTI0NTAsImV4cCI6MTYwNzY3NzI1MH0.zsA2l5eYIwGFXawjlitkIC4rtoZSOlNSym-FGel0tE4
 
 ### get a task
 GET {{host}}/task
@@ -7,7 +7,7 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId" : "5fc1f217ec9c885d984ab15b"
+    "taskId" : "5fd255e5c70c392fa05c24b0"
 }
 
 ### create a task
@@ -16,9 +16,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "xxd vgrf bbgv bbb",
-    "status": "To-do",
-    "boardId" : "5fc1fd71ed95933e0c9f67af"
+    "title": "xxd",
+    "status": "Doing",
+    "boardId" : "5fd255bdc70c392fa05c24ab"
 }
 
 ### update task 
@@ -28,11 +28,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId": "5fc1f40e1e617c558021e546",
-    "body": "xbhgvvx",
-    "title": "wmkns",
-    "fromStatus":"Done", 
-    "toStatus": "To-do"
+    "taskId": "5fd255e5c70c392fa05c24b0",
+    "fromStatus":"Doing", 
+    "toStatus": "Done"
 }
 
 ### delete the tasks

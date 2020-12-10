@@ -20,12 +20,14 @@ const boardControllers = require('./controllers/board')
 const sharedControllers = require('./controllers/shared')
 const taskControllers = require('./controllers/task')
 const roomControllers = require('./controllers/room')
+const activityControllers = require('./controllers/activity')
 
 app.use("/user", userControllers)
 app.use("/board", boardControllers)
 app.use("/shared", sharedControllers)
 app.use("/task", taskControllers)
 app.use("/room", roomControllers)
+app.use("/activity", activityControllers)
 
 // Serve static assets if in production
 app.use('/static', express.static(path.resolve(__dirname, 'imgs')))

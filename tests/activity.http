@@ -1,0 +1,25 @@
+@host = http://localhost:5000
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmM5YjY2MTZjMmQzNjRkMDA1NTFlN2IiLCJpYXQiOjE2MDc1OTgwOTUsImV4cCI6MTYwNzY2Mjg5NX0.Volf-2KecCLs7TXkJbkYoyCaTpwXg1mVd9sXtLCaKg0
+
+### get activity 
+GET {{host}}/activity/5fd200731a842604d0b8d2a9
+Authorization: {{token}}
+
+### create 
+POST {{host}}/activity
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "boardId":"5fc9c5585d4ec966d4bdf6d4"
+}
+
+### create action
+POST {{host}}/activity/act
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "activityId":"5fd200731a842604d0b8d2a9",
+    "description":"tgggg"
+}

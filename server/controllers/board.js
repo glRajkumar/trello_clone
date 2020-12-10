@@ -1,6 +1,7 @@
 const express = require('express')
 const auth = require('../middlewares/auth')
 const Board = require('../models/Board')
+const { activityCreator, actionCreator, taskTitle } = require("../utils/activityHelper")
 
 const router = express.Router()
 
@@ -83,7 +84,8 @@ router.post("/", auth, async (req, res) => {
         const board = new Board({ ...payload, postedBy: userId })
         await board.save()
 
-        res.json({ id: board._id, msg: "Board saved successfully" })
+        const activityId = await activityCreator(board._id, res)
+        res.json({ id: board._id, activityId })
 
     } catch (error) {
         res.status(400).json({ error, msg: "Board creation failed" })
@@ -113,6 +115,8 @@ router.put("/add-status", auth, async (req, res) => {
         await Board.findByIdAndUpdate(boardId, {
             $push: { tasks, taskStatus: status }
         })
+
+        await actionCreator(req.user._id, boardId, `added new status named ${status}`, res)
         res.json({ msg: "new status added successfully" })
 
     } catch (error) {
@@ -127,6 +131,8 @@ router.put("/del-status", auth, async (req, res) => {
         await Board.findByIdAndUpdate(boardId, {
             $pull: { taskStatus: status, tasks: { status } }
         })
+
+        await actionCreator(req.user._id, boardId, `deleted status named ${status}`, res)
         res.json({ msg: "status deleted successfully" })
 
     } catch (error) {
@@ -169,6 +175,9 @@ router.put("/restatus-task", auth, async (req, res) => {
             $push: { "tasks.$.orderedList": { $each: [taskId], $position: to } }
         })
 
+        const title = await taskTitle(taskId, res)
+        await actionCreator(req.user._id, boardId, `task named ${title} moved from ${fromStatus} to ${toStatus}`, res)
+
         res.json({ msg: "tasks restatused successfully" })
 
     } catch (error) {
@@ -209,7 +218,7 @@ router.put("/reorder-status", auth, async (req, res) => {
 })
 
 router.put("/addmember", auth, async (req, res) => {
-    const { boardId, memId, permision } = req.body
+    const { boardId, memId, memName, permision } = req.body
     const payload = {
         user: memId
     }
@@ -220,6 +229,8 @@ router.put("/addmember", auth, async (req, res) => {
         await Board.findByIdAndUpdate(boardId, {
             $push: { members: { ...payload } }
         })
+
+        await actionCreator(req.user._id, boardId, `added new member (${memName}) to the board`, res)
         res.json({ msg: "Added member to the board successfully" })
 
     } catch (error) {
@@ -228,12 +239,14 @@ router.put("/addmember", auth, async (req, res) => {
 })
 
 router.put("/removememb", auth, async (req, res) => {
-    const { boardId, _id } = req.body
+    const { boardId, _id, memName } = req.body
 
     try {
         await Board.findByIdAndUpdate(boardId, {
             $pull: { members: { _id } }
         })
+
+        await actionCreator(req.user._id, boardId, `removed user (${memName}) from the board`, res)
         res.json({ msg: "Removed member from the board successfully" })
 
     } catch (error) {
