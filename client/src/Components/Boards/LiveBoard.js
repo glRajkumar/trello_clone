@@ -9,7 +9,7 @@ import {
     taskEditer, taskEditerWithStatus
 } from '../utils/dataManager'
 import decideUpdate from '../utils/decideUpdate'
-import LiveTaskDetailed from './LiveTaskDetailed'
+import TaskBody from '../SharedComp/TaskBody'
 import LiveLists from './LiveLists'
 import axios from 'axios'
 
@@ -295,11 +295,12 @@ function LiveBoard({ headers }) {
             {
                 showDetails &&
                 <div className="task-holder">
-                    <LiveTaskDetailed
+                    <TaskBody
                         list={task}
                         headers={headers}
-                        editTask={editTask}
                         taggleTask={taggleTask}
+                        canSubmit={true}
+                        editTask={editTask}
                     />
                 </div>
             }

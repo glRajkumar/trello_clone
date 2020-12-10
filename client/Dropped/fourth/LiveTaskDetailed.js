@@ -1,4 +1,24 @@
 import React from 'react'
+import TaskBody from '../SharedComp/TaskBody'
+
+function LiveTaskDetailed({ list, headers, taggleTask, editTask }) {
+    return (
+        <TaskBody
+            list={list}
+            headers={headers}
+            taggleTask={taggleTask}
+            canSubmit={true}
+            editTask={editTask}
+        />
+    )
+}
+
+export default LiveTaskDetailed
+
+
+
+/// first
+import React from 'react'
 import axios from 'axios'
 import TaskBody from '../SharedComp/TaskBody'
 

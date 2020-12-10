@@ -2,6 +2,41 @@ import React from 'react'
 import { useDispatch } from "react-redux"
 import { TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
 import TaskBody from '../SharedComp/TaskBody'
+
+function TaskDetailed({ list, headers, taggleTask, isMine, permision }) {
+    const dispatch = useDispatch()
+
+    const editTask = (payload, originalStatus) => {
+        if (payload.toStatus) {
+            dispatch({ type: TASK_EDIT_WSTATUS, payload })
+        } else {
+            payload.status = originalStatus
+            dispatch({ type: TASK_EDIT, payload })
+        }
+        taggleTask()
+    }
+
+    return (
+        <TaskBody
+            list={list}
+            headers={headers}
+            taggleTask={taggleTask}
+            canSubmit={isMine || permision !== "View"}
+            editTask={editTask}
+        />
+    )
+}
+
+export default TaskDetailed
+
+
+
+
+/// first
+import React from 'react'
+import { useDispatch } from "react-redux"
+import { TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
+import TaskBody from '../SharedComp/TaskBody'
 import axios from 'axios'
 
 function TaskDetailed({ list, headers, taggleTask, isMine, permision }) {

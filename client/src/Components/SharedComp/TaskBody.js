@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { PlusIcon } from "../Common/Icons"
+import axios from 'axios'
 
-function TaskBody({ list, taggleTask, canSubmit, Submit }) {
+function TaskBody({ list, taggleTask, headers, canSubmit, editTask }) {
     const textAreaRef = useRef(null)
     const [details, setDetails] = useState(list)
     const [original] = useState(list)
@@ -22,6 +23,31 @@ function TaskBody({ list, taggleTask, canSubmit, Submit }) {
         height: "24px",
         transform: "rotate(45deg)",
         float: "right"
+    }
+
+    const Submit = () => {
+        const payload = {
+            taskId: original._id
+        }
+        if (original.title !== details.title) {
+            payload.title = details.title
+        }
+        if (original.body !== details.body) {
+            payload.body = details.body
+        }
+        if (original.status !== details.status) {
+            payload.fromStatus = original.status
+            payload.toStatus = details.status
+        }
+
+        axios.put('/task', { ...payload }, { headers })
+            .then(() => {
+                payload.boardId = original.boardId
+                editTask(payload, original.status)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     return (
@@ -72,7 +98,7 @@ function TaskBody({ list, taggleTask, canSubmit, Submit }) {
 
             {
                 canSubmit &&
-                <button onClick={() => Submit(original, details)}>Save</button>
+                <button onClick={Submit}>Save</button>
             }
 
         </div>

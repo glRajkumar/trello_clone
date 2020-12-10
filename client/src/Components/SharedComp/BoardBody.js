@@ -1,30 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
 import { Container, Draggable } from 'react-smooth-dnd'
-import { useDispatch } from 'react-redux'
-import { TASK_REORDER, TASK_REGROUP, TASK_EDIT, TASK_EDIT_WSTATUS } from '../../Store/actionTypes'
 import { initDnDState, colDragStyle, getBg } from '../utils/general'
-import useDetailed from '../Customs/useDetailed'
-import { OtherUser, SearchUser } from '../User'
-import TaskBody from '../SharedComp/TaskBody'
-import { Loading } from '../Common'
-import Lists from './Lists'
-import axios from 'axios'
+import TaskBody from './SharedComp/TaskBody'
 import "../../CSS/board.css"
 
-function Board({ headers }) {
-    const { boardId } = useParams()
-    const { state } = useLocation()
-    const dispatch = useDispatch()
+function BoardBody({ isMine, children }) {
     const createStatusRef = useRef(null)
-    const {
-        loading, detailed,
-        taskStatus, isMine, permision,
-        Private, createNewStatus, reOrderStatus
-    } = useDetailed(boardId, headers, state.isMine)
-    const [showMem, setshowMem] = useState(false)
-    const [open, setOpen] = useState(false)
-    const [addU, setAddU] = useState(false)
     const [create, setCreate] = useState(false)
     const [newStatus, setStatus] = useState("")
     const [listDnD, setlistDnD] = useState(initDnDState)
@@ -112,54 +93,14 @@ function Board({ headers }) {
         setShowDetails(prev => !prev)
     }
 
-    const editTask = (payload, originalStatus) => {
-        if (payload.toStatus) {
-            dispatch({ type: TASK_EDIT_WSTATUS, payload })
-        } else {
-            payload.status = originalStatus
-            dispatch({ type: TASK_EDIT, payload })
-        }
-        taggleTask()
-    }
-
-    return !loading ? (
+    return (
         <div className="board" style={getBg(detailed.bg)}>
             <div className="board-head">
                 <div className="bh-top"> {detailed.boardName} </div>
                 <div className="bh-top"> {detailed.catagery} </div>
                 {
                     isMine &&
-                    <>
-                        <div className="bh-top" onClick={Private}> {detailed.isPublic ? "Make private" : "Make public"} </div>
-                        <div className="board-users bh-top">
-                            <div onClick={() => setOpen(prev => !prev)}>other users</div>
-                            <div>
-                                {
-                                    open &&
-                                    <div className="board-useroption">
-                                        <div>
-                                            <p onClick={() => { setshowMem(prev => !prev); setAddU(false) }}>members</p>
-                                            {
-                                                showMem &&
-                                                <div>
-                                                    <OtherUser headers={headers} boardId={boardId} />
-                                                </div>
-                                            }
-                                        </div>
-                                        <div>
-                                            <p onClick={() => { setAddU(prev => !prev); setshowMem(false) }}>add users</p>
-                                            {
-                                                addU &&
-                                                <div>
-                                                    <SearchUser headers={headers} boardId={boardId} />
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </>
+                    children
                 }
             </div>
 
@@ -251,14 +192,13 @@ function Board({ headers }) {
                         list={task}
                         headers={headers}
                         taggleTask={taggleTask}
-                        canSubmit={isMine || permision !== "View"}
+                        canSubmit={true}
                         editTask={editTask}
                     />
                 </div>
             }
         </div>
     )
-        : (<Loading />)
 }
 
-export default Board
+export default BoardBody
