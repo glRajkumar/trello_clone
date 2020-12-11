@@ -1,5 +1,5 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2MTI0NTAsImV4cCI6MTYwNzY3NzI1MH0.zsA2l5eYIwGFXawjlitkIC4rtoZSOlNSym-FGel0tE4
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2NjQ0NzEsImV4cCI6MTYwNzcyOTI3MX0.RcD1qjb85P5ZmywYPplCBDyU-lRKtoZcqJADxk8lWkc
 
 ### get a task
 GET {{host}}/task
@@ -7,7 +7,7 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "taskId" : "5fd255e5c70c392fa05c24b0"
+    "taskId" : "5fd31c2a591f2e10205b0489"
 }
 
 ### create a task
@@ -16,9 +16,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "title": "xxd",
+    "title": "nn bhgvb nn nj",
     "status": "Doing",
-    "boardId" : "5fd255bdc70c392fa05c24ab"
+    "boardId" : "5fd31a0aeba1a2073c5df8b5"
 }
 
 ### update task 

@@ -1,12 +1,12 @@
 @host = http://localhost:5000
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2MTI0NTAsImV4cCI6MTYwNzY3NzI1MH0.zsA2l5eYIwGFXawjlitkIC4rtoZSOlNSym-FGel0tE4
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZmQyMzgxNDFhZWUxMTExOWM1NzAyNjEiLCJpYXQiOjE2MDc2NjQ0NzEsImV4cCI6MTYwNzcyOTI3MX0.RcD1qjb85P5ZmywYPplCBDyU-lRKtoZcqJADxk8lWkc
 
 ### get boards 
 GET {{host}}/board/boards
 Authorization: {{token}}
 
 ### get board by id
-GET {{host}}/board/5fd24f25ebdb0d055008e11e
+GET {{host}}/board/5fd31a0aeba1a2073c5df8b5
 Authorization: {{token}}
 
 ### get members by id
@@ -19,7 +19,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardName" : "hyk", 
+    "boardName" : "uy6", 
     "catagery" : "Education",
     "bg": {
         "isColour" : "true",
@@ -43,8 +43,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fd24f25ebdb0d055008e11e", 
-    "status" : "wwuyj"
+    "boardId" : "5fd31a0aeba1a2073c5df8b5", 
+    "status" : "Bad man"
 }
 
 ### delete the status
@@ -53,8 +53,8 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fbcd738a4ebe51774835d50", 
-    "status" : "Doing"
+    "boardId" : "5fd31a0aeba1a2073c5df8b5", 
+    "status" : "Bad man"
 }
 
 ### reorder-task
@@ -75,10 +75,10 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
-    "fromStatus" : "Done",
-    "toStatus" : "Doing",
-    "taskId" : "5fd2463999d2ce2e443618ca",
+    "boardId" : "5fd31a0aeba1a2073c5df8b5", 
+    "fromStatus" : "Doing",
+    "toStatus" : "Done",
+    "taskId" : "5fd31c2a591f2e10205b0489",
     "to" : 0
 }
 
@@ -99,7 +99,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
+    "boardId" : "5fd31a0aeba1a2073c5df8b5", 
     "memId" : "5fc9b6616c2d364d00551e7b",
     "memName":"Def",
     "permision": "Admin"
@@ -111,7 +111,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "boardId" : "5fd23dc15ab0e02db0c83cc5", 
+    "boardId" : "5fd31a0aeba1a2073c5df8b5", 
     "memName":"Def",
     "_id" : "5fc9b6616c2d364d00551e7b"
 }

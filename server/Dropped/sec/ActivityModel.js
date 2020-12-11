@@ -1,22 +1,32 @@
 const mongoose = require('mongoose')
 
-const activitySchema = new mongoose.Schema({
+const Action = mongoose.model("Action", {
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
 
+    description: {
+        type: String
+    }
+})
+
+const activitySchema = new mongoose.Schema({
     boardId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Board"
     },
 
-    description: {
-        type: String
-    }
+    actions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Action"
+    }]
 
 }, { timestamps: true })
 
 const Activity = mongoose.model("Activity", activitySchema)
 
-module.exports = Activity
+module.exports = {
+    Action,
+    Activity
+}

@@ -2,7 +2,7 @@ const express = require('express')
 const auth = require('../middlewares/auth')
 const Task = require('../models/Task')
 const Board = require("../models/Board")
-const { activityCreator } = require('../utils/activityHelper')
+const { actionCreator } = require('../utils/activityHelper')
 
 const router = express.Router()
 
@@ -28,7 +28,7 @@ router.post("/", auth, async (req, res) => {
             $push: { "tasks.$.orderedList": task._id }
         })
 
-        await activityCreator(req.user._id, boardId, `task named ${details.title} added in ${details.status}`, res)
+        await actionCreator(req.user._id, boardId, `task named ${details.title} added in ${details.status}`, res)
         res.json({ id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
@@ -73,7 +73,7 @@ router.put("/", auth, async (req, res) => {
             description = `content added to the task ${title}`
         }
 
-        await activityCreator(req.user._id, board, description, res)
+        await actionCreator(req.user._id, board, description, res)
         res.json({ msg: "Task updated successfully" })
 
     } catch (error) {
@@ -90,7 +90,7 @@ router.delete("/:boardId/:taskId/:status", auth, async (req, res) => {
             $pull: { "tasks.$.orderedList": taskId }
         })
 
-        await activityCreator(req.user._id, boardId, `task named ${title} deleted`, res)
+        await actionCreator(req.user._id, boardId, `task named ${title} deleted`, res)
         res.json({ msg: "Task deleted successfully" })
 
     } catch (error) {

@@ -1,7 +1,7 @@
 const express = require('express')
 const auth = require('../middlewares/auth')
 const Board = require('../models/Board')
-const { activityCreator, taskTitle } = require("../utils/activityHelper")
+const { activityCreator, actionCreator, taskTitle } = require("../utils/activityHelper")
 
 const router = express.Router()
 
@@ -26,7 +26,7 @@ router.get("/:boardId", auth, async (req, res) => {
 
     try {
         let board = await Board.findOne({ _id: boardId })
-            .select("postedBy tasks members isPublic")
+            .select("postedBy tasks members isPublic activityId")
             .populate("tasks.orderedList", "title body")
             .lean()
 
@@ -82,9 +82,12 @@ router.post("/", auth, async (req, res) => {
         if (existBoard) return res.status(400).json({ msg: "Board already existed with same catagery" })
 
         const board = new Board({ ...payload, postedBy: userId })
+        const activityId = await activityCreator(board._id, res)
+
+        board.activityId = activityId
         await board.save()
 
-        await activityCreator(req.user._id, board._id, `created the board`, res)
+        await actionCreator(req.user._id, board._id, `created the board`, res)
         res.json({ id: board._id })
 
     } catch (error) {
@@ -116,7 +119,7 @@ router.put("/add-status", auth, async (req, res) => {
             $push: { tasks, taskStatus: status }
         })
 
-        await activityCreator(req.user._id, boardId, `added new status named ${status}`, res)
+        await actionCreator(req.user._id, boardId, `added new status named ${status}`, res)
         res.json({ msg: "new status added successfully" })
 
     } catch (error) {
@@ -132,7 +135,7 @@ router.put("/del-status", auth, async (req, res) => {
             $pull: { taskStatus: status, tasks: { status } }
         })
 
-        await activityCreator(req.user._id, boardId, `deleted status named ${status}`, res)
+        await actionCreator(req.user._id, boardId, `deleted status named ${status}`, res)
         res.json({ msg: "status deleted successfully" })
 
     } catch (error) {
@@ -176,7 +179,7 @@ router.put("/restatus-task", auth, async (req, res) => {
         })
 
         const title = await taskTitle(taskId, res)
-        await activityCreator(req.user._id, boardId, `task named ${title} moved from ${fromStatus} to ${toStatus}`, res)
+        await actionCreator(req.user._id, boardId, `task named ${title} moved from ${fromStatus} to ${toStatus}`, res)
 
         res.json({ msg: "tasks restatused successfully" })
 
@@ -230,7 +233,7 @@ router.put("/addmember", auth, async (req, res) => {
             $push: { members: { ...payload } }
         })
 
-        await activityCreator(req.user._id, boardId, `added new member (${memName}) to the board`, res)
+        await actionCreator(req.user._id, boardId, `added new member (${memName}) to the board`, res)
         res.json({ msg: "Added member to the board successfully" })
 
     } catch (error) {
@@ -246,7 +249,7 @@ router.put("/removememb", auth, async (req, res) => {
             $pull: { members: { _id } }
         })
 
-        await activityCreator(req.user._id, boardId, `removed user (${memName}) from the board`, res)
+        await actionCreator(req.user._id, boardId, `removed user (${memName}) from the board`, res)
         res.json({ msg: "Removed member from the board successfully" })
 
     } catch (error) {
