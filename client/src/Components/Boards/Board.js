@@ -11,6 +11,7 @@ import { Loading } from '../Common'
 import Lists from './Lists'
 import axios from 'axios'
 import "../../CSS/board.css"
+import Activity from './Activity'
 
 function Board({ headers }) {
     const { boardId } = useParams()
@@ -30,6 +31,7 @@ function Board({ headers }) {
     const [listDnD, setlistDnD] = useState(initDnDState)
     const [showDetails, setShowDetails] = useState(false)
     const [task, setTask] = useState({})
+    const [showMenu, setMenu] = useState(false)
 
     const reOrder = () => {
         let payload = {
@@ -161,6 +163,7 @@ function Board({ headers }) {
                         </div>
                     </>
                 }
+                <div className="bh-top" onClick={() => setMenu(prev => !prev)}> Menu </div>
             </div>
 
             <Container
@@ -254,6 +257,13 @@ function Board({ headers }) {
                         canSubmit={isMine || permision !== "View"}
                         editTask={editTask}
                     />
+                </div>
+            }
+
+            {
+                showMenu &&
+                <div className="active-cont">
+                    <Activity headers={headers} boardId={boardId} />
                 </div>
             }
         </div>

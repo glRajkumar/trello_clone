@@ -1,7 +1,7 @@
 const express = require('express')
 const auth = require('../middlewares/auth')
 const Task = require('../models/Task')
-const Board = require("../models/Board")
+const { boardTaskAdd, boardTaskDel } = require('../utils/boardHelper')
 const { activityCreator } = require('../utils/activityHelper')
 
 const router = express.Router()
@@ -24,11 +24,9 @@ router.post("/", auth, async (req, res) => {
     try {
         const task = new Task({ board: boardId, ...details })
         await task.save()
-        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": details.status }, {
-            $push: { "tasks.$.orderedList": task._id }
-        })
 
-        await activityCreator(req.user._id, boardId, `task named ${details.title} added in ${details.status}`, res)
+        await boardTaskAdd(boardId, details.status, task._id, res)
+        await activityCreator(req.user._id, boardId, `added new task named ${details.title} in ${details.status}`, res)
         res.json({ id: task._id, msg: "Task saved successfully" })
 
     } catch (error) {
@@ -42,35 +40,32 @@ router.put("/", auth, async (req, res) => {
 
     try {
         let { board, title } = await Task.findByIdAndUpdate(taskId, { ...details })
+
         if (toStatus) {
-            await Board.findOneAndUpdate({ _id: board, "tasks.status": toStatus }, {
-                $push: { "tasks.$.orderedList": taskId }
-            })
-            await Board.findOneAndUpdate({ _id: board, "tasks.status": fromStatus }, {
-                $pull: { "tasks.$.orderedList": taskId }
-            })
+            await boardTaskAdd(board, toStatus, taskId, res)
+            await boardTaskDel(board, fromStatus, taskId, res)
         }
 
         if (toStatus && details.title && details.body) {
-            description = `task named ${title} moved from ${fromStatus} to ${toStatus} with task name changed to ${details.title} and content added to the task`
+            description = `moved task named ${title} from ${fromStatus} to ${toStatus} with new name ${details.title} and added content to the task`
 
         } else if (toStatus && details.title) {
-            description = `task named ${title} moved from ${fromStatus} to ${toStatus} with task name changed to ${details.title}`
+            description = `moved task named ${title} from ${fromStatus} to ${toStatus} with new name ${details.title}`
 
         } else if (toStatus && details.body) {
-            description = `task named ${title} moved from ${fromStatus} to ${toStatus} and content added`
+            description = `moved task named ${title} from ${fromStatus} to ${toStatus} and added content to the task`
 
         } else if (details.title && details.body) {
-            description = `task named ${title} changed to ${details.title} and content added`
+            description = `changed task named ${title} to ${details.title} and added content to the task`
 
         } else if (toStatus) {
-            description = `task named ${title} moved from ${fromStatus} to ${toStatus}`
+            description = `moved task named ${title} from ${fromStatus} to ${toStatus}`
 
         } else if (details.title) {
-            description = `task named ${title} changed to ${details.title}`
+            description = `changed task named ${title} to ${details.title}`
 
         } else {
-            description = `content added to the task ${title}`
+            description = `added content to the task ${title}`
         }
 
         await activityCreator(req.user._id, board, description, res)
@@ -86,11 +81,8 @@ router.delete("/:boardId/:taskId/:status", auth, async (req, res) => {
 
     try {
         const { title } = await Task.findByIdAndRemove(taskId)
-        await Board.findOneAndUpdate({ _id: boardId, "tasks.status": status }, {
-            $pull: { "tasks.$.orderedList": taskId }
-        })
-
-        await activityCreator(req.user._id, boardId, `task named ${title} deleted`, res)
+        await boardTaskDel(boardId, status, taskId, res)
+        await activityCreator(req.user._id, boardId, `deleted the task named ${title}`, res)
         res.json({ msg: "Task deleted successfully" })
 
     } catch (error) {

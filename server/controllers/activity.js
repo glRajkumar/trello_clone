@@ -10,7 +10,7 @@ router.get("/:boardId", auth, async (req, res) => {
 
     try {
         let activities = await Activity.find({ boardId })
-            .select("postedBy description -_id")
+            .select("postedBy description createdAt -_id")
             .populate("postedBy", "userName -_id")
             .sort('-createdAt')
             .skip(skip)

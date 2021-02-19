@@ -149,3 +149,38 @@
 .nondrag{
     cursor: default;
 }
+
+.active-cont{
+    position: absolute;
+    background-color: #ebecf0;   
+    top: 0;
+    right: 0;
+}
+
+.activity{
+    width: 30vw;
+    padding: 1rem;
+    height: calc(100vh - 2.8rem - 1px);
+    overflow: scroll;
+}
+
+.activity h3{
+    text-align: center;
+}
+
+.activity-user p{
+    color: #fff;
+    line-height: 1;
+    border-radius: 50%;
+    padding: .5rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(0, 0,0, 0.1);
+    background-color: rgb(250, 128, 144);
+    margin-right: .3rem;
+}
+
+.activity-body{
+    display: flex;
+    margin: .5rem 0;
+}

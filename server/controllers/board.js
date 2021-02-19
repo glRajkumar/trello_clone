@@ -84,7 +84,7 @@ router.post("/", auth, async (req, res) => {
         const board = new Board({ ...payload, postedBy: userId })
         await board.save()
 
-        await activityCreator(req.user._id, board._id, `created the board`, res)
+        await activityCreator(req.user._id, board._id, `created this board`, res)
         res.json({ id: board._id })
 
     } catch (error) {
@@ -94,9 +94,11 @@ router.post("/", auth, async (req, res) => {
 
 router.put("/public", auth, async (req, res) => {
     const { boardId, isPublic } = req.body
+    let description = isPublic ? "public" : "private"
 
     try {
         await Board.findByIdAndUpdate(boardId, { isPublic })
+        await activityCreator(req.user._id, boardId, `changed the board to ${description}`, res)
         res.json({ msg: "Board public status updated successfully" })
 
     } catch (error) {
@@ -176,7 +178,7 @@ router.put("/restatus-task", auth, async (req, res) => {
         })
 
         const title = await taskTitle(taskId, res)
-        await activityCreator(req.user._id, boardId, `task named ${title} moved from ${fromStatus} to ${toStatus}`, res)
+        await activityCreator(req.user._id, boardId, `moved task named ${title} from ${fromStatus} to ${toStatus}`, res)
 
         res.json({ msg: "tasks restatused successfully" })
 
@@ -209,6 +211,7 @@ router.put("/reorder-status", auth, async (req, res) => {
         board.taskStatus = newTaskStatus
         board.tasks = newTasks
         await board.save()
+        // await activityCreator(req.user._id, boardId, `moved task named ${title} from ${fromStatus} to ${toStatus}`, res)
 
         res.json({ msg: "stauts reordered successfully" })
 
@@ -246,7 +249,7 @@ router.put("/removememb", auth, async (req, res) => {
             $pull: { members: { _id } }
         })
 
-        await activityCreator(req.user._id, boardId, `removed user (${memName}) from the board`, res)
+        await activityCreator(req.user._id, boardId, `removed member (${memName}) from the board`, res)
         res.json({ msg: "Removed member from the board successfully" })
 
     } catch (error) {

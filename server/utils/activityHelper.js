@@ -1,5 +1,4 @@
 const Activity = require('../models/Activity')
-const Task = require('../models/Task')
 
 //details -> postedBy, boardId, description
 async function activityCreator(postedBy, boardId, description, res) {
@@ -13,17 +12,6 @@ async function activityCreator(postedBy, boardId, description, res) {
     }
 }
 
-async function taskTitle(taskId, res) {
-    try {
-        const { title } = await Task.findById(taskId).select("title").lean()
-        return title
-
-    } catch (error) {
-        return res.status(400).json({ error, msg: "cannot get title for the task" })
-    }
-}
-
 module.exports = {
-    activityCreator,
-    taskTitle
+    activityCreator
 }
